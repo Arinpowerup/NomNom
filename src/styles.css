@@ -1186,8 +1186,8 @@ textarea:focus {
 .theme-snoopy .hero {
   color: #171717;
   background: #fff6e4;
-  border: 2px solid #242424;
-  box-shadow: 10px 10px 0 rgba(240, 160, 40, 0.2);
+  border: 1px solid #ddd1bd;
+  box-shadow: 0 14px 34px rgba(82, 59, 31, 0.1);
 }
 .theme-snoopy .hero p {
   color: #5f594f;
@@ -1195,7 +1195,7 @@ textarea:focus {
 .theme-snoopy .hero .pill {
   color: #171717;
   background: #fff;
-  border-color: #242424;
+  border-color: #d8cbb5;
 }
 .theme-snoopy .hero::before {
   background: rgba(240, 160, 40, 0.2);
@@ -1208,19 +1208,33 @@ textarea:focus {
   background: var(--orange);
   border: 2px solid #171717;
 }
-.theme-snoopy
-  button:not(.soft):not(.icon):not(.language):not(.bottom-nav button) {
-  background: #1f1f1f;
+.app-shell.theme-snoopy button:not(.danger):not(.bottom-nav button) {
+  color: #1f1f1f;
+  background: #ffffff;
+  border: 1px solid #ded7c9;
+  box-shadow: none;
+}
+.app-shell.theme-snoopy button:not(.danger):not(.bottom-nav button):hover {
+  color: #1f1f1f;
+  background: rgba(240, 160, 40, 0.08);
+  border-color: rgba(240, 160, 40, 0.36);
+}
+.app-shell.theme-snoopy button:not(.danger):not(.bottom-nav button).active,
+.app-shell.theme-snoopy button:not(.danger):not(.bottom-nav button).selected {
+  color: #8a4b00;
+  background: rgba(240, 160, 40, 0.16);
+  border-color: rgba(240, 160, 40, 0.48);
+  box-shadow: 0 5px 16px rgba(130, 82, 20, 0.09);
 }
 .theme-snoopy .bottom-nav button.active {
   color: #b96300;
   background: rgba(240, 160, 40, 0.16);
 }
 .theme-snoopy .theme-grid button.active {
-  color: #171717;
-  background: #fff2d9;
-  border-color: #171717;
-  box-shadow: 5px 5px 0 rgba(240, 160, 40, 0.35);
+  color: #8a4b00;
+  background: rgba(240, 160, 40, 0.16);
+  border-color: rgba(240, 160, 40, 0.48);
+  box-shadow: 0 5px 16px rgba(130, 82, 20, 0.09);
 }
 .app-shell.theme-warm {
   --green: #a94f2c;
