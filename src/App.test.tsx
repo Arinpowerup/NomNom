@@ -162,7 +162,7 @@ describe("application shell", () => {
       Array.from(
         bottomNav.querySelectorAll<HTMLElement>("[data-nav-effect]"),
       ).map((effect) => effect.dataset.navEffect),
-    ).toEqual(["rainbow", "hearts", "hearts", "sparkles", "hearts"]);
+    ).toEqual(["hearts", "hearts", "hearts", "hearts", "hearts"]);
     expect(container.querySelector(".sidebar")).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "历史记录" })).toBeNull();
     const weeklyPlan = screen.getByRole("button", { name: /一周安排/ });

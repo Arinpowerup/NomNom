@@ -64,12 +64,12 @@ import type {
 } from "./types";
 
 type Page = "home" | "order" | "foodlog" | "fridge" | "me";
-type NavEffect = "rainbow" | "hearts" | "sparkles";
+type NavEffect = "hearts";
 const nav: { key: Page; src: string; effect: NavEffect }[] = [
-  { key: "home", src: "/nav/snoopy-home.png", effect: "rainbow" },
+  { key: "home", src: "/nav/snoopy-home.png", effect: "hearts" },
   { key: "order", src: "/nav/snoopy-menu.png", effect: "hearts" },
   { key: "foodlog", src: "/nav/snoopy-foodlog.png", effect: "hearts" },
-  { key: "fridge", src: "/nav/snoopy-fridge.png", effect: "sparkles" },
+  { key: "fridge", src: "/nav/snoopy-fridge.png", effect: "hearts" },
   { key: "me", src: "/nav/snoopy-me.png", effect: "hearts" },
 ];
 const meals: MealType[] = ["breakfast", "lunch", "dinner"];
