@@ -24,11 +24,11 @@ describe("default Snoopy theme contrast", () => {
 });
 
 describe("Snoopy home hero artwork", () => {
-  it("integrates the static chef trio with a translucent orange backdrop", () => {
-    expect(styles).toMatch(
-      /\.kitchen-mascot::before \{[\s\S]*rgba\(240, 160, 40, 0\.16\);/,
-    );
-    expect(styles).not.toContain("transform: scaleX(-1)");
+  it("shows a larger static chef trio without a competing circular backdrop", () => {
+    expect(styles).not.toContain(".kitchen-mascot::before");
+    expect(styles).toContain("width: min(390px, 40vw);");
+    expect(styles).toContain("width: 118%;");
+    expect(styles).toContain("width: 190px;");
   });
 });
 describe("Snoopy recipe search artwork", () => {
