@@ -671,6 +671,7 @@ function RecipesPage({
   const [query, setQuery] = useState("");
   const [editing, setEditing] = useState<Recipe | null | undefined>(undefined);
   const [managingCategories, setManagingCategories] = useState(false);
+  const [pickedRecipeId, setPickedRecipeId] = useState<string>();
   const L = labels[language];
   const shown = data!.recipes.filter(
     (r) =>
@@ -750,9 +751,11 @@ function RecipesPage({
                   {language === "zh" ? "种食材" : "ingredients"}
                 </span>
               </div>
-              <div className="card-actions">
+              <div className={`card-actions ${r.builtIn ? "two-actions" : ""}`}>
                 <button
-                  onClick={() =>
+                  className={`pick-action ${pickedRecipeId === r.id ? "just-picked" : ""}`}
+                  aria-live="polite"
+                  onClick={() => {
                     setData(
                       orderDish(
                         data!,
@@ -761,14 +764,31 @@ function RecipesPage({
                         r.id,
                         currentRoleId,
                       ),
-                    )
-                  }
+                    );
+                    setPickedRecipeId(r.id);
+                    window.setTimeout(
+                      () =>
+                        setPickedRecipeId((current) =>
+                          current === r.id ? undefined : current,
+                        ),
+                      700,
+                    );
+                  }}
                 >
-                  <Plus />
-                  {language === "zh" ? "今晚想吃" : "Pick for tonight"}
+                  {pickedRecipeId === r.id ? (
+                    <>
+                      <span className="action-check">✓</span>
+                      {language === "zh" ? "已加入" : "Added"}
+                    </>
+                  ) : (
+                    <>
+                      <Plus />
+                      {language === "zh" ? "今晚想吃" : "Pick tonight"}
+                    </>
+                  )}
                 </button>
                 <button className="soft" onClick={() => setEditing(r)}>
-                  {language === "zh" ? "查看 / 编辑" : "View / Edit"}
+                  {language === "zh" ? "查看/编辑" : "View/Edit"}
                 </button>
                 {!r.builtIn && (
                   <button

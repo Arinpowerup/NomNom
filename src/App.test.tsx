@@ -44,6 +44,14 @@ describe("application shell", () => {
     await userEvent.click(screen.getByRole("button", { name: "菜单" }));
     const picks = await screen.findAllByRole("button", { name: /今晚想吃/ });
     await userEvent.click(picks[0]);
+    expect(picks[0]).toHaveClass("just-picked");
+    expect(picks[0]).toHaveTextContent("已加入");
+    const actionRow = picks[0].closest(".card-actions");
+    expect(actionRow).toHaveClass("two-actions");
+    expect(actionRow?.children).toHaveLength(2);
+    expect(
+      screen.getAllByRole("button", { name: "查看/编辑" })[0],
+    ).toBeVisible();
     await waitFor(async () =>
       expect((await loadData()).mealPlans[0]?.meal).toBe("dinner"),
     );
