@@ -2067,17 +2067,14 @@ function KitchenMascot() {
     <div
       className="kitchen-mascot"
       role="img"
-      aria-label="Snoopy carrying a steaming cooking pot"
+      aria-label="Snoopy cooking with two family chefs"
     >
       <img
         className="kitchen-mascot-image"
-        src="/illustrations/snoopy-cooking-pot.png"
+        src="/illustrations/snoopy-chef-trio.png"
         alt=""
         aria-hidden="true"
       />
-      <span className="cooking-steam steam-one" aria-hidden="true" />
-      <span className="cooking-steam steam-two" aria-hidden="true" />
-      <span className="cooking-steam steam-three" aria-hidden="true" />
     </div>
   );
 }

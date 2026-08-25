@@ -23,16 +23,11 @@ describe("default Snoopy theme contrast", () => {
   });
 });
 
-describe("Snoopy home hero motion", () => {
-  it("mirrors a static character while keeping only steam animated", () => {
+describe("Snoopy home hero artwork", () => {
+  it("integrates the static chef trio with a translucent orange backdrop", () => {
     expect(styles).toMatch(
-      /\.kitchen-mascot-image \{[\s\S]*transform: scaleX\(-1\);/,
+      /\.kitchen-mascot::before \{[\s\S]*rgba\(240, 160, 40, 0\.16\);/,
     );
-    expect(styles).not.toContain("animation: snoopy-cook-bob");
-    expect(styles).not.toContain("@keyframes snoopy-cook-bob");
-    expect(styles).toMatch(
-      /\.cooking-steam \{[\s\S]*left: 13%;[\s\S]*animation: cooking-steam-rise/,
-    );
-    expect(styles).toContain("@keyframes cooking-steam-rise");
+    expect(styles).not.toContain("transform: scaleX(-1)");
   });
 });

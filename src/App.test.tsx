@@ -24,14 +24,14 @@ describe("application shell", () => {
     expect(document.title).toBe("NomNom");
     expect(document.querySelector(".app-shell")).toHaveClass("theme-snoopy");
     expect(screen.getAllByText("首页").length).toBeGreaterThan(0);
-    const cookingSnoopy = screen.getByRole("img", {
-      name: "Snoopy carrying a steaming cooking pot",
+    const homeArtwork = screen.getByRole("img", {
+      name: "Snoopy cooking with two family chefs",
     });
-    expect(cookingSnoopy.querySelector("img")).toHaveAttribute(
+    expect(homeArtwork.querySelector("img")).toHaveAttribute(
       "src",
-      "/illustrations/snoopy-cooking-pot.png",
+      "/illustrations/snoopy-chef-trio.png",
     );
-    expect(cookingSnoopy.querySelectorAll(".cooking-steam")).toHaveLength(3);
+    expect(homeArtwork.querySelector(".cooking-steam")).toBeNull();
   });
   it("switches the system interface to English", async () => {
     render(
@@ -361,7 +361,7 @@ describe("application shell", () => {
     );
     expect(
       await screen.findByRole("img", {
-        name: "Snoopy carrying a steaming cooking pot",
+        name: "Snoopy cooking with two family chefs",
       }),
     ).toBeVisible();
     expect(container.querySelectorAll(".ambient-shapes span")).toHaveLength(3);
