@@ -3,7 +3,7 @@ export type MealType = "breakfast" | "lunch" | "dinner";
 export type Unit =
   "g" | "kg" | "ml" | "l" | "piece" | "grain" | "slice" | "pack" | "box";
 export type Category = string;
-export type AppTheme = "warm" | "glass" | "custom";
+export type AppTheme = "snoopy" | "warm" | "glass" | "custom";
 
 export interface Role {
   id: string;

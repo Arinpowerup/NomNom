@@ -1853,6 +1853,14 @@ function AppearancePanel() {
     descEn: string;
   }> = [
     {
+      id: "snoopy",
+      icon: "◉",
+      zh: "默认 Snoopy",
+      en: "Default Snoopy",
+      descZh: "黑白橙简约手绘插画",
+      descEn: "Minimal black, white and orange illustrations",
+    },
+    {
       id: "warm",
       icon: "☀️",
       zh: "暖色插画",
@@ -1940,7 +1948,7 @@ function AppearancePanel() {
             onClick={() =>
               setData({
                 ...data!,
-                preferences: { theme: "warm" },
+                preferences: { theme: "snoopy" },
               })
             }
           >

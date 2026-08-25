@@ -22,6 +22,7 @@ describe("application shell", () => {
     expect(screen.getByText("NomNom")).toBeVisible();
     expect(screen.queryByText("灶边")).not.toBeInTheDocument();
     expect(document.title).toBe("NomNom");
+    expect(document.querySelector(".app-shell")).toHaveClass("theme-snoopy");
     expect(screen.getAllByText("首页").length).toBeGreaterThan(0);
     const cookingSnoopy = screen.getByRole("img", {
       name: "Snoopy carrying a steaming cooking pot",
@@ -218,6 +219,9 @@ describe("application shell", () => {
       await screen.findByRole("heading", { name: "界面风格" }),
     ).toBeVisible();
     expect(screen.queryByText("App 皮肤")).not.toBeInTheDocument();
+    const snoopyTheme = screen.getByRole("button", { name: /默认 Snoopy/ });
+    expect(snoopyTheme).toHaveTextContent("黑白橙简约手绘插画");
+    expect(snoopyTheme).toHaveClass("active");
     const liquidGlass = await screen.findByRole("button", {
       name: /蓝白 Liquid Glass/,
     });

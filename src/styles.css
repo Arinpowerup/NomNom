@@ -221,7 +221,7 @@ header h1 {
 }
 .meal-tabs {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
   gap: 12px;
   margin: 22px 0;
 }
@@ -1143,6 +1143,85 @@ textarea:focus {
   font-size: 13px;
   font-weight: 700;
 }
+.app-shell.theme-snoopy {
+  --green: #1f1f1f;
+  --green2: #3a3a3a;
+  --orange: rgb(240, 160, 40);
+  --cream: #fffaf0;
+  --paper: #ffffff;
+  --line: #ded7c9;
+  --text: #171717;
+  --muted: #6f6a61;
+  min-height: 100vh;
+  color: var(--text);
+  background:
+    radial-gradient(
+      circle at 90% 8%,
+      rgba(240, 160, 40, 0.13),
+      transparent 22%
+    ),
+    linear-gradient(180deg, #fffdf8 0%, #fff8ea 100%);
+}
+.theme-snoopy .ambient-shapes span:nth-child(1) {
+  background: var(--orange);
+  opacity: 0.18;
+}
+.theme-snoopy .ambient-shapes span:nth-child(2) {
+  background: #222;
+  opacity: 0.055;
+}
+.theme-snoopy .ambient-shapes span:nth-child(3) {
+  background: #ffd68a;
+  opacity: 0.16;
+}
+.theme-snoopy header,
+.theme-snoopy .panel,
+.theme-snoopy .recipe-card,
+.theme-snoopy .meal-card,
+.theme-snoopy .bottom-nav {
+  background: rgba(255, 255, 255, 0.96);
+  border-color: #ded7c9;
+  box-shadow: 0 10px 30px rgba(31, 31, 31, 0.07);
+}
+.theme-snoopy .hero {
+  color: #171717;
+  background: #fff6e4;
+  border: 2px solid #242424;
+  box-shadow: 10px 10px 0 rgba(240, 160, 40, 0.2);
+}
+.theme-snoopy .hero p {
+  color: #5f594f;
+}
+.theme-snoopy .hero .pill {
+  color: #171717;
+  background: #fff;
+  border-color: #242424;
+}
+.theme-snoopy .hero::before {
+  background: rgba(240, 160, 40, 0.2);
+}
+.theme-snoopy .hero::after {
+  background: rgba(31, 31, 31, 0.06);
+}
+.theme-snoopy .brand-mark {
+  color: #171717;
+  background: var(--orange);
+  border: 2px solid #171717;
+}
+.theme-snoopy
+  button:not(.soft):not(.icon):not(.language):not(.bottom-nav button) {
+  background: #1f1f1f;
+}
+.theme-snoopy .bottom-nav button.active {
+  color: #b96300;
+  background: rgba(240, 160, 40, 0.16);
+}
+.theme-snoopy .theme-grid button.active {
+  color: #171717;
+  background: #fff2d9;
+  border-color: #171717;
+  box-shadow: 5px 5px 0 rgba(240, 160, 40, 0.35);
+}
 .app-shell.theme-warm {
   --green: #a94f2c;
   --green2: #c7653d;
@@ -1375,7 +1454,7 @@ textarea:focus {
 }
 .theme-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
   gap: 12px;
 }
 .theme-grid button {
