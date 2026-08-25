@@ -2103,23 +2103,18 @@ function ProfileIllustration() {
 
 function EmptyIllustration() {
   return (
-    <svg
+    <div
       className="empty-illustration"
-      viewBox="0 0 130 90"
       role="img"
-      aria-label="empty plate illustration"
+      aria-label="Snoopy wondering beside an empty plate"
     >
-      <ellipse className="empty-shadow" cx="65" cy="76" rx="45" ry="7" />
-      <circle className="empty-plate" cx="65" cy="43" r="34" />
-      <circle className="empty-plate-inner" cx="65" cy="43" r="21" />
-      <circle className="empty-eye" cx="57" cy="40" r="2.5" />
-      <circle className="empty-eye" cx="73" cy="40" r="2.5" />
-      <path className="empty-smile" d="M59 50c4 4 8 4 12 0" />
-      <path
-        className="empty-fork"
-        d="M18 16v49M12 16v17h12V16M112 16v49M106 16c0 16 12 16 12 0"
+      <img
+        className="empty-snoopy-image"
+        src="/illustrations/snoopy-empty-plate.png"
+        alt=""
+        aria-hidden="true"
       />
-    </svg>
+    </div>
   );
 }
 function Empty({ text }: { text: string }) {

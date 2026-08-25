@@ -356,7 +356,9 @@ describe("application shell", () => {
     expect(container.querySelector(".content")).toHaveClass("page-enter");
     await userEvent.click(screen.getByRole("button", { name: "食记" }));
     expect(
-      await screen.findByRole("img", { name: "empty plate illustration" }),
+      await screen.findByRole("img", {
+        name: "Snoopy wondering beside an empty plate",
+      }),
     ).toBeVisible();
     expect(screen.getByRole("button", { name: "食记" })).toHaveClass("active");
   });

@@ -76,6 +76,13 @@ describe("Snoopy home illustration", () => {
     expect(alpha.max).toBe(255);
   });
 });
+describe("Snoopy empty-state illustration", () => {
+  it("is an RGBA PNG with genuine transparency", () => {
+    const alpha = alphaRange("../illustrations/snoopy-empty-plate.png");
+    expect(alpha.min).toBeLessThan(255);
+    expect(alpha.max).toBe(255);
+  });
+});
 describe("Snoopy navigation PNG assets", () => {
   it.each(["snoopy-menu.png", "snoopy-fridge.png"])(
     "%s is an RGBA PNG with genuinely transparent and opaque pixels",
