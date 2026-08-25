@@ -44,6 +44,7 @@ import {
 } from "./lib/appActions";
 import { missingForRecipe } from "./lib/calculations";
 import { labels, t } from "./i18n";
+import { BRAND_ORANGE } from "./theme";
 import type {
   Category,
   AppTheme,
@@ -103,11 +104,14 @@ export default function App() {
   const currentRole = ctx.data.roles.find(
     (role) => role.id === ctx.currentRoleId,
   );
-  const shellStyle = ctx.data.preferences.customBackground
-    ? ({
-        "--custom-background": `url(${ctx.data.preferences.customBackground})`,
-      } as CSSProperties)
-    : undefined;
+  const shellStyle = {
+    "--orange": BRAND_ORANGE,
+    ...(ctx.data.preferences.customBackground
+      ? {
+          "--custom-background": `url(${ctx.data.preferences.customBackground})`,
+        }
+      : {}),
+  } as CSSProperties;
   return (
     <div
       className={`app-shell theme-${ctx.data.preferences.theme}`}
@@ -1806,19 +1810,84 @@ function AppearancePanel() {
 }
 
 function RecipeImage({ recipe }: { recipe: Recipe }) {
-  return recipe.image ? (
-    <img className="recipe-image" src={recipe.image} alt="" />
-  ) : (
-    <div className={`recipe-image placeholder ${recipe.category}`}>
-      {recipe.category === "diet" || recipe.category === "vegetable"
-        ? "🥗"
-        : recipe.category === "meat"
-          ? "🍳"
-          : recipe.category === "soup"
-            ? "🍲"
-            : recipe.category === "dessert"
-              ? "🍰"
-              : "🥢"}
+  if (recipe.image)
+    return <img className="recipe-image" src={recipe.image} alt="" />;
+  const kind =
+    recipe.category === "meat"
+      ? "meat"
+      : recipe.category === "soup"
+        ? "soup"
+        : recipe.category === "dessert"
+          ? "dessert"
+          : recipe.category === "diet" || recipe.category === "vegetable"
+            ? "vegetable"
+            : "cold";
+  return (
+    <div className={`recipe-image placeholder illustration-${kind}`}>
+      <svg
+        viewBox="0 0 160 120"
+        role="img"
+        aria-label="dish illustration"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle className="illustration-sun" cx="132" cy="22" r="10" />
+        <path className="illustration-table" d="M0 92h160v28H0z" />
+        {kind === "soup" ? (
+          <>
+            <path className="illustration-main" d="M35 48h90l-9 49H44z" />
+            <path className="illustration-rim" d="M29 45h102v10H29z" />
+            <path
+              className="illustration-steam"
+              d="M62 37c-8-8 9-11 1-21M82 37c-8-8 9-11 1-21M102 37c-8-8 9-11 1-21"
+            />
+          </>
+        ) : kind === "dessert" ? (
+          <>
+            <path
+              className="illustration-plate"
+              d="M27 96h106c-9 9-26 13-53 13S36 105 27 96z"
+            />
+            <path className="illustration-main" d="M48 44h65v50H48z" />
+            <path className="illustration-layer" d="M48 61h65v10H48z" />
+            <circle className="illustration-accent" cx="80" cy="38" r="10" />
+          </>
+        ) : kind === "meat" ? (
+          <>
+            <ellipse
+              className="illustration-plate"
+              cx="80"
+              cy="83"
+              rx="58"
+              ry="29"
+            />
+            <path
+              className="illustration-main"
+              d="M48 62c15-21 58-18 68 3 9 20-20 32-43 29-25-3-37-16-25-32z"
+            />
+            <path
+              className="illustration-detail"
+              d="M64 69c13-8 27-6 38 3M61 80c14 8 29 8 42 0"
+            />
+          </>
+        ) : (
+          <>
+            <path
+              className="illustration-bowl"
+              d="M27 69h106c-7 29-25 40-53 40S34 98 27 69z"
+            />
+            <path className="illustration-rim" d="M23 64h114v10H23z" />
+            <path
+              className="illustration-leaf leaf-one"
+              d="M79 66C49 59 43 36 48 23c22 3 36 17 31 43z"
+            />
+            <path
+              className="illustration-leaf leaf-two"
+              d="M83 65c3-29 24-40 39-38 1 21-12 37-39 38z"
+            />
+            <circle className="illustration-accent" cx="94" cy="60" r="9" />
+          </>
+        )}
+      </svg>
     </div>
   );
 }

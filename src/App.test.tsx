@@ -132,4 +132,21 @@ describe("application shell", () => {
     );
     expect(await screen.findByAltText("我 avatar")).toBeVisible();
   });
+  it("renders code-drawn dish illustrations instead of emoji placeholders", async () => {
+    const { container } = render(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    await screen.findByText("今晚想吃点什么？");
+    await userEvent.click(screen.getByRole("button", { name: "菜单" }));
+    expect(
+      await screen.findAllByRole("img", { name: "dish illustration" }),
+    ).toHaveLength(initialData.recipes.length);
+    expect(container.querySelector(".illustration-meat svg")).toBeVisible();
+    expect(container.querySelector(".illustration-soup svg")).toBeVisible();
+    expect(container.querySelector(".app-shell")).toHaveStyle({
+      "--orange": "rgb(240, 160, 40)",
+    });
+  });
 });
