@@ -158,6 +158,25 @@ describe("application shell", () => {
     await userEvent.click(screen.getByRole("button", { name: "我" }));
     expect(await screen.findByText("新手教程")).toBeVisible();
   });
+  it("pops the menu icon when the menu destination is clicked", async () => {
+    render(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    await screen.findByText("今晚想吃点什么？");
+    const menuButton = screen.getByRole("button", { name: "菜单" });
+
+    const firstIcon = menuButton.querySelector("svg");
+    await userEvent.click(menuButton);
+
+    expect(menuButton).toHaveClass("menu-icon-popping");
+    const animatedIcon = menuButton.querySelector("svg");
+    expect(animatedIcon).not.toBe(firstIcon);
+
+    await userEvent.click(menuButton);
+    expect(menuButton.querySelector("svg")).not.toBe(animatedIcon);
+  });
   it("switches and persists the glass theme", async () => {
     const { container } = render(
       <AppProvider>

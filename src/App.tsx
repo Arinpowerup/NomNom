@@ -102,6 +102,7 @@ const mondayOf = (date: string) => {
 export default function App() {
   const ctx = useApp();
   const [page, setPage] = useState<Page>("home");
+  const [menuIconAnimation, setMenuIconAnimation] = useState(0);
   useEffect(() => {
     document.title = ctx.data?.preferences.appName?.trim() || "NomNom";
   }, [ctx.data?.preferences.appName]);
@@ -205,11 +206,17 @@ export default function App() {
         {nav.map(([key, Icon]) => (
           <button
             key={key}
-            className={page === key ? "active" : ""}
+            className={[
+              page === key ? "active" : "",
+              key === "order" && menuIconAnimation > 0 ? "menu-icon-popping" : "",
+            ].filter(Boolean).join(" ")}
             aria-current={page === key ? "page" : undefined}
-            onClick={() => setPage(key)}
+            onClick={() => {
+              setPage(key);
+              if (key === "order") setMenuIconAnimation((value) => value + 1);
+            }}
           >
-            <Icon />
+            <Icon key={key === "order" ? menuIconAnimation : key} />
             <span>{L[key]}</span>
           </button>
         ))}
