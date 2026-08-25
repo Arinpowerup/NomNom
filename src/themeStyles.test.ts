@@ -31,12 +31,23 @@ describe("Snoopy home hero artwork", () => {
     expect(styles).toContain("width: 190px;");
   });
 });
+describe("bottom navigation positioning", () => {
+  it("keeps the menu centered independently from the right-aligned search artwork", () => {
+    const rule =
+      styles.match(/.bottom-nav {[^}]*position: fixed;[^}]*}/)?.[0] ?? "";
+    expect(rule).not.toBe("");
+    expect(rule).toContain("left: 50%;");
+    expect(rule).toContain("transform: translateX(-50%);");
+  });
+});
 describe("Snoopy recipe search artwork", () => {
   it("aligns the transparent trio to the border and adapts on narrow screens", () => {
-    expect(styles).toContain("bottom: calc(100% - 1px);");
-    expect(styles).toContain("width: min(42%, 325px);");
-    expect(styles).toContain("right: 0;");
-    expect(styles).not.toContain("transform: translateX(-50%);");
+    const start = styles.indexOf(".recipe-search-art {");
+    const rule = styles.slice(start, styles.indexOf("}", start));
+    expect(rule).toContain("bottom: calc(100% - 1px);");
+    expect(rule).toContain("width: min(42%, 325px);");
+    expect(rule).toContain("right: 0;");
+    expect(rule).not.toContain("transform: translateX(-50%);");
     expect(styles).toContain("@media (max-width: 560px)");
     expect(styles).toContain("flex-wrap: wrap;");
     expect(styles).toContain("flex-basis: 100%;");

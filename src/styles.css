@@ -2003,6 +2003,7 @@ button:not(:disabled):active {
   z-index: 40;
   left: 50%;
   bottom: 14px;
+  transform: translateX(-50%);
 
   width: min(560px, calc(100% - 24px));
   min-height: 82px;
