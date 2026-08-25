@@ -989,6 +989,163 @@ textarea:focus {
   margin: 10px 0;
   color: var(--muted);
 }
+.app-shell.theme-warm {
+  --green: #a94f2c;
+  --green2: #c7653d;
+  --orange: #e87842;
+  --cream: #f7efe3;
+  --paper: #fffaf2;
+  --line: #eadaca;
+  background: #f7efe3;
+}
+.theme-warm .sidebar {
+  background: #9f4f31;
+}
+.theme-warm .brand-mark {
+  background: #ffd89a;
+  color: #9f4f31;
+}
+.theme-warm .hero {
+  background: linear-gradient(120deg, #db754a, #a94f2c);
+}
+.app-shell.theme-glass {
+  --green: #375b70;
+  --paper: rgba(255, 255, 255, 0.52);
+  --line: rgba(255, 255, 255, 0.48);
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      circle at 15% 20%,
+      rgba(255, 183, 197, 0.75),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 80% 15%,
+      rgba(154, 213, 255, 0.8),
+      transparent 34%
+    ),
+    linear-gradient(135deg, #c9d8ff, #f4d7df 55%, #d7f3ec);
+  background-attachment: fixed;
+}
+.theme-glass .sidebar {
+  background: rgba(29, 56, 72, 0.62);
+  backdrop-filter: blur(24px);
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+}
+.theme-glass header,
+.theme-glass .panel,
+.theme-glass .recipe-card,
+.theme-glass .meal-tabs button,
+.theme-glass .meal-card {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(20px);
+  border-color: rgba(255, 255, 255, 0.55);
+}
+.theme-glass .hero {
+  background: rgba(44, 77, 94, 0.68);
+  backdrop-filter: blur(18px);
+}
+.app-shell.theme-custom {
+  --paper: rgba(255, 255, 255, 0.8);
+  min-height: 100vh;
+  background-image:
+    linear-gradient(rgba(245, 240, 230, 0.26), rgba(245, 240, 230, 0.26)),
+    var(--custom-background, linear-gradient(135deg, #f5dbc5, #d5e8dc));
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+.theme-custom .sidebar {
+  background: rgba(35, 58, 48, 0.78);
+  backdrop-filter: blur(18px);
+}
+.theme-custom header,
+.theme-custom .panel,
+.theme-custom .recipe-card,
+.theme-custom .meal-card {
+  background: rgba(255, 253, 248, 0.78);
+  backdrop-filter: blur(18px);
+}
+.role-switcher {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  padding-left: 5px;
+}
+.role-switcher img,
+.role-switcher > span,
+.avatar-upload img,
+.avatar-upload > span {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: grid;
+  place-items: center;
+  color: white;
+  font-weight: 700;
+}
+.role-switcher select {
+  border: 0;
+  box-shadow: none;
+  min-width: 85px;
+}
+.role-editor {
+  align-items: center;
+}
+.avatar-upload {
+  position: relative;
+  cursor: pointer;
+  flex: 0 0 38px;
+}
+.avatar-upload input {
+  display: none;
+}
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.theme-grid button {
+  min-height: 130px;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  background: #f1ede5;
+  color: #3f463f;
+  border: 2px solid transparent;
+}
+.theme-grid button.active {
+  border-color: var(--orange);
+  background: #fff5e9;
+}
+.theme-grid button > span {
+  font-size: 28px;
+}
+.theme-grid button small {
+  color: var(--muted);
+  font-weight: 400;
+}
+.custom-background-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+.appearance-panel {
+  margin-bottom: 18px;
+}
+@media (max-width: 700px) {
+  .theme-grid {
+    grid-template-columns: 1fr;
+  }
+  .role-switcher > img,
+  .role-switcher > span {
+    display: none;
+  }
+}
 .category-editor {
   display: grid;
   gap: 9px;

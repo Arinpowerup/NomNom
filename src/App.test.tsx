@@ -85,4 +85,49 @@ describe("application shell", () => {
     await userEvent.click(screen.getByRole("button", { name: "我" }));
     expect(await screen.findByText("新手教程")).toBeVisible();
   });
+  it("switches and persists the glass theme", async () => {
+    const { container } = render(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    await screen.findByText("今晚想吃点什么？");
+    await userEvent.click(screen.getByRole("button", { name: "我" }));
+    await userEvent.click(
+      await screen.findByRole("button", { name: /玻璃透明/ }),
+    );
+    expect(container.querySelector(".app-shell")).toHaveClass("theme-glass");
+    await waitFor(async () =>
+      expect((await loadData()).preferences.theme).toBe("glass"),
+    );
+  });
+  it("stores device images for a custom background and user avatar", async () => {
+    render(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    await screen.findByText("今晚想吃点什么？");
+    await userEvent.click(screen.getByRole("button", { name: "我" }));
+    const image = new File([new Uint8Array([137, 80, 78, 71])], "photo.png", {
+      type: "image/png",
+    });
+    await userEvent.upload(
+      screen.getByLabelText("custom background image"),
+      image,
+    );
+    await waitFor(async () => {
+      const saved = await loadData();
+      expect(saved.preferences.theme).toBe("custom");
+      expect(saved.preferences.customBackground).toMatch(/^data:image\/png/);
+    });
+    await userEvent.upload(
+      screen.getByLabelText("upload avatar for 我"),
+      image,
+    );
+    await waitFor(async () =>
+      expect((await loadData()).roles[0].avatar).toMatch(/^data:image\/png/),
+    );
+    expect(await screen.findByAltText("我 avatar")).toBeVisible();
+  });
 });

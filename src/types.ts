@@ -3,11 +3,13 @@ export type MealType = "breakfast" | "lunch" | "dinner";
 export type Unit =
   "g" | "kg" | "ml" | "l" | "piece" | "grain" | "slice" | "pack" | "box";
 export type Category = string;
+export type AppTheme = "warm" | "glass" | "custom";
 
 export interface Role {
   id: string;
   name: string;
   color: string;
+  avatar?: string;
   createdAt: string;
 }
 export interface DishCategory {
@@ -95,6 +97,10 @@ export interface HistoryEntry {
 }
 export interface AppData {
   version: 1;
+  preferences: {
+    theme: AppTheme;
+    customBackground?: string;
+  };
   categories: DishCategory[];
   roles: Role[];
   recipes: Recipe[];

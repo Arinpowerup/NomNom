@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState, type CSSProperties } from "react";
 import {
   CalendarDays,
   ChefHat,
@@ -46,6 +46,7 @@ import { missingForRecipe } from "./lib/calculations";
 import { labels, t } from "./i18n";
 import type {
   Category,
+  AppTheme,
   Ingredient,
   MealPlan,
   MealType,
@@ -103,8 +104,19 @@ export default function App() {
       </div>
     );
   const L = labels[ctx.language];
+  const currentRole = ctx.data.roles.find(
+    (role) => role.id === ctx.currentRoleId,
+  );
+  const shellStyle = ctx.data.preferences.customBackground
+    ? ({
+        "--custom-background": `url(${ctx.data.preferences.customBackground})`,
+      } as CSSProperties)
+    : undefined;
   return (
-    <div className="app-shell">
+    <div
+      className={`app-shell theme-${ctx.data.preferences.theme}`}
+      style={shellStyle}
+    >
       <aside className={mobile ? "sidebar open" : "sidebar"}>
         <div className="brand">
           <span className="brand-mark">
@@ -200,17 +212,26 @@ export default function App() {
               <Languages />
               {ctx.language === "zh" ? "简体中文" : "English"}
             </button>
-            <select
-              aria-label="current role"
-              value={ctx.currentRoleId}
-              onChange={(e) => ctx.setCurrentRoleId(e.target.value)}
-            >
-              {ctx.data.roles.map((r) => (
-                <option key={r.id} value={r.id}>
-                  {r.name}
-                </option>
-              ))}
-            </select>
+            <div className="role-switcher">
+              {currentRole?.avatar ? (
+                <img src={currentRole.avatar} alt="current user avatar" />
+              ) : (
+                <span style={{ background: currentRole?.color }}>
+                  {currentRole?.name.slice(0, 1)}
+                </span>
+              )}
+              <select
+                aria-label="current role"
+                value={ctx.currentRoleId}
+                onChange={(e) => ctx.setCurrentRoleId(e.target.value)}
+              >
+                {ctx.data.roles.map((r) => (
+                  <option key={r.id} value={r.id}>
+                    {r.name}
+                  </option>
+                ))}
+              </select>
+            </div>
             <button className="icon" onClick={() => setPage("me")}>
               <Settings />
             </button>
@@ -1550,6 +1571,16 @@ function SettingsPage() {
       );
     }
   };
+  const readAvatar = (roleId: string, selected?: File) => {
+    if (!selected) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const role = data!.roles.find((item) => item.id === roleId);
+      if (role)
+        setData(updateRole(data!, { ...role, avatar: String(reader.result) }));
+    };
+    reader.readAsDataURL(selected);
+  };
   return (
     <div className="settings-grid">
       <section className="panel">
@@ -1577,7 +1608,27 @@ function SettingsPage() {
         </div>
         <div className="role-list">
           {data!.roles.map((r) => (
-            <div key={r.id}>
+            <div className="role-editor" key={r.id}>
+              <label
+                className="avatar-upload"
+                title={language === "zh" ? "上传头像" : "Upload avatar"}
+              >
+                {r.avatar ? (
+                  <img src={r.avatar} alt={`${r.name} avatar`} />
+                ) : (
+                  <span style={{ background: r.color }}>
+                    {r.name.slice(0, 1)}
+                  </span>
+                )}
+                <input
+                  aria-label={`upload avatar for ${r.name}`}
+                  type="file"
+                  accept="image/*"
+                  onChange={(event) =>
+                    readAvatar(r.id, event.target.files?.[0])
+                  }
+                />
+              </label>
               <input
                 type="color"
                 value={r.color}
@@ -1678,6 +1729,7 @@ function MePage() {
         </div>
         <span className="welcome-emoji">👩‍🍳</span>
       </section>
+      <AppearancePanel />
       <SettingsPage />
       <section className="panel tutorial-panel">
         <div className="section-head">
@@ -1703,6 +1755,117 @@ function MePage() {
         </ol>
       </section>
     </>
+  );
+}
+
+function AppearancePanel() {
+  const { data, setData, language } = useApp();
+  const backgroundInput = useRef<HTMLInputElement>(null);
+  const themes: Array<{
+    id: AppTheme;
+    icon: string;
+    zh: string;
+    en: string;
+    descZh: string;
+    descEn: string;
+  }> = [
+    {
+      id: "warm",
+      icon: "☀️",
+      zh: "暖色插画",
+      en: "Warm illustration",
+      descZh: "米色搭配橙色，温暖简约",
+      descEn: "Warm beige and orange",
+    },
+    {
+      id: "glass",
+      icon: "💎",
+      zh: "玻璃透明",
+      en: "Glass",
+      descZh: "通透磨砂与柔和渐变",
+      descEn: "Translucent glass and gradients",
+    },
+    {
+      id: "custom",
+      icon: "🖼️",
+      zh: "自定义图片",
+      en: "Custom image",
+      descZh: "从自己的设备选择背景",
+      descEn: "Choose a background from your device",
+    },
+  ];
+  const chooseTheme = (theme: AppTheme) =>
+    setData({ ...data!, preferences: { ...data!.preferences, theme } });
+  const readBackground = (selected?: File) => {
+    if (!selected) return;
+    const reader = new FileReader();
+    reader.onload = () =>
+      setData({
+        ...data!,
+        preferences: {
+          theme: "custom",
+          customBackground: String(reader.result),
+        },
+      });
+    reader.readAsDataURL(selected);
+  };
+  return (
+    <section className="panel appearance-panel">
+      <div className="section-head">
+        <div>
+          <p className="eyebrow">
+            {language === "zh" ? "个性设置" : "PERSONALISE"}
+          </p>
+          <h2>{language === "zh" ? "App 皮肤" : "App theme"}</h2>
+        </div>
+      </div>
+      <div className="theme-grid">
+        {themes.map((theme) => (
+          <button
+            key={theme.id}
+            className={data!.preferences.theme === theme.id ? "active" : ""}
+            onClick={() =>
+              theme.id === "custom" && !data!.preferences.customBackground
+                ? backgroundInput.current?.click()
+                : chooseTheme(theme.id)
+            }
+          >
+            <span>{theme.icon}</span>
+            <strong>{language === "zh" ? theme.zh : theme.en}</strong>
+            <small>{language === "zh" ? theme.descZh : theme.descEn}</small>
+          </button>
+        ))}
+      </div>
+      <input
+        ref={backgroundInput}
+        aria-label="custom background image"
+        hidden
+        type="file"
+        accept="image/*"
+        onChange={(event) => readBackground(event.target.files?.[0])}
+      />
+      {data!.preferences.customBackground && (
+        <div className="custom-background-actions">
+          <button
+            className="soft"
+            onClick={() => backgroundInput.current?.click()}
+          >
+            <Upload /> {language === "zh" ? "更换背景图片" : "Replace image"}
+          </button>
+          <button
+            className="soft"
+            onClick={() =>
+              setData({
+                ...data!,
+                preferences: { theme: "warm" },
+              })
+            }
+          >
+            {language === "zh" ? "恢复默认" : "Restore default"}
+          </button>
+        </div>
+      )}
+    </section>
   );
 }
 

@@ -30,6 +30,7 @@ export async function loadData(): Promise<AppData> {
         saved
           ? {
               ...saved,
+              preferences: saved.preferences ?? { theme: "warm" },
               categories: saved.categories ?? structuredClone(seedCategories),
             }
           : cloneInitial(),
