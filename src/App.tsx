@@ -51,7 +51,7 @@ import {
 import { missingForRecipe } from "./lib/calculations";
 import { displayUnit } from "./lib/units";
 import { labels, t } from "./i18n";
-import { BRAND_ORANGE } from "./theme";
+import { BRAND_ORANGE, LIQUID_GLASS_ANIMATION_PALETTE } from "./theme";
 import type {
   Category,
   AppTheme,
@@ -117,6 +117,14 @@ export default function App() {
   );
   const shellStyle = {
     "--orange": BRAND_ORANGE,
+    ...(ctx.data.preferences.theme === "glass"
+      ? {
+          "--ambient-one": LIQUID_GLASS_ANIMATION_PALETTE.ambientOne,
+          "--ambient-two": LIQUID_GLASS_ANIMATION_PALETTE.ambientTwo,
+          "--ambient-three": LIQUID_GLASS_ANIMATION_PALETTE.ambientThree,
+          "--illustration-spark": LIQUID_GLASS_ANIMATION_PALETTE.sparkle,
+        }
+      : {}),
     ...(ctx.data.preferences.customBackground
       ? {
           "--custom-background": `url(${ctx.data.preferences.customBackground})`,

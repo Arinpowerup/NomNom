@@ -1188,9 +1188,17 @@ textarea:focus {
   background-attachment: fixed;
 }
 .theme-glass .ambient-shapes span {
-  background: rgba(75, 169, 244, 0.28);
   filter: blur(2px);
   box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.9), 0 18px 45px rgba(44, 125, 196, 0.22);
+}
+.theme-glass .ambient-shapes span:nth-child(1) {
+  background: var(--ambient-one);
+}
+.theme-glass .ambient-shapes span:nth-child(2) {
+  background: var(--ambient-two);
+}
+.theme-glass .ambient-shapes span:nth-child(3) {
+  background: var(--ambient-three);
 }
 .theme-glass header,
 .theme-glass .panel,
@@ -1243,6 +1251,52 @@ textarea:focus {
   background: rgba(255, 255, 255, 0.58);
   border-color: rgba(255, 255, 255, 0.86);
   box-shadow: inset 0 1px 2px rgba(39, 117, 184, 0.08);
+}
+.theme-glass .mascot-shadow,
+.theme-glass .empty-shadow {
+  fill: rgba(21, 91, 151, 0.18);
+}
+.theme-glass .mascot-pot {
+  fill: #f4fbff;
+}
+.theme-glass .mascot-pot-rim {
+  fill: #8ed1ff;
+}
+.theme-glass .mascot-handle {
+  stroke: #8ed1ff;
+}
+.theme-glass .mascot-leaf {
+  fill: #66b9ee;
+}
+.theme-glass .mascot-leaf-line {
+  stroke: #e8f8ff;
+}
+.theme-glass .mascot-spark,
+.theme-glass .profile-spark {
+  fill: var(--illustration-spark);
+  filter: drop-shadow(0 0 7px rgba(106, 196, 255, 0.72));
+}
+.theme-glass .profile-bg {
+  fill: rgba(217, 242, 255, 0.82);
+}
+.theme-glass .chef-body {
+  fill: #57a9e8;
+}
+.theme-glass .chef-hat,
+.theme-glass .chef-apron {
+  fill: #f8fcff;
+  stroke: #b8ddf5;
+}
+.theme-glass .empty-plate {
+  fill: rgba(245, 252, 255, 0.92);
+  stroke: #8cccf4;
+}
+.theme-glass .empty-plate-inner {
+  fill: rgba(255, 255, 255, 0.78);
+  stroke: #c6e8fb;
+}
+.theme-glass .empty-fork {
+  stroke: #5da8d8;
 }
 .app-shell.theme-custom {
   --paper: rgba(255, 255, 255, 0.8);

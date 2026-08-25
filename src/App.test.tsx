@@ -177,6 +177,16 @@ describe("application shell", () => {
     await userEvent.click(liquidGlass);
     expect(container.querySelector(".app-shell")).toHaveClass("theme-glass");
     expect(liquidGlass).toHaveClass("active");
+    const shell = container.querySelector<HTMLElement>(".app-shell")!;
+    expect(shell.style.getPropertyValue("--ambient-one")).toBe(
+      "rgba(78, 167, 245, 0.42)",
+    );
+    expect(shell.style.getPropertyValue("--ambient-two")).toBe(
+      "rgba(203, 235, 255, 0.72)",
+    );
+    expect(shell.style.getPropertyValue("--illustration-spark")).toBe(
+      "#bfe8ff",
+    );
     await waitFor(async () =>
       expect((await loadData()).preferences.theme).toBe("glass"),
     );
