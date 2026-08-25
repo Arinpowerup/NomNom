@@ -66,7 +66,7 @@ function alphaRange(fileName: string) {
     current.copy(previous);
   }
 
-  return { min, max };
+  return { min, max, width, height };
 }
 
 describe("Snoopy home illustration", () => {
@@ -102,6 +102,12 @@ describe("Snoopy recipe search trio illustration", () => {
     const alpha = alphaRange("../illustrations/snoopy-search-trio.png");
     expect(alpha.min).toBeLessThan(255);
     expect(alpha.max).toBe(255);
+  });
+
+  it("keeps the clean wide-and-shallow banner crop used by the search field", () => {
+    const artwork = alphaRange("../illustrations/snoopy-search-trio.png");
+    expect(artwork.width / artwork.height).toBeGreaterThan(5);
+    expect(artwork.height).toBeLessThan(450);
   });
 });
 describe("Snoopy navigation PNG assets", () => {
