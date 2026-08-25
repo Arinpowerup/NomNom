@@ -165,7 +165,7 @@ export default function App() {
               {currentRole?.avatar ? (
                 <img src={currentRole.avatar} alt="current user avatar" />
               ) : (
-                <span style={{ background: currentRole?.color }}>
+                <span style={{ background: BRAND_ORANGE }}>
                   {currentRole?.name.slice(0, 1)}
                 </span>
               )}
@@ -1593,7 +1593,7 @@ function SettingsPage() {
                 {r.avatar ? (
                   <img src={r.avatar} alt={`${r.name} avatar`} />
                 ) : (
-                  <span style={{ background: r.color }}>
+                  <span style={{ background: BRAND_ORANGE }}>
                     {r.name.slice(0, 1)}
                   </span>
                 )}
@@ -1606,13 +1606,6 @@ function SettingsPage() {
                   }
                 />
               </label>
-              <input
-                type="color"
-                value={r.color}
-                onChange={(e) =>
-                  setData(updateRole(data!, { ...r, color: e.target.value }))
-                }
-              />
               <input
                 value={r.name}
                 onChange={(e) =>

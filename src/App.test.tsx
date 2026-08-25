@@ -123,6 +123,10 @@ describe("application shell", () => {
     );
     await screen.findByText("今晚想吃点什么？");
     await userEvent.click(screen.getByRole("button", { name: "我" }));
+    expect(
+      document.querySelector('.role-list input[type="color"]'),
+    ).not.toBeInTheDocument();
+    expect(screen.getByLabelText("upload avatar for 我")).toBeInTheDocument();
     const image = new File([new Uint8Array([137, 80, 78, 71])], "photo.png", {
       type: "image/png",
     });
