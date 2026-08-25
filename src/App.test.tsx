@@ -102,6 +102,14 @@ describe("application shell", () => {
     expect(screen.queryByText("个人资料")).not.toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: "我的名字" })).toBeNull();
     expect(screen.queryByLabelText("我的名字")).toBeNull();
+    const chefProfile = screen.getByRole("img", {
+      name: "Snoopy chef profile illustration",
+    });
+    expect(chefProfile.querySelector(".profile-bg")).toBeInTheDocument();
+    expect(chefProfile.querySelector("image")).toHaveAttribute(
+      "href",
+      "/illustrations/snoopy-chef-profile.png",
+    );
     expect(screen.getByLabelText("App 名称")).toBeVisible();
   });
   it("adds a recipe to tonight from the recipe catalogue", async () => {

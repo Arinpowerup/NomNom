@@ -2087,28 +2087,21 @@ function ProfileIllustration() {
       className="profile-illustration"
       viewBox="0 0 150 120"
       role="img"
-      aria-label="friendly chef illustration"
+      aria-label="Snoopy chef profile illustration"
     >
       <circle className="profile-bg" cx="75" cy="62" r="55" />
-      <path className="chef-body" d="M38 117c2-30 17-43 37-43s35 13 37 43z" />
-      <circle className="chef-face" cx="75" cy="59" r="27" />
-      <path
-        className="chef-hair"
-        d="M48 58c0-26 11-37 27-37s28 11 28 37c-9-15-18-20-28-20S57 43 48 58z"
+      <image
+        className="profile-snoopy"
+        href="/illustrations/snoopy-chef-profile.png"
+        x="18"
+        y="1"
+        width="116"
+        height="116"
+        preserveAspectRatio="xMidYMid meet"
       />
-      <path
-        className="chef-hat"
-        d="M49 33c-8-2-11-9-8-15 3-7 11-8 17-4 3-12 20-15 27-5 8-6 21-1 21 10 0 8-7 13-14 14z"
-      />
-      <circle className="chef-eye" cx="65" cy="60" r="3" />
-      <circle className="chef-eye" cx="85" cy="60" r="3" />
-      <path className="chef-smile" d="M68 70c5 5 10 5 15 0" />
-      <path className="chef-apron" d="M61 82h28l7 35H54z" />
-      <circle className="profile-spark" cx="120" cy="35" r="6" />
     </svg>
   );
 }
-
 function EmptyIllustration() {
   return (
     <div
