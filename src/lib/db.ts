@@ -26,12 +26,26 @@ export async function loadData(): Promise<AppData> {
     const request = tx.objectStore(STORE).get(KEY);
     request.onsuccess = () => {
       const saved = request.result as AppData | undefined;
+      const isLegacyCategoryData = Boolean(saved && !saved.categories);
+      const legacyCategoryMap: Record<string, string> = {
+        light: "diet",
+        home: "meat",
+        hotpot: "soup",
+        bakery: "dessert",
+      };
       resolve(
         saved
           ? {
               ...saved,
               preferences: saved.preferences ?? { theme: "warm" },
               categories: saved.categories ?? structuredClone(seedCategories),
+              recipes: isLegacyCategoryData
+                ? saved.recipes.map((recipe) => ({
+                    ...recipe,
+                    category:
+                      legacyCategoryMap[recipe.category] ?? recipe.category,
+                  }))
+                : saved.recipes,
             }
           : cloneInitial(),
       );
