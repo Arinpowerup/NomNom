@@ -37,7 +37,11 @@ export async function loadData(): Promise<AppData> {
         saved
           ? {
               ...saved,
-              preferences: saved.preferences ?? { theme: "warm" },
+              preferences: {
+                theme: "warm",
+                appName: "NomNom",
+                ...saved.preferences,
+              },
               categories: saved.categories ?? structuredClone(seedCategories),
               recipes: isLegacyCategoryData
                 ? saved.recipes.map((recipe) => ({

@@ -103,8 +103,8 @@ export default function App() {
   const ctx = useApp();
   const [page, setPage] = useState<Page>("home");
   useEffect(() => {
-    document.title = "NomNom";
-  }, []);
+    document.title = ctx.data?.preferences.appName?.trim() || "NomNom";
+  }, [ctx.data?.preferences.appName]);
   if (!ctx.data)
     return (
       <div className="loading">
@@ -140,7 +140,7 @@ export default function App() {
               <ChefHat />
             </span>
             <div>
-              <strong>NomNom</strong>
+              <strong>{ctx.data.preferences.appName?.trim() || "NomNom"}</strong>
               <small>{L[page]}</small>
             </div>
           </div>
@@ -1776,8 +1776,8 @@ function SettingsPage() {
 }
 
 function MePage() {
-  const { data, language, currentRoleId } = useApp();
-  const currentRole = data!.roles.find((role) => role.id === currentRoleId);
+  const { data, setData, language } = useApp();
+  const appName = data!.preferences.appName ?? "NomNom";
   return (
     <>
       <section className="panel welcome-panel">
@@ -1785,11 +1785,24 @@ function MePage() {
           <p className="eyebrow">
             {language === "zh" ? "欢迎回来" : "Welcome back"}
           </p>
-          <h2>
-            {language === "zh"
-              ? `你好，${currentRole?.name ?? "家人"}`
-              : `Hello, ${currentRole?.name ?? "family"}`}
-          </h2>
+          <h2>{appName.trim() || "NomNom"}</h2>
+          <label className="app-name-field">
+            <span>{language === "zh" ? "给这个 App 起个名字" : "Name this app"}</span>
+            <input
+              aria-label={language === "zh" ? "App 名称" : "App name"}
+              value={appName}
+              placeholder="NomNom"
+              onChange={(event) =>
+                setData({
+                  ...data!,
+                  preferences: {
+                    ...data!.preferences,
+                    appName: event.target.value,
+                  },
+                })
+              }
+            />
+          </label>
           <p>
             {language === "zh"
               ? "管理家庭成员、语言、数据备份和个性设置。"

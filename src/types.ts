@@ -99,6 +99,7 @@ export interface AppData {
   version: 1;
   preferences: {
     theme: AppTheme;
+    appName?: string;
     customBackground?: string;
   };
   categories: DishCategory[];

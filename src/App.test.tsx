@@ -37,7 +37,7 @@ describe("application shell", () => {
     );
     expect(localStorage.getItem("language")).toBe("en");
   });
-  it("keeps NomNom as the product name and lets the current user rename themselves", async () => {
+  it("lets the user name the app independently from member names", async () => {
     render(
       <AppProvider>
         <App />
@@ -45,15 +45,16 @@ describe("application shell", () => {
     );
     await screen.findByText("今晚想吃点什么？");
     await userEvent.click(screen.getByRole("button", { name: "我" }));
-    expect(screen.getByText("NomNom", { selector: ".top-brand strong" })).toBeVisible();
-    expect(screen.queryByRole("heading", { name: "我的 NomNom" })).toBeNull();
-    const displayName = screen.getByLabelText("我的名字");
-    await userEvent.clear(displayName);
-    await userEvent.type(displayName, "小厨神");
+    expect(screen.getByRole("heading", { name: "NomNom" })).toBeVisible();
+    const appName = screen.getByLabelText("App 名称");
+    await userEvent.clear(appName);
+    await userEvent.type(appName, "幸福厨房");
     await waitFor(async () =>
-      expect((await loadData()).roles[0].name).toBe("小厨神"),
+      expect((await loadData()).preferences.appName).toBe("幸福厨房"),
     );
-    expect(screen.getByRole("heading", { name: "你好，小厨神" })).toBeVisible();
+    expect(screen.getByText("幸福厨房", { selector: ".top-brand strong" })).toBeVisible();
+    expect((await loadData()).roles[0].name).toBe("我");
+    expect(document.title).toBe("幸福厨房");
   });
   it("adds a recipe to tonight from the recipe catalogue", async () => {
     render(

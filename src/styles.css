@@ -1136,6 +1136,17 @@ textarea:focus {
   display: grid;
   gap: 8px;
 }
+.app-name-field {
+  display: grid;
+  max-width: 360px;
+  gap: 6px;
+  margin-top: 14px;
+}
+.app-name-field span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
 .profile-name-field span {
   font-weight: 700;
 }
