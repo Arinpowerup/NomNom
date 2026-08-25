@@ -753,8 +753,19 @@ function RecipesPage({
   };
   return (
     <>
-      <div className="toolbar">
-        <div className="search">
+      <div className="toolbar recipe-toolbar">
+        <div className="search recipe-search">
+          <div
+            className="recipe-search-art"
+            role="img"
+            aria-label="Three Snoopy characters resting on the recipe search border"
+          >
+            <img
+              src="/illustrations/snoopy-search-trio.png"
+              alt=""
+              aria-hidden="true"
+            />
+          </div>
           <Search />
           <input
             aria-label="recipe search"

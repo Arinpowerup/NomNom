@@ -560,6 +560,29 @@ textarea:focus {
   padding: 0 12px;
   flex: 1;
 }
+.recipe-toolbar {
+  align-items: flex-end;
+  padding-top: 92px;
+}
+.recipe-search {
+  position: relative;
+}
+.recipe-search-art {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% - 2px);
+  width: min(94%, 760px);
+  line-height: 0;
+  pointer-events: none;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+.recipe-search-art img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 5px 7px rgba(83, 51, 22, 0.08));
+}
 .search input {
   border: 0;
   box-shadow: none;
@@ -1016,6 +1039,17 @@ textarea:focus {
   }
 }
 @media (max-width: 560px) {
+  .recipe-toolbar {
+    align-items: stretch;
+    flex-wrap: wrap;
+    padding-top: 76px;
+  }
+  .recipe-toolbar .recipe-search {
+    flex-basis: 100%;
+  }
+  .recipe-search-art {
+    width: min(92%, 520px);
+  }
   header {
     padding: 12px 16px;
     height: 82px;

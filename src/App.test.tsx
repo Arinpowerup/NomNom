@@ -134,6 +134,27 @@ describe("application shell", () => {
       expect((await loadData()).mealPlans[0]?.meal).toBe("dinner"),
     );
   });
+  it("rests the approved Snoopy trio on the recipe search border", async () => {
+    render(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    await screen.findByText("今晚想吃点什么？");
+    await userEvent.click(screen.getByRole("button", { name: "菜单" }));
+    const artwork = await screen.findByRole("img", {
+      name: "Three Snoopy characters resting on the recipe search border",
+    });
+    expect(artwork.parentElement).toHaveClass("recipe-search");
+    expect(artwork.querySelector("img")).toHaveAttribute(
+      "src",
+      "/illustrations/snoopy-search-trio.png",
+    );
+    expect(screen.getByLabelText("recipe search")).toHaveAttribute(
+      "placeholder",
+      "搜索菜名或食材",
+    );
+  });
   it("shows and persists editable recipe categories", async () => {
     render(
       <AppProvider>
