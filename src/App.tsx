@@ -76,6 +76,20 @@ const units: Unit[] = [
   "pack",
   "box",
 ];
+const fridgeUnits: Unit[] = ["piece", "g", "kg"];
+const fridgeUnitLabel = (unit: Unit, language: "zh" | "en") => {
+  const zh: Partial<Record<Unit, string>> = {
+    piece: "个",
+    g: "克",
+    kg: "千克",
+  };
+  const en: Partial<Record<Unit, string>> = {
+    piece: "piece",
+    g: "gram",
+    kg: "kilogram",
+  };
+  return (language === "zh" ? zh[unit] : en[unit]) ?? unit;
+};
 const localDate = (d = new Date()) => {
   const x = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
   return x.toISOString().slice(0, 10);
@@ -1122,11 +1136,14 @@ function FridgePage() {
             onChange={(e) => setQty(+e.target.value)}
           />
           <select
+            aria-label="fridge unit"
             value={unit}
             onChange={(e) => setUnit(e.target.value as Unit)}
           >
-            {units.map((u) => (
-              <option key={u}>{u}</option>
+            {fridgeUnits.map((u) => (
+              <option value={u} key={u}>
+                {fridgeUnitLabel(u, language)}
+              </option>
             ))}
           </select>
           <button onClick={submit}>
@@ -1153,7 +1170,7 @@ function FridgePage() {
                   })
                 }
               />
-              <span>{s.unit}</span>
+              <span>{fridgeUnitLabel(s.unit, language)}</span>
               <button
                 className="icon danger"
                 onClick={() =>

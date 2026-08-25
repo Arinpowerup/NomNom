@@ -149,4 +149,26 @@ describe("application shell", () => {
       "--orange": "rgb(240, 160, 40)",
     });
   });
+  it("limits fridge entry units to pieces, grams and kilograms", async () => {
+    render(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    await screen.findByText("今晚想吃点什么？");
+    await userEvent.click(screen.getByRole("button", { name: "冰箱" }));
+    const unitSelect = screen.getByLabelText(
+      "fridge unit",
+    ) as HTMLSelectElement;
+    expect([...unitSelect.options].map((option) => option.value)).toEqual([
+      "piece",
+      "g",
+      "kg",
+    ]);
+    expect([...unitSelect.options].map((option) => option.text)).toEqual([
+      "个",
+      "克",
+      "千克",
+    ]);
+  });
 });
