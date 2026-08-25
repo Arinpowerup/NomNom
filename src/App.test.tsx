@@ -41,7 +41,7 @@ describe("application shell", () => {
       </AppProvider>,
     );
     await screen.findByText("今晚想吃点什么？");
-    await userEvent.click(screen.getByRole("button", { name: "菜谱" }));
+    await userEvent.click(screen.getByRole("button", { name: "点菜" }));
     const picks = await screen.findAllByRole("button", { name: /今晚想吃/ });
     await userEvent.click(picks[0]);
     await waitFor(async () =>
@@ -55,7 +55,7 @@ describe("application shell", () => {
       </AppProvider>,
     );
     await screen.findByText("今晚想吃点什么？");
-    await userEvent.click(screen.getByRole("button", { name: "菜谱" }));
+    await userEvent.click(screen.getByRole("button", { name: "点菜" }));
     expect(await screen.findByRole("button", { name: "肉类" })).toBeVisible();
     await userEvent.click(screen.getByRole("button", { name: /管理分类/ }));
     await userEvent.type(screen.getByLabelText("new category"), "主食");
@@ -65,5 +65,24 @@ describe("application shell", () => {
         (await loadData()).categories.some((item) => item.name === "主食"),
       ).toBe(true),
     );
+  });
+  it("uses the five requested primary modules and keeps planning under Order", async () => {
+    render(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    await screen.findByText("今晚想吃点什么？");
+    for (const name of ["首页", "点菜", "食记", "冰箱", "我"]) {
+      expect(screen.getByRole("button", { name })).toBeVisible();
+    }
+    expect(screen.queryByRole("button", { name: "历史记录" })).toBeNull();
+    await userEvent.click(screen.getByRole("button", { name: "点菜" }));
+    expect(
+      await screen.findByRole("button", { name: /一周安排/ }),
+    ).toBeVisible();
+    expect(screen.getByRole("button", { name: /购物清单/ })).toBeVisible();
+    await userEvent.click(screen.getByRole("button", { name: "我" }));
+    expect(await screen.findByText("新手教程")).toBeVisible();
   });
 });

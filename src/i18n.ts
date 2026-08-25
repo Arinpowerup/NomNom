@@ -2,6 +2,9 @@ import type { Language } from "./types";
 export const labels = {
   zh: {
     home: "首页",
+    order: "点菜",
+    foodlog: "食记",
+    me: "我",
     week: "一周菜单",
     recipes: "菜谱",
     fridge: "冰箱",
@@ -43,6 +46,9 @@ export const labels = {
   },
   en: {
     home: "Home",
+    order: "Order",
+    foodlog: "Food Journal",
+    me: "Me",
     week: "Weekly Menu",
     recipes: "Recipes",
     fridge: "Fridge",

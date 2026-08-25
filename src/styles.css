@@ -921,6 +921,74 @@ textarea:focus {
   justify-content: space-between;
   gap: 12px;
 }
+.side-categories {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0 0 16px;
+  margin-bottom: 13px;
+  max-height: 38vh;
+  overflow: auto;
+}
+.side-categories p,
+.nav-caption {
+  color: #9fb9ad;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  margin: 0 14px 7px;
+}
+.side-categories button {
+  width: 100%;
+  justify-content: flex-start;
+  padding: 7px 14px;
+  background: transparent;
+  color: #d5e1da;
+  font-size: 13px;
+}
+.side-categories button span {
+  color: #f2c979;
+}
+.side-categories button.active {
+  background: rgba(255, 255, 255, 0.1);
+}
+.module-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 6px;
+  background: #e9e5db;
+  border-radius: 16px;
+  width: fit-content;
+}
+.module-tabs button {
+  background: transparent;
+  color: #5b625b;
+}
+.module-tabs button.active {
+  background: var(--paper);
+  color: var(--green);
+  box-shadow: 0 5px 14px rgba(43, 57, 45, 0.08);
+}
+.welcome-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  background: #f5e6bd;
+}
+.welcome-panel p:last-child {
+  margin-bottom: 0;
+  color: var(--muted);
+}
+.welcome-emoji {
+  font-size: 60px;
+}
+.tutorial-panel {
+  margin-top: 18px;
+}
+.tutorial-panel li {
+  margin: 10px 0;
+  color: var(--muted);
+}
 .category-editor {
   display: grid;
   gap: 9px;

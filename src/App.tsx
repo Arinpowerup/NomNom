@@ -54,15 +54,13 @@ import type {
   Unit,
 } from "./types";
 
-type Page =
-  "home" | "week" | "recipes" | "fridge" | "shopping" | "history" | "settings";
+type Page = "home" | "order" | "foodlog" | "fridge" | "me";
 const nav: [Page, typeof Home][] = [
   ["home", Home],
-  ["week", CalendarDays],
-  ["recipes", ChefHat],
+  ["order", ChefHat],
+  ["foodlog", History],
   ["fridge", Refrigerator],
-  ["shopping", ShoppingBasket],
-  ["history", History],
+  ["me", Users],
 ];
 const meals: MealType[] = ["breakfast", "lunch", "dinner"];
 const units: Unit[] = [
@@ -94,6 +92,9 @@ const mondayOf = (date: string) => {
 export default function App() {
   const ctx = useApp();
   const [page, setPage] = useState<Page>("home");
+  const [selectedCategory, setSelectedCategory] = useState<Category | "all">(
+    "all",
+  );
   const [mobile, setMobile] = useState(false);
   if (!ctx.data)
     return (
@@ -114,6 +115,44 @@ export default function App() {
             <small>家庭点单</small>
           </div>
         </div>
+        <div className="side-categories">
+          <p>{ctx.language === "zh" ? "菜品分类" : "CATEGORIES"}</p>
+          <button
+            className={
+              page === "order" && selectedCategory === "all" ? "active" : ""
+            }
+            onClick={() => {
+              setSelectedCategory("all");
+              setPage("order");
+              setMobile(false);
+            }}
+          >
+            <span>•</span> {L.all}
+          </button>
+          {ctx.data.categories.map((category) => (
+            <button
+              key={category.id}
+              className={
+                page === "order" && selectedCategory === category.id
+                  ? "active"
+                  : ""
+              }
+              onClick={() => {
+                setSelectedCategory(category.id);
+                setPage("order");
+                setMobile(false);
+              }}
+            >
+              <span>•</span>
+              {ctx.language === "en" && category.nameEn
+                ? category.nameEn
+                : category.name}
+            </button>
+          ))}
+        </div>
+        <p className="nav-caption">
+          {ctx.language === "zh" ? "主要功能" : "MAIN"}
+        </p>
         <nav>
           {nav.map(([key, Icon]) => (
             <button
@@ -172,19 +211,22 @@ export default function App() {
                 </option>
               ))}
             </select>
-            <button className="icon" onClick={() => setPage("settings")}>
+            <button className="icon" onClick={() => setPage("me")}>
               <Settings />
             </button>
           </div>
         </header>
         <div className="content">
           {page === "home" && <HomePage />}
-          {page === "week" && <WeekPage />}
-          {page === "recipes" && <RecipesPage />}
+          {page === "order" && (
+            <OrderPage
+              key={selectedCategory}
+              initialCategory={selectedCategory}
+            />
+          )}
+          {page === "foodlog" && <HistoryPage />}
           {page === "fridge" && <FridgePage />}
-          {page === "shopping" && <ShoppingPage />}
-          {page === "history" && <HistoryPage />}
-          {page === "settings" && <SettingsPage />}
+          {page === "me" && <MePage />}
         </div>
       </main>
     </div>
@@ -608,9 +650,49 @@ function MealDrawer({
   );
 }
 
-function RecipesPage() {
+function OrderPage({ initialCategory }: { initialCategory: Category | "all" }) {
+  const { language } = useApp();
+  const [section, setSection] = useState<"recipes" | "week" | "shopping">(
+    "recipes",
+  );
+  return (
+    <>
+      <div className="module-tabs">
+        <button
+          className={section === "recipes" ? "active" : ""}
+          onClick={() => setSection("recipes")}
+        >
+          <ChefHat /> {language === "zh" ? "点菜" : "Choose dishes"}
+        </button>
+        <button
+          className={section === "week" ? "active" : ""}
+          onClick={() => setSection("week")}
+        >
+          <CalendarDays /> {language === "zh" ? "一周安排" : "Weekly plan"}
+        </button>
+        <button
+          className={section === "shopping" ? "active" : ""}
+          onClick={() => setSection("shopping")}
+        >
+          <ShoppingBasket /> {language === "zh" ? "购物清单" : "Shopping"}
+        </button>
+      </div>
+      {section === "recipes" && (
+        <RecipesPage initialCategory={initialCategory} />
+      )}
+      {section === "week" && <WeekPage />}
+      {section === "shopping" && <ShoppingPage />}
+    </>
+  );
+}
+
+function RecipesPage({
+  initialCategory = "all",
+}: {
+  initialCategory?: Category | "all";
+}) {
   const { data, setData, language, currentRoleId } = useApp();
-  const [cat, setCat] = useState<Category | "all">("all");
+  const [cat, setCat] = useState<Category | "all">(initialCategory);
   const [query, setQuery] = useState("");
   const [editing, setEditing] = useState<Recipe | null | undefined>(undefined);
   const [managingCategories, setManagingCategories] = useState(false);
@@ -1575,6 +1657,52 @@ function SettingsPage() {
         </div>
       </section>
     </div>
+  );
+}
+
+function MePage() {
+  const { language } = useApp();
+  return (
+    <>
+      <section className="panel welcome-panel">
+        <div>
+          <p className="eyebrow">
+            {language === "zh" ? "欢迎回来" : "Welcome back"}
+          </p>
+          <h2>{language === "zh" ? "我的灶边" : "My Kitchen"}</h2>
+          <p>
+            {language === "zh"
+              ? "管理家庭成员、语言、数据备份和个性设置。"
+              : "Manage family members, language, backups and preferences."}
+          </p>
+        </div>
+        <span className="welcome-emoji">👩‍🍳</span>
+      </section>
+      <SettingsPage />
+      <section className="panel tutorial-panel">
+        <div className="section-head">
+          <h2>{language === "zh" ? "新手教程" : "Quick start"}</h2>
+          <span className="count">3</span>
+        </div>
+        <ol>
+          <li>
+            {language === "zh"
+              ? "切换家庭角色后去“点菜”选择想吃的菜。"
+              : "Switch family role, then choose dishes in Order."}
+          </li>
+          <li>
+            {language === "zh"
+              ? "确认人数和菜单，生成对应的购物清单。"
+              : "Confirm diners and menu, then generate a shopping list."}
+          </li>
+          <li>
+            {language === "zh"
+              ? "买完放入冰箱，做完菜后标记完成自动扣库。"
+              : "Stock purchases and complete dishes to deduct ingredients."}
+          </li>
+        </ol>
+      </section>
+    </>
   );
 }
 
