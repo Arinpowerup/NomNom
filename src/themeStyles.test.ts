@@ -34,11 +34,11 @@ describe("Snoopy home hero artwork", () => {
 describe("Snoopy recipe search artwork", () => {
   it("aligns the transparent trio to the border and adapts on narrow screens", () => {
     expect(styles).toContain("bottom: calc(100% - 1px);");
-    expect(styles).toContain("width: min(84%, 650px);");
+    expect(styles).toContain("width: min(42%, 325px);");
     expect(styles).toContain("transform: translateX(-50%);");
     expect(styles).toContain("@media (max-width: 560px)");
     expect(styles).toContain("flex-wrap: wrap;");
     expect(styles).toContain("flex-basis: 100%;");
-    expect(styles).toContain("width: min(86%, 430px);");
+    expect(styles).toContain("width: min(43%, 215px);");
   });
 });

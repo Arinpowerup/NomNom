@@ -32,6 +32,7 @@ function alphaRange(fileName: string) {
   let source = 0;
   let min = 255;
   let max = 0;
+  let bottomBrownPixels = 0;
   const paeth = (a: number, b: number, c: number) => {
     const p = a + b - c;
     const pa = Math.abs(p - a);
@@ -62,11 +63,24 @@ function alphaRange(fileName: string) {
     for (let x = 3; x < stride; x += bytesPerPixel) {
       min = Math.min(min, current[x]);
       max = Math.max(max, current[x]);
+      const red = current[x - 3];
+      const green = current[x - 2];
+      const blue = current[x - 1];
+      if (
+        y >= height * 0.84 &&
+        current[x] > 32 &&
+        red > green + 7 &&
+        green > blue + 7 &&
+        red > 120 &&
+        red < 245
+      ) {
+        bottomBrownPixels += 1;
+      }
     }
     current.copy(previous);
   }
 
-  return { min, max, width, height };
+  return { min, max, width, height, bottomBrownPixels };
 }
 
 describe("Snoopy home illustration", () => {
@@ -108,6 +122,7 @@ describe("Snoopy recipe search trio illustration", () => {
     const artwork = alphaRange("../illustrations/snoopy-search-trio.png");
     expect(artwork.width / artwork.height).toBeGreaterThan(5);
     expect(artwork.height).toBeLessThan(450);
+    expect(artwork.bottomBrownPixels).toBe(0);
   });
 });
 describe("Snoopy navigation PNG assets", () => {
