@@ -23,6 +23,14 @@ describe("application shell", () => {
     expect(screen.queryByText("灶边")).not.toBeInTheDocument();
     expect(document.title).toBe("NomNom");
     expect(screen.getAllByText("首页").length).toBeGreaterThan(0);
+    const cookingSnoopy = screen.getByRole("img", {
+      name: "Snoopy carrying a steaming cooking pot",
+    });
+    expect(cookingSnoopy.querySelector("img")).toHaveAttribute(
+      "src",
+      "/illustrations/snoopy-cooking-pot.png",
+    );
+    expect(cookingSnoopy.querySelectorAll(".cooking-steam")).toHaveLength(3);
   });
   it("switches the system interface to English", async () => {
     render(
@@ -341,7 +349,7 @@ describe("application shell", () => {
     );
     expect(
       await screen.findByRole("img", {
-        name: "NomNom cooking illustration",
+        name: "Snoopy carrying a steaming cooking pot",
       }),
     ).toBeVisible();
     expect(container.querySelectorAll(".ambient-shapes span")).toHaveLength(3);

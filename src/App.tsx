@@ -2056,42 +2056,23 @@ function MiniRecipe({ recipe }: { recipe: Recipe }) {
 }
 function KitchenMascot() {
   return (
-    <svg
+    <div
       className="kitchen-mascot"
-      viewBox="0 0 260 190"
       role="img"
-      aria-label="NomNom cooking illustration"
+      aria-label="Snoopy carrying a steaming cooking pot"
     >
-      <ellipse className="mascot-shadow" cx="132" cy="171" rx="92" ry="14" />
-      <path className="mascot-pot" d="M55 103h151l-14 61H70z" />
-      <path
-        className="mascot-pot-rim"
-        d="M47 95h167a8 8 0 0 1 0 16H47a8 8 0 0 1 0-16z"
+      <img
+        className="kitchen-mascot-image"
+        src="/illustrations/snoopy-cooking-pot.png"
+        alt=""
+        aria-hidden="true"
       />
-      <path
-        className="mascot-handle"
-        d="M55 117H30a13 13 0 0 1 0-26h17M206 117h24a13 13 0 0 0 0-26h-16"
-      />
-      <circle className="mascot-eye" cx="111" cy="129" r="5" />
-      <circle className="mascot-eye" cx="151" cy="129" r="5" />
-      <path className="mascot-smile" d="M119 141c8 9 17 9 25 0" />
-      <path className="mascot-steam steam-one" d="M92 84c-18-20 17-26 2-52" />
-      <path className="mascot-steam steam-two" d="M131 78c-17-20 18-28 1-56" />
-      <path
-        className="mascot-steam steam-three"
-        d="M171 84c-17-20 17-26 2-52"
-      />
-      <path
-        className="mascot-leaf"
-        d="M198 35c-22 0-35 11-38 32 22 1 35-10 38-32z"
-      />
-      <path className="mascot-leaf-line" d="M166 62l27-22" />
-      <circle className="mascot-spark spark-one" cx="52" cy="49" r="7" />
-      <circle className="mascot-spark spark-two" cx="222" cy="69" r="5" />
-    </svg>
+      <span className="cooking-steam steam-one" aria-hidden="true" />
+      <span className="cooking-steam steam-two" aria-hidden="true" />
+      <span className="cooking-steam steam-three" aria-hidden="true" />
+    </div>
   );
 }
-
 function ProfileIllustration() {
   return (
     <svg
