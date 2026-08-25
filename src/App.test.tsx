@@ -19,6 +19,9 @@ describe("application shell", () => {
       </AppProvider>,
     );
     expect(await screen.findByText("今晚想吃点什么？")).toBeInTheDocument();
+    expect(screen.getByText("NomNom")).toBeVisible();
+    expect(screen.queryByText("灶边")).not.toBeInTheDocument();
+    expect(document.title).toBe("NomNom");
     expect(screen.getAllByText("首页").length).toBeGreaterThan(0);
   });
   it("switches the system interface to English", async () => {

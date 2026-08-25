@@ -1,4 +1,10 @@
-import { useMemo, useRef, useState, type CSSProperties } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import {
   CalendarDays,
   ChefHat,
@@ -96,6 +102,9 @@ const mondayOf = (date: string) => {
 export default function App() {
   const ctx = useApp();
   const [page, setPage] = useState<Page>("home");
+  useEffect(() => {
+    document.title = "NomNom";
+  }, []);
   if (!ctx.data)
     return (
       <div className="loading">
@@ -126,7 +135,7 @@ export default function App() {
               <ChefHat />
             </span>
             <div>
-              <strong>灶边</strong>
+              <strong>NomNom</strong>
               <small>{L[page]}</small>
             </div>
           </div>
@@ -1568,7 +1577,7 @@ function SettingsPage() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `family-menu-${new Date().toISOString().replace(/[:.]/g, "-")}.json`;
+    a.download = `nomnom-${new Date().toISOString().replace(/[:.]/g, "-")}.json`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -1736,7 +1745,7 @@ function MePage() {
           <p className="eyebrow">
             {language === "zh" ? "欢迎回来" : "Welcome back"}
           </p>
-          <h2>{language === "zh" ? "我的灶边" : "My Kitchen"}</h2>
+          <h2>{language === "zh" ? "我的 NomNom" : "My NomNom"}</h2>
           <p>
             {language === "zh"
               ? "管理家庭成员、语言、数据备份和个性设置。"

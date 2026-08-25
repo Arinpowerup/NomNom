@@ -372,7 +372,7 @@ export function recommend(recipes: Recipe[], stock: StockItem[], diners = 2) {
 }
 export function exportData(data: AppData) {
   return JSON.stringify({
-    format: "family-menu-backup",
+    format: "nomnom-backup",
     exportedAt: iso(),
     data,
   });
@@ -380,7 +380,7 @@ export function exportData(data: AppData) {
 export function importData(raw: string): AppData {
   const parsed = JSON.parse(raw);
   if (
-    parsed.format !== "family-menu-backup" ||
+    !["nomnom-backup", "family-menu-backup"].includes(parsed.format) ||
     parsed.data?.version !== 1 ||
     !Array.isArray(parsed.data.recipes)
   )
