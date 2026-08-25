@@ -668,6 +668,24 @@ function RecipesPage({
         .toLowerCase()
         .includes(query.toLowerCase()),
   );
+  const uploadPhoto = (recipe: Recipe, selected?: File) => {
+    if (!selected) return;
+    const reader = new FileReader();
+    reader.onload = () =>
+      setData({
+        ...data!,
+        recipes: data!.recipes.map((item) =>
+          item.id === recipe.id
+            ? {
+                ...item,
+                image: String(reader.result),
+                updatedAt: new Date().toISOString(),
+              }
+            : item,
+        ),
+      });
+    reader.readAsDataURL(selected);
+  };
   return (
     <>
       <div className="toolbar">
@@ -711,7 +729,25 @@ function RecipesPage({
       <div className="recipe-grid">
         {shown.map((r) => (
           <article className="recipe-card" key={r.id}>
-            <RecipeImage recipe={r} />
+            <div className="recipe-visual">
+              <RecipeImage recipe={r} />
+              <label className="recipe-photo-upload">
+                <Upload />
+                {language === "zh"
+                  ? r.image
+                    ? "更换照片"
+                    : "上传照片"
+                  : r.image
+                    ? "Replace photo"
+                    : "Upload photo"}
+                <input
+                  aria-label={`upload photo for ${r.name}`}
+                  type="file"
+                  accept="image/*"
+                  onChange={(event) => uploadPhoto(r, event.target.files?.[0])}
+                />
+              </label>
+            </div>
             <div>
               <span className="category">
                 {(() => {
@@ -1836,7 +1872,9 @@ function AppearancePanel() {
 
 function RecipeImage({ recipe }: { recipe: Recipe }) {
   if (recipe.image)
-    return <img className="recipe-image" src={recipe.image} alt="" />;
+    return (
+      <img className="recipe-image" src={recipe.image} alt={recipe.name} />
+    );
   const kind =
     recipe.category === "meat"
       ? "meat"

@@ -626,6 +626,40 @@ textarea:focus {
   border-radius: 0;
   font-size: 60px;
 }
+.recipe-visual {
+  height: 180px;
+  position: relative;
+  overflow: hidden;
+}
+.recipe-visual > .recipe-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+}
+.recipe-photo-upload {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 10px;
+  border-radius: 10px;
+  background: rgba(255, 253, 248, 0.9);
+  color: #4e514b;
+  box-shadow: 0 5px 16px rgba(45, 47, 39, 0.16);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+}
+.recipe-photo-upload svg {
+  width: 14px;
+  height: 14px;
+}
+.recipe-photo-upload input {
+  display: none;
+}
 .recipe-card > div:last-child {
   padding: 20px;
 }

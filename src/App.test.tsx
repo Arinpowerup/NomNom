@@ -196,4 +196,25 @@ describe("application shell", () => {
     await userEvent.type(ingredient, "鸡蛋");
     expect(unitSelect.options[0].text).toBe("个");
   });
+  it("uploads and persists a dish photo directly from the menu card", async () => {
+    render(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    await screen.findByText("今晚想吃点什么？");
+    await userEvent.click(screen.getByRole("button", { name: "菜单" }));
+    const photo = new File([new Uint8Array([137, 80, 78, 71])], "dish.png", {
+      type: "image/png",
+    });
+    await userEvent.upload(
+      await screen.findByLabelText("upload photo for 柠香鸡胸沙拉"),
+      photo,
+    );
+    await waitFor(async () =>
+      expect((await loadData()).recipes[0].image).toMatch(/^data:image\/png/),
+    );
+    expect(await screen.findByAltText("柠香鸡胸沙拉")).toBeVisible();
+    expect(screen.getByText("更换照片")).toBeVisible();
+  });
 });
