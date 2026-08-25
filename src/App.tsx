@@ -93,10 +93,6 @@ const mondayOf = (date: string) => {
 export default function App() {
   const ctx = useApp();
   const [page, setPage] = useState<Page>("home");
-  const [selectedCategory, setSelectedCategory] = useState<Category | "all">(
-    "all",
-  );
-  const [mobile, setMobile] = useState(false);
   if (!ctx.data)
     return (
       <div className="loading">
@@ -117,83 +113,18 @@ export default function App() {
       className={`app-shell theme-${ctx.data.preferences.theme}`}
       style={shellStyle}
     >
-      <aside className={mobile ? "sidebar open" : "sidebar"}>
-        <div className="brand">
-          <span className="brand-mark">
-            <ChefHat />
-          </span>
-          <div>
-            <strong>灶边</strong>
-            <small>家庭点单</small>
-          </div>
-        </div>
-        <div className="side-categories">
-          <p>{ctx.language === "zh" ? "菜品分类" : "CATEGORIES"}</p>
-          <button
-            className={
-              page === "order" && selectedCategory === "all" ? "active" : ""
-            }
-            onClick={() => {
-              setSelectedCategory("all");
-              setPage("order");
-              setMobile(false);
-            }}
-          >
-            <span>•</span> {L.all}
-          </button>
-          {ctx.data.categories.map((category) => (
-            <button
-              key={category.id}
-              className={
-                page === "order" && selectedCategory === category.id
-                  ? "active"
-                  : ""
-              }
-              onClick={() => {
-                setSelectedCategory(category.id);
-                setPage("order");
-                setMobile(false);
-              }}
-            >
-              <span>•</span>
-              {ctx.language === "en" && category.nameEn
-                ? category.nameEn
-                : category.name}
-            </button>
-          ))}
-        </div>
-        <p className="nav-caption">
-          {ctx.language === "zh" ? "主要功能" : "MAIN"}
-        </p>
-        <nav>
-          {nav.map(([key, Icon]) => (
-            <button
-              key={key}
-              className={page === key ? "active" : ""}
-              onClick={() => {
-                setPage(key);
-                setMobile(false);
-              }}
-            >
-              <Icon />
-              {L[key]}
-            </button>
-          ))}
-        </nav>
-        <div className="side-note">
-          <span>本地保存</span>
-          <small>数据只留在这台电脑</small>
-        </div>
-      </aside>
       <main>
         <header>
-          <button
-            className="icon mobile-menu"
-            onClick={() => setMobile(!mobile)}
-          >
-            <Menu />
-          </button>
-          <div>
+          <div className="top-brand">
+            <span className="brand-mark">
+              <ChefHat />
+            </span>
+            <div>
+              <strong>灶边</strong>
+              <small>{L[page]}</small>
+            </div>
+          </div>
+          <div className="desktop-title">
             <p className="eyebrow">
               {new Intl.DateTimeFormat(
                 ctx.language === "zh" ? "zh-CN" : "en-AU",
@@ -232,24 +163,29 @@ export default function App() {
                 ))}
               </select>
             </div>
-            <button className="icon" onClick={() => setPage("me")}>
-              <Settings />
-            </button>
           </div>
         </header>
         <div className="content">
           {page === "home" && <HomePage />}
-          {page === "order" && (
-            <OrderPage
-              key={selectedCategory}
-              initialCategory={selectedCategory}
-            />
-          )}
+          {page === "order" && <OrderPage initialCategory="all" />}
           {page === "foodlog" && <HistoryPage />}
           {page === "fridge" && <FridgePage />}
           {page === "me" && <MePage />}
         </div>
       </main>
+      <nav className="bottom-nav" aria-label="主要功能">
+        {nav.map(([key, Icon]) => (
+          <button
+            key={key}
+            className={page === key ? "active" : ""}
+            aria-current={page === key ? "page" : undefined}
+            onClick={() => setPage(key)}
+          >
+            <Icon />
+            <span>{L[key]}</span>
+          </button>
+        ))}
+      </nav>
     </div>
   );
 }
