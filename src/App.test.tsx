@@ -80,6 +80,19 @@ describe("application shell", () => {
     expect(screen.queryByText("家庭角色")).not.toBeInTheDocument();
     expect(screen.getByText(/切换成员后去/)).toBeVisible();
   });
+  it("removes the separate personal profile name card", async () => {
+    render(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    await screen.findByText("今晚想吃点什么？");
+    await userEvent.click(screen.getByRole("button", { name: "我" }));
+    expect(screen.queryByText("个人资料")).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "我的名字" })).toBeNull();
+    expect(screen.queryByLabelText("我的名字")).toBeNull();
+    expect(screen.getByLabelText("App 名称")).toBeVisible();
+  });
   it("adds a recipe to tonight from the recipe catalogue", async () => {
     render(
       <AppProvider>
