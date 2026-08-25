@@ -1850,11 +1850,11 @@ function AppearancePanel() {
     },
     {
       id: "glass",
-      icon: "💎",
-      zh: "玻璃透明",
-      en: "Glass",
-      descZh: "通透磨砂与柔和渐变",
-      descEn: "Translucent glass and gradients",
+      icon: "◌",
+      zh: "蓝白 Liquid Glass",
+      en: "Blue Liquid Glass",
+      descZh: "蓝色、白色与透明流光",
+      descEn: "Blue, white and translucent highlights",
     },
     {
       id: "custom",

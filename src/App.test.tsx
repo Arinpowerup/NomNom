@@ -132,10 +132,13 @@ describe("application shell", () => {
       await screen.findByRole("heading", { name: "界面风格" }),
     ).toBeVisible();
     expect(screen.queryByText("App 皮肤")).not.toBeInTheDocument();
-    await userEvent.click(
-      await screen.findByRole("button", { name: /玻璃透明/ }),
-    );
+    const liquidGlass = await screen.findByRole("button", {
+      name: /蓝白 Liquid Glass/,
+    });
+    expect(liquidGlass).toHaveTextContent("蓝色、白色与透明流光");
+    await userEvent.click(liquidGlass);
     expect(container.querySelector(".app-shell")).toHaveClass("theme-glass");
+    expect(liquidGlass).toHaveClass("active");
     await waitFor(async () =>
       expect((await loadData()).preferences.theme).toBe("glass"),
     );
