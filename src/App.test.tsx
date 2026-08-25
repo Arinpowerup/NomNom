@@ -87,10 +87,14 @@ describe("application shell", () => {
     expect(container.querySelector(".bottom-nav")).toBeInTheDocument();
     expect(container.querySelector(".sidebar")).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "历史记录" })).toBeNull();
+    const weeklyPlan = screen.getByRole("button", { name: /一周安排/ });
+    expect(weeklyPlan).toBeVisible();
+    await userEvent.click(weeklyPlan);
+    await waitFor(() =>
+      expect(container.querySelector(".week-board")).toBeVisible(),
+    );
     await userEvent.click(screen.getByRole("button", { name: "菜单" }));
-    expect(
-      await screen.findByRole("button", { name: /一周安排/ }),
-    ).toBeVisible();
+    expect(screen.queryByRole("button", { name: /一周安排/ })).toBeNull();
     expect(screen.getByRole("button", { name: /购物清单/ })).toBeVisible();
     await userEvent.click(screen.getByRole("button", { name: "我" }));
     expect(await screen.findByText("新手教程")).toBeVisible();

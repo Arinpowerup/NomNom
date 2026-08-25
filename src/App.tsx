@@ -172,7 +172,7 @@ export default function App() {
           </div>
         </header>
         <div className="content">
-          {page === "home" && <HomePage />}
+          {page === "home" && <HomeModule />}
           {page === "order" && <OrderPage initialCategory="all" />}
           {page === "foodlog" && <HistoryPage />}
           {page === "fridge" && <FridgePage />}
@@ -193,6 +193,30 @@ export default function App() {
         ))}
       </nav>
     </div>
+  );
+}
+
+function HomeModule() {
+  const { language } = useApp();
+  const [section, setSection] = useState<"today" | "week">("today");
+  return (
+    <>
+      <div className="module-tabs home-tabs">
+        <button
+          className={section === "today" ? "active" : ""}
+          onClick={() => setSection("today")}
+        >
+          <Home /> {language === "zh" ? "今日安排" : "Today"}
+        </button>
+        <button
+          className={section === "week" ? "active" : ""}
+          onClick={() => setSection("week")}
+        >
+          <CalendarDays /> {language === "zh" ? "一周安排" : "Weekly plan"}
+        </button>
+      </div>
+      {section === "today" ? <HomePage /> : <WeekPage />}
+    </>
   );
 }
 
@@ -615,9 +639,7 @@ function MealDrawer({
 
 function OrderPage({ initialCategory }: { initialCategory: Category | "all" }) {
   const { language } = useApp();
-  const [section, setSection] = useState<"recipes" | "week" | "shopping">(
-    "recipes",
-  );
+  const [section, setSection] = useState<"recipes" | "shopping">("recipes");
   return (
     <>
       <div className="module-tabs">
@@ -626,12 +648,6 @@ function OrderPage({ initialCategory }: { initialCategory: Category | "all" }) {
           onClick={() => setSection("recipes")}
         >
           <ChefHat /> {language === "zh" ? "点菜" : "Choose dishes"}
-        </button>
-        <button
-          className={section === "week" ? "active" : ""}
-          onClick={() => setSection("week")}
-        >
-          <CalendarDays /> {language === "zh" ? "一周安排" : "Weekly plan"}
         </button>
         <button
           className={section === "shopping" ? "active" : ""}
@@ -643,7 +659,6 @@ function OrderPage({ initialCategory }: { initialCategory: Category | "all" }) {
       {section === "recipes" && (
         <RecipesPage initialCategory={initialCategory} />
       )}
-      {section === "week" && <WeekPage />}
       {section === "shopping" && <ShoppingPage />}
     </>
   );
