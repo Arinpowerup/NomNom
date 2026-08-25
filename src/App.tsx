@@ -1818,8 +1818,8 @@ function MePage() {
         <ol>
           <li>
             {language === "zh"
-              ? "切换家庭角色后去“点菜”选择想吃的菜。"
-              : "Switch family role, then choose dishes in Order."}
+              ? "切换成员后去“点菜”选择想吃的菜。"
+              : "Switch members, then choose dishes in Order."}
           </li>
           <li>
             {language === "zh"

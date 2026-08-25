@@ -41,7 +41,7 @@ export const labels = {
     putStock: "已买食材入冰箱",
     export: "导出完整备份",
     import: "导入恢复",
-    roles: "家庭角色",
+    roles: "成员",
     noData: "暂无内容",
   },
   en: {
@@ -85,7 +85,7 @@ export const labels = {
     putStock: "Add purchased to fridge",
     export: "Export backup",
     import: "Restore backup",
-    roles: "Family roles",
+    roles: "Members",
     noData: "Nothing here yet",
   },
 } as const;

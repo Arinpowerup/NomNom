@@ -68,6 +68,18 @@ describe("application shell", () => {
       screen.queryByText("管理家庭成员、语言、数据备份和个性设置。"),
     ).not.toBeInTheDocument();
   });
+  it("labels family role management as members", async () => {
+    render(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    await screen.findByText("今晚想吃点什么？");
+    await userEvent.click(screen.getByRole("button", { name: "我" }));
+    expect(screen.getByRole("heading", { name: "成员" })).toBeVisible();
+    expect(screen.queryByText("家庭角色")).not.toBeInTheDocument();
+    expect(screen.getByText(/切换成员后去/)).toBeVisible();
+  });
   it("adds a recipe to tonight from the recipe catalogue", async () => {
     render(
       <AppProvider>
