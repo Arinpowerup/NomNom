@@ -570,7 +570,7 @@ textarea:focus {
 .recipe-search-art {
   position: absolute;
   left: 50%;
-  bottom: -1px;
+  bottom: calc(100% - 1px);
   width: min(84%, 650px);
   line-height: 0;
   pointer-events: none;
