@@ -104,6 +104,13 @@ describe("Snoopy chef profile illustration", () => {
     expect(alpha.max).toBe(255);
   });
 });
+describe("Snoopy cooking profile illustration", () => {
+  it("is an RGBA PNG with genuine transparency", () => {
+    const alpha = alphaRange("../illustrations/snoopy-profile-pan.png");
+    expect(alpha.min).toBeLessThan(255);
+    expect(alpha.max).toBe(255);
+  });
+});
 describe("Snoopy home chef trio illustration", () => {
   it("is an RGBA PNG with genuine transparency", () => {
     const alpha = alphaRange("../illustrations/snoopy-chef-trio.png");

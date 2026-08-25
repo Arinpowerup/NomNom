@@ -43,3 +43,12 @@ describe("Snoopy recipe search artwork", () => {
     expect(styles).toContain("width: min(43%, 215px);");
   });
 });
+describe("Snoopy profile cooking steam", () => {
+  it("animates only the steam overlay while the profile character stays static", () => {
+    expect(styles).toContain(
+      "animation: profile-steam-rise 1.8s ease-in-out infinite;",
+    );
+    expect(styles).toContain("@keyframes profile-steam-rise");
+    expect(styles).not.toMatch(/.profile-snoopy {[sS]*animation:/);
+  });
+});

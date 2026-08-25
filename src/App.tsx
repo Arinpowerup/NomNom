@@ -2100,12 +2100,24 @@ function ProfileIllustration() {
       <circle className="profile-bg" cx="75" cy="62" r="55" />
       <image
         className="profile-snoopy"
-        href="/illustrations/snoopy-chef-profile.png"
-        x="18"
-        y="1"
-        width="116"
-        height="116"
+        href="/illustrations/snoopy-profile-pan.png"
+        x="8"
+        y="3"
+        width="134"
+        height="114"
         preserveAspectRatio="xMidYMid meet"
+      />
+      <path
+        className="profile-steam profile-steam-one"
+        d="M24 64c-7-7 5-11-1-19"
+      />
+      <path
+        className="profile-steam profile-steam-two"
+        d="M36 61c-6-7 5-11 0-19"
+      />
+      <path
+        className="profile-steam profile-steam-three"
+        d="M48 64c-7-7 5-11-1-19"
       />
     </svg>
   );

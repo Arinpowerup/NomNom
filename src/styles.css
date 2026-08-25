@@ -1749,6 +1749,21 @@ button:not(:disabled):active {
 .profile-bg {
   fill: #fff1ce;
 }
+.profile-steam {
+  fill: none;
+  stroke: rgba(83, 67, 48, 0.72);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-dasharray: 18;
+  transform-origin: center bottom;
+  animation: profile-steam-rise 1.8s ease-in-out infinite;
+}
+.profile-steam-two {
+  animation-delay: -0.6s;
+}
+.profile-steam-three {
+  animation-delay: -1.2s;
+}
 .chef-body {
   fill: #ef8e51;
 }
@@ -1824,6 +1839,21 @@ button:not(:disabled):active {
   }
   50% {
     transform: translate3d(14px, -18px, 0) scale(1.06);
+  }
+}
+@keyframes profile-steam-rise {
+  0% {
+    opacity: 0;
+    stroke-dashoffset: 18;
+    transform: translateY(4px);
+  }
+  45% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0;
+    stroke-dashoffset: 0;
+    transform: translateY(-7px);
   }
 }
 @keyframes steam-drift {

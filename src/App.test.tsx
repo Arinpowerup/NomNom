@@ -108,8 +108,9 @@ describe("application shell", () => {
     expect(chefProfile.querySelector(".profile-bg")).toBeInTheDocument();
     expect(chefProfile.querySelector("image")).toHaveAttribute(
       "href",
-      "/illustrations/snoopy-chef-profile.png",
+      "/illustrations/snoopy-profile-pan.png",
     );
+    expect(chefProfile.querySelectorAll(".profile-steam")).toHaveLength(3);
     expect(screen.getByLabelText("App 名称")).toBeVisible();
   });
   it("adds a recipe to tonight from the recipe catalogue", async () => {
