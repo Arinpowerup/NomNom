@@ -1803,11 +1803,6 @@ function MePage() {
               }
             />
           </label>
-          <p>
-            {language === "zh"
-              ? "管理家庭成员、语言、数据备份和个性设置。"
-              : "Manage family members, language, backups and preferences."}
-          </p>
         </div>
         <span className="welcome-illustration">
           <ProfileIllustration />

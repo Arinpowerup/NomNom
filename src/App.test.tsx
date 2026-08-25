@@ -56,6 +56,18 @@ describe("application shell", () => {
     expect((await loadData()).roles[0].name).toBe("我");
     expect(document.title).toBe("幸福厨房");
   });
+  it("does not show the old management description in the profile hero", async () => {
+    render(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    await screen.findByText("今晚想吃点什么？");
+    await userEvent.click(screen.getByRole("button", { name: "我" }));
+    expect(
+      screen.queryByText("管理家庭成员、语言、数据备份和个性设置。"),
+    ).not.toBeInTheDocument();
+  });
   it("adds a recipe to tonight from the recipe catalogue", async () => {
     render(
       <AppProvider>
