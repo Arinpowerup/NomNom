@@ -224,4 +224,23 @@ describe("application shell", () => {
     expect(await screen.findByAltText("柠香鸡胸沙拉")).toBeVisible();
     expect(screen.getByText("更换照片")).toBeVisible();
   });
+  it("renders the new offline illustrations and animated page structure", async () => {
+    const { container } = render(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    expect(
+      await screen.findByRole("img", {
+        name: "NomNom cooking illustration",
+      }),
+    ).toBeVisible();
+    expect(container.querySelectorAll(".ambient-shapes span")).toHaveLength(3);
+    expect(container.querySelector(".content")).toHaveClass("page-enter");
+    await userEvent.click(screen.getByRole("button", { name: "食记" }));
+    expect(
+      await screen.findByRole("img", { name: "empty plate illustration" }),
+    ).toBeVisible();
+    expect(screen.getByRole("button", { name: "食记" })).toHaveClass("active");
+  });
 });

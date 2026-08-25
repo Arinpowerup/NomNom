@@ -128,6 +128,11 @@ export default function App() {
       className={`app-shell theme-${ctx.data.preferences.theme}`}
       style={shellStyle}
     >
+      <div className="ambient-shapes" aria-hidden="true">
+        <span />
+        <span />
+        <span />
+      </div>
       <main>
         <header>
           <div className="top-brand">
@@ -180,7 +185,7 @@ export default function App() {
             </div>
           </div>
         </header>
-        <div className="content">
+        <div className="content page-enter" key={page}>
           {page === "home" && <HomeModule />}
           {page === "order" && <OrderPage initialCategory="all" />}
           {page === "foodlog" && <HistoryPage />}
@@ -265,7 +270,9 @@ function HomePage() {
               : "Pick, vote, and turn family favourites into today’s menu."}
           </p>
         </div>
-        <div className="hero-art">🍲</div>
+        <div className="hero-art">
+          <KitchenMascot />
+        </div>
       </section>
       <div className="meal-tabs">
         {meals.map((m) => (
@@ -1752,7 +1759,9 @@ function MePage() {
               : "Manage family members, language, backups and preferences."}
           </p>
         </div>
-        <span className="welcome-emoji">👩‍🍳</span>
+        <span className="welcome-illustration">
+          <ProfileIllustration />
+        </span>
       </section>
       <AppearancePanel />
       <SettingsPage />
@@ -1996,10 +2005,97 @@ function MiniRecipe({ recipe }: { recipe: Recipe }) {
     </div>
   );
 }
+function KitchenMascot() {
+  return (
+    <svg
+      className="kitchen-mascot"
+      viewBox="0 0 260 190"
+      role="img"
+      aria-label="NomNom cooking illustration"
+    >
+      <ellipse className="mascot-shadow" cx="132" cy="171" rx="92" ry="14" />
+      <path className="mascot-pot" d="M55 103h151l-14 61H70z" />
+      <path
+        className="mascot-pot-rim"
+        d="M47 95h167a8 8 0 0 1 0 16H47a8 8 0 0 1 0-16z"
+      />
+      <path
+        className="mascot-handle"
+        d="M55 117H30a13 13 0 0 1 0-26h17M206 117h24a13 13 0 0 0 0-26h-16"
+      />
+      <circle className="mascot-eye" cx="111" cy="129" r="5" />
+      <circle className="mascot-eye" cx="151" cy="129" r="5" />
+      <path className="mascot-smile" d="M119 141c8 9 17 9 25 0" />
+      <path className="mascot-steam steam-one" d="M92 84c-18-20 17-26 2-52" />
+      <path className="mascot-steam steam-two" d="M131 78c-17-20 18-28 1-56" />
+      <path
+        className="mascot-steam steam-three"
+        d="M171 84c-17-20 17-26 2-52"
+      />
+      <path
+        className="mascot-leaf"
+        d="M198 35c-22 0-35 11-38 32 22 1 35-10 38-32z"
+      />
+      <path className="mascot-leaf-line" d="M166 62l27-22" />
+      <circle className="mascot-spark spark-one" cx="52" cy="49" r="7" />
+      <circle className="mascot-spark spark-two" cx="222" cy="69" r="5" />
+    </svg>
+  );
+}
+
+function ProfileIllustration() {
+  return (
+    <svg
+      className="profile-illustration"
+      viewBox="0 0 150 120"
+      role="img"
+      aria-label="friendly chef illustration"
+    >
+      <circle className="profile-bg" cx="75" cy="62" r="55" />
+      <path className="chef-body" d="M38 117c2-30 17-43 37-43s35 13 37 43z" />
+      <circle className="chef-face" cx="75" cy="59" r="27" />
+      <path
+        className="chef-hair"
+        d="M48 58c0-26 11-37 27-37s28 11 28 37c-9-15-18-20-28-20S57 43 48 58z"
+      />
+      <path
+        className="chef-hat"
+        d="M49 33c-8-2-11-9-8-15 3-7 11-8 17-4 3-12 20-15 27-5 8-6 21-1 21 10 0 8-7 13-14 14z"
+      />
+      <circle className="chef-eye" cx="65" cy="60" r="3" />
+      <circle className="chef-eye" cx="85" cy="60" r="3" />
+      <path className="chef-smile" d="M68 70c5 5 10 5 15 0" />
+      <path className="chef-apron" d="M61 82h28l7 35H54z" />
+      <circle className="profile-spark" cx="120" cy="35" r="6" />
+    </svg>
+  );
+}
+
+function EmptyIllustration() {
+  return (
+    <svg
+      className="empty-illustration"
+      viewBox="0 0 130 90"
+      role="img"
+      aria-label="empty plate illustration"
+    >
+      <ellipse className="empty-shadow" cx="65" cy="76" rx="45" ry="7" />
+      <circle className="empty-plate" cx="65" cy="43" r="34" />
+      <circle className="empty-plate-inner" cx="65" cy="43" r="21" />
+      <circle className="empty-eye" cx="57" cy="40" r="2.5" />
+      <circle className="empty-eye" cx="73" cy="40" r="2.5" />
+      <path className="empty-smile" d="M59 50c4 4 8 4 12 0" />
+      <path
+        className="empty-fork"
+        d="M18 16v49M12 16v17h12V16M112 16v49M106 16c0 16 12 16 12 0"
+      />
+    </svg>
+  );
+}
 function Empty({ text }: { text: string }) {
   return (
     <div className="empty">
-      <span>🍽️</span>
+      <EmptyIllustration />
       <p>{text}</p>
     </div>
   );

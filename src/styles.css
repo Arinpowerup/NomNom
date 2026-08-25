@@ -1289,6 +1289,360 @@ textarea:focus {
     display: none;
   }
 }
+
+/* NomNom visual polish */
+.app-shell {
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
+}
+.app-shell main,
+.bottom-nav {
+  position: relative;
+  z-index: 2;
+}
+.ambient-shapes {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.ambient-shapes span {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(2px);
+  opacity: 0.2;
+  animation: ambient-float 14s ease-in-out infinite;
+}
+.ambient-shapes span:nth-child(1) {
+  width: 260px;
+  height: 260px;
+  right: -70px;
+  top: 12%;
+  background: rgb(240, 160, 40);
+}
+.ambient-shapes span:nth-child(2) {
+  width: 180px;
+  height: 180px;
+  left: -55px;
+  top: 48%;
+  background: #8db79a;
+  animation-delay: -5s;
+}
+.ambient-shapes span:nth-child(3) {
+  width: 120px;
+  height: 120px;
+  right: 18%;
+  bottom: 4%;
+  background: #f2c5b8;
+  animation-delay: -9s;
+}
+.page-enter {
+  animation: page-rise 420ms cubic-bezier(0.22, 0.8, 0.28, 1) both;
+}
+.panel,
+.recipe-card,
+.meal-card,
+.dish-row {
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease;
+}
+.panel {
+  box-shadow: 0 12px 34px rgba(78, 57, 32, 0.07);
+}
+.recipe-card:hover,
+.meal-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 42px rgba(78, 57, 32, 0.13);
+  border-color: color-mix(in srgb, var(--orange) 40%, var(--line));
+}
+.dish-row:hover {
+  transform: translateX(3px);
+  box-shadow: 0 10px 24px rgba(78, 57, 32, 0.09);
+}
+button {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 150ms ease,
+    box-shadow 180ms ease,
+    filter 180ms ease;
+}
+button:not(:disabled):active {
+  transform: scale(0.96);
+}
+.hero {
+  position: relative;
+  min-height: 245px;
+  isolation: isolate;
+}
+.hero::before,
+.hero::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.09);
+  z-index: -1;
+}
+.hero::before {
+  width: 220px;
+  height: 220px;
+  right: 12%;
+  top: -110px;
+}
+.hero::after {
+  width: 120px;
+  height: 120px;
+  left: 42%;
+  bottom: -70px;
+}
+.hero > div:first-child {
+  max-width: 610px;
+}
+.hero-art {
+  width: min(310px, 35vw);
+  height: 210px;
+  font-size: initial;
+  filter: none;
+  flex: 0 0 auto;
+}
+.kitchen-mascot,
+.profile-illustration,
+.empty-illustration {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.mascot-shadow,
+.empty-shadow {
+  fill: rgba(54, 37, 20, 0.16);
+}
+.mascot-pot {
+  fill: #fff5df;
+}
+.mascot-pot-rim {
+  fill: #ffc95f;
+}
+.mascot-handle {
+  fill: none;
+  stroke: #ffc95f;
+  stroke-width: 9;
+  stroke-linecap: round;
+}
+.mascot-eye,
+.chef-eye,
+.empty-eye {
+  fill: #4c3c30;
+}
+.mascot-smile,
+.chef-smile,
+.empty-smile {
+  fill: none;
+  stroke: #4c3c30;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+.mascot-steam {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.9);
+  stroke-width: 7;
+  stroke-linecap: round;
+  animation: steam-drift 2.5s ease-in-out infinite;
+}
+.steam-two {
+  animation-delay: -0.8s;
+}
+.steam-three {
+  animation-delay: -1.6s;
+}
+.mascot-leaf {
+  fill: #9acb82;
+  transform-origin: 166px 62px;
+  animation: leaf-wave 2.8s ease-in-out infinite;
+}
+.mascot-leaf-line {
+  fill: none;
+  stroke: #f2ffe8;
+  stroke-width: 3;
+}
+.mascot-spark,
+.profile-spark {
+  fill: #ffe49b;
+  animation: sparkle 1.8s ease-in-out infinite;
+}
+.spark-two {
+  animation-delay: -0.9s;
+}
+.welcome-illustration {
+  width: 150px;
+  height: 120px;
+  flex: 0 0 auto;
+}
+.profile-bg {
+  fill: #fff1ce;
+}
+.chef-body {
+  fill: #ef8e51;
+}
+.chef-face {
+  fill: #f5c9a5;
+}
+.chef-hair {
+  fill: #5b4436;
+}
+.chef-hat {
+  fill: #fffdf7;
+  stroke: #e9d8bc;
+  stroke-width: 2;
+}
+.chef-apron {
+  fill: #fff8e8;
+}
+.empty {
+  padding: 24px;
+}
+.empty-illustration {
+  width: 130px;
+  height: 90px;
+  margin: 0 auto 5px;
+  animation: empty-bob 3.2s ease-in-out infinite;
+}
+.empty-plate {
+  fill: #fff8e8;
+  stroke: #e5cfa9;
+  stroke-width: 3;
+}
+.empty-plate-inner {
+  fill: #fffdf7;
+  stroke: #f1e3cb;
+  stroke-width: 2;
+}
+.empty-fork {
+  fill: none;
+  stroke: #c0a986;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.bottom-nav button.active svg {
+  animation: nav-bounce 420ms cubic-bezier(0.2, 0.9, 0.3, 1.4);
+}
+.count {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+}
+@keyframes page-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes ambient-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(14px, -18px, 0) scale(1.06);
+  }
+}
+@keyframes steam-drift {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: translateY(3px);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-5px);
+  }
+}
+@keyframes leaf-wave {
+  0%,
+  100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(6deg);
+  }
+}
+@keyframes sparkle {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+@keyframes empty-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+@keyframes nav-bounce {
+  0% {
+    transform: scale(0.8) translateY(3px);
+  }
+  65% {
+    transform: scale(1.15) translateY(-2px);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+@media (max-width: 700px) {
+  .hero {
+    min-height: 230px;
+    padding: 26px 24px;
+  }
+  .hero-art {
+    display: block;
+    position: absolute;
+    width: 165px;
+    height: 125px;
+    right: -16px;
+    bottom: -3px;
+    opacity: 0.88;
+  }
+  .hero > div:first-child {
+    position: relative;
+    z-index: 1;
+    max-width: 75%;
+  }
+  .hero h2 {
+    font-size: 25px;
+  }
+  .hero p {
+    font-size: 13px;
+  }
+  .welcome-illustration {
+    width: 105px;
+    height: 90px;
+  }
+}
 .app-shell {
   display: block;
   min-height: 100dvh;
