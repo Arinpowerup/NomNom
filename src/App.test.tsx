@@ -103,6 +103,10 @@ describe("application shell", () => {
     );
     await screen.findByText("今晚想吃点什么？");
     await userEvent.click(screen.getByRole("button", { name: "我" }));
+    expect(
+      await screen.findByRole("heading", { name: "界面风格" }),
+    ).toBeVisible();
+    expect(screen.queryByText("App 皮肤")).not.toBeInTheDocument();
     await userEvent.click(
       await screen.findByRole("button", { name: /玻璃透明/ }),
     );

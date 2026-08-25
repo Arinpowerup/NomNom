@@ -1793,7 +1793,7 @@ function AppearancePanel() {
           <p className="eyebrow">
             {language === "zh" ? "个性设置" : "PERSONALISE"}
           </p>
-          <h2>{language === "zh" ? "App 皮肤" : "App theme"}</h2>
+          <h2>{language === "zh" ? "界面风格" : "Interface style"}</h2>
         </div>
       </div>
       <div className="theme-grid">
