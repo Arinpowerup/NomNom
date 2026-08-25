@@ -1183,13 +1183,19 @@ textarea:focus {
       rgba(97, 192, 255, 0.72),
       transparent 30%
     ),
-    radial-gradient(circle at 55% 90%, rgba(183, 225, 255, 0.9), transparent 35%),
+    radial-gradient(
+      circle at 55% 90%,
+      rgba(183, 225, 255, 0.9),
+      transparent 35%
+    ),
     linear-gradient(145deg, #dff3ff 0%, #f8fcff 44%, #b9dcfa 100%);
   background-attachment: fixed;
 }
 .theme-glass .ambient-shapes span {
   filter: blur(2px);
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.9), 0 18px 45px rgba(44, 125, 196, 0.22);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.9),
+    0 18px 45px rgba(44, 125, 196, 0.22);
 }
 .theme-glass .ambient-shapes span:nth-child(1) {
   background: var(--ambient-one);
@@ -1206,7 +1212,11 @@ textarea:focus {
 .theme-glass .meal-tabs button,
 .theme-glass .meal-card,
 .theme-glass .bottom-nav {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.62), rgba(226, 244, 255, 0.3));
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.62),
+    rgba(226, 244, 255, 0.3)
+  );
   -webkit-backdrop-filter: blur(24px) saturate(175%);
   backdrop-filter: blur(24px) saturate(175%);
   border: 1px solid rgba(255, 255, 255, 0.82);
@@ -1218,11 +1228,17 @@ textarea:focus {
 .theme-glass .hero {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(125deg, rgba(15, 105, 204, 0.82), rgba(99, 190, 250, 0.58));
+  background: linear-gradient(
+    125deg,
+    rgba(15, 105, 204, 0.82),
+    rgba(99, 190, 250, 0.58)
+  );
   -webkit-backdrop-filter: blur(26px) saturate(170%);
   backdrop-filter: blur(26px) saturate(170%);
   border: 1px solid rgba(255, 255, 255, 0.72);
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0.72), 0 20px 50px rgba(25, 101, 172, 0.2);
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.72),
+    0 20px 50px rgba(25, 101, 172, 0.2);
 }
 .theme-glass .hero::after {
   content: "";
@@ -1637,10 +1653,10 @@ button:not(:disabled):active {
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.bottom-nav button.active svg {
+.bottom-nav button.active .nav-character {
   animation: nav-bounce 420ms cubic-bezier(0.2, 0.9, 0.3, 1.4);
 }
-.bottom-nav button.menu-icon-popping svg {
+.bottom-nav button.menu-icon-popping .nav-character {
   animation: menu-icon-pop 360ms cubic-bezier(0.2, 0.9, 0.3, 1.45);
 }
 .count {
@@ -1716,6 +1732,28 @@ button:not(:disabled):active {
     transform: scale(1) translateY(0);
   }
 }
+@keyframes nav-rainbow-glow {
+  0%,
+  100% {
+    opacity: 0.64;
+    transform: scale(0.94);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+@keyframes nav-heart-float {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: translateY(3px) scale(0.78) rotate(-8deg);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-4px) scale(1.08) rotate(6deg);
+  }
+}
 @keyframes menu-icon-pop {
   0% {
     transform: scale(1);
@@ -1773,7 +1811,7 @@ button:not(:disabled):active {
 }
 .app-shell main {
   min-width: 0;
-  padding-bottom: calc(82px + env(safe-area-inset-bottom));
+  padding-bottom: calc(98px + env(safe-area-inset-bottom));
 }
 .top-brand {
   display: flex;
@@ -1802,7 +1840,7 @@ button:not(:disabled):active {
   bottom: 14px;
   transform: translateX(-50%);
   width: min(560px, calc(100% - 24px));
-  min-height: 66px;
+  min-height: 82px;
   padding: 7px 10px calc(7px + env(safe-area-inset-bottom));
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -1825,6 +1863,102 @@ button:not(:disabled):active {
 .bottom-nav button svg {
   width: 21px;
   height: 21px;
+}
+.nav-character-wrap {
+  position: relative;
+  width: 50px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  overflow: visible;
+}
+.nav-character {
+  position: relative;
+  z-index: 2;
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  transform-origin: center bottom;
+  filter: saturate(0.78) drop-shadow(0 2px 2px rgba(70, 45, 28, 0.12));
+  transition:
+    filter 180ms ease,
+    transform 180ms ease;
+}
+.bottom-nav button.active .nav-character {
+  filter: saturate(1) drop-shadow(0 3px 4px rgba(70, 45, 28, 0.2));
+}
+.nav-effect {
+  position: absolute;
+  z-index: 1;
+  inset: -4px -5px 2px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 160ms ease;
+}
+.bottom-nav button.active .nav-effect {
+  opacity: 1;
+}
+.nav-effect-rainbow {
+  background: conic-gradient(
+    from 270deg at 50% 100%,
+    #ff6b6b,
+    #ffd93d,
+    #6bcb77,
+    #4d96ff,
+    #c77dff
+  );
+  -webkit-mask: radial-gradient(
+    ellipse at 50% 100%,
+    transparent 47%,
+    #000 50% 65%,
+    transparent 68%
+  );
+  mask: radial-gradient(
+    ellipse at 50% 100%,
+    transparent 47%,
+    #000 50% 65%,
+    transparent 68%
+  );
+  animation: nav-rainbow-glow 1.7s ease-in-out infinite;
+}
+.nav-effect-hearts::before,
+.nav-effect-hearts::after {
+  content: "♥";
+  position: absolute;
+  color: #ed5146;
+  font-size: 12px;
+  filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.8));
+  animation: nav-heart-float 1.45s ease-in-out infinite;
+}
+.nav-effect-hearts::before {
+  left: 1px;
+  top: 4px;
+}
+.nav-effect-hearts::after {
+  right: 0;
+  top: -1px;
+  font-size: 9px;
+  animation-delay: -0.7s;
+}
+.nav-effect-sparkles::before,
+.nav-effect-sparkles::after {
+  content: "✦";
+  position: absolute;
+  color: #f5b82e;
+  font-size: 14px;
+  animation: sparkle 1.5s ease-in-out infinite;
+}
+.nav-effect-sparkles::before {
+  left: 0;
+  top: 3px;
+}
+.nav-effect-sparkles::after {
+  content: "✧";
+  right: 0;
+  top: -2px;
+  color: #78b46a;
+  font-size: 12px;
+  animation-delay: -0.75s;
 }
 .bottom-nav button.active {
   color: var(--orange);

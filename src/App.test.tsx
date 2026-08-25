@@ -52,7 +52,9 @@ describe("application shell", () => {
     await waitFor(async () =>
       expect((await loadData()).preferences.appName).toBe("幸福厨房"),
     );
-    expect(screen.getByText("幸福厨房", { selector: ".top-brand strong" })).toBeVisible();
+    expect(
+      screen.getByText("幸福厨房", { selector: ".top-brand strong" }),
+    ).toBeVisible();
     expect((await loadData()).roles[0].name).toBe("我");
     expect(document.title).toBe("幸福厨房");
   });
@@ -143,7 +145,24 @@ describe("application shell", () => {
     for (const name of ["首页", "菜单", "食记", "冰箱", "我"]) {
       expect(screen.getByRole("button", { name })).toBeVisible();
     }
-    expect(container.querySelector(".bottom-nav")).toBeInTheDocument();
+    const bottomNav = container.querySelector(".bottom-nav")!;
+    expect(bottomNav).toBeInTheDocument();
+    expect(
+      Array.from(
+        bottomNav.querySelectorAll<HTMLImageElement>("[data-nav-character]"),
+      ).map((image) => image.getAttribute("src")),
+    ).toEqual([
+      "/nav/snoopy-home.png",
+      "/nav/snoopy-menu.png",
+      "/nav/snoopy-foodlog.png",
+      "/nav/snoopy-fridge.png",
+      "/nav/snoopy-me.png",
+    ]);
+    expect(
+      Array.from(
+        bottomNav.querySelectorAll<HTMLElement>("[data-nav-effect]"),
+      ).map((effect) => effect.dataset.navEffect),
+    ).toEqual(["rainbow", "hearts", "hearts", "sparkles", "hearts"]);
     expect(container.querySelector(".sidebar")).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "历史记录" })).toBeNull();
     const weeklyPlan = screen.getByRole("button", { name: /一周安排/ });
@@ -167,15 +186,17 @@ describe("application shell", () => {
     await screen.findByText("今晚想吃点什么？");
     const menuButton = screen.getByRole("button", { name: "菜单" });
 
-    const firstIcon = menuButton.querySelector("svg");
+    const firstIcon = menuButton.querySelector("[data-nav-character]");
     await userEvent.click(menuButton);
 
     expect(menuButton).toHaveClass("menu-icon-popping");
-    const animatedIcon = menuButton.querySelector("svg");
+    const animatedIcon = menuButton.querySelector("[data-nav-character]");
     expect(animatedIcon).not.toBe(firstIcon);
 
     await userEvent.click(menuButton);
-    expect(menuButton.querySelector("svg")).not.toBe(animatedIcon);
+    expect(menuButton.querySelector("[data-nav-character]")).not.toBe(
+      animatedIcon,
+    );
   });
   it("switches and persists the glass theme", async () => {
     const { container } = render(

@@ -64,12 +64,13 @@ import type {
 } from "./types";
 
 type Page = "home" | "order" | "foodlog" | "fridge" | "me";
-const nav: [Page, typeof Home][] = [
-  ["home", Home],
-  ["order", ChefHat],
-  ["foodlog", History],
-  ["fridge", Refrigerator],
-  ["me", Users],
+type NavEffect = "rainbow" | "hearts" | "sparkles";
+const nav: { key: Page; src: string; effect: NavEffect }[] = [
+  { key: "home", src: "/nav/snoopy-home.png", effect: "rainbow" },
+  { key: "order", src: "/nav/snoopy-menu.png", effect: "hearts" },
+  { key: "foodlog", src: "/nav/snoopy-foodlog.png", effect: "hearts" },
+  { key: "fridge", src: "/nav/snoopy-fridge.png", effect: "sparkles" },
+  { key: "me", src: "/nav/snoopy-me.png", effect: "hearts" },
 ];
 const meals: MealType[] = ["breakfast", "lunch", "dinner"];
 const units: Unit[] = [
@@ -149,7 +150,9 @@ export default function App() {
               <ChefHat />
             </span>
             <div>
-              <strong>{ctx.data.preferences.appName?.trim() || "NomNom"}</strong>
+              <strong>
+                {ctx.data.preferences.appName?.trim() || "NomNom"}
+              </strong>
               <small>{L[page]}</small>
             </div>
           </div>
@@ -203,20 +206,36 @@ export default function App() {
         </div>
       </main>
       <nav className="bottom-nav" aria-label="主要功能">
-        {nav.map(([key, Icon]) => (
+        {nav.map(({ key, src, effect }) => (
           <button
             key={key}
             className={[
               page === key ? "active" : "",
-              key === "order" && menuIconAnimation > 0 ? "menu-icon-popping" : "",
-            ].filter(Boolean).join(" ")}
+              key === "order" && menuIconAnimation > 0
+                ? "menu-icon-popping"
+                : "",
+            ]
+              .filter(Boolean)
+              .join(" ")}
             aria-current={page === key ? "page" : undefined}
             onClick={() => {
               setPage(key);
               if (key === "order") setMenuIconAnimation((value) => value + 1);
             }}
           >
-            <Icon key={key === "order" ? menuIconAnimation : key} />
+            <span className="nav-character-wrap" aria-hidden="true">
+              <span
+                className={`nav-effect nav-effect-${effect}`}
+                data-nav-effect={effect}
+              />
+              <img
+                key={key === "order" ? menuIconAnimation : key}
+                className="nav-character"
+                data-nav-character={key}
+                src={src}
+                alt=""
+              />
+            </span>
             <span>{L[key]}</span>
           </button>
         ))}
@@ -1770,7 +1789,9 @@ function MePage() {
           </p>
           <h2>{appName.trim() || "NomNom"}</h2>
           <label className="app-name-field">
-            <span>{language === "zh" ? "给这个 App 起个名字" : "Name this app"}</span>
+            <span>
+              {language === "zh" ? "给这个 App 起个名字" : "Name this app"}
+            </span>
             <input
               aria-label={language === "zh" ? "App 名称" : "App name"}
               value={appName}
