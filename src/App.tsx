@@ -21,10 +21,12 @@ import {
 } from "lucide-react";
 import { useApp } from "./context/AppContext";
 import {
+  addCategory,
   addRole,
   addStock,
   completeDish,
   confirmDish,
+  deleteCategory,
   deleteRecipe,
   deleteRole,
   exportData,
@@ -36,6 +38,7 @@ import {
   saveRecipe,
   stockPurchased,
   toggleVote,
+  updateCategory,
   updatePlan,
   updateRole,
 } from "./lib/appActions";
@@ -61,7 +64,6 @@ const nav: [Page, typeof Home][] = [
   ["shopping", ShoppingBasket],
   ["history", History],
 ];
-const categories: Category[] = ["light", "home", "hotpot", "bakery"];
 const meals: MealType[] = ["breakfast", "lunch", "dinner"];
 const units: Unit[] = [
   "g",
@@ -611,6 +613,7 @@ function RecipesPage() {
   const [cat, setCat] = useState<Category | "all">("all");
   const [query, setQuery] = useState("");
   const [editing, setEditing] = useState<Recipe | null | undefined>(undefined);
+  const [managingCategories, setManagingCategories] = useState(false);
   const L = labels[language];
   const shown = data!.recipes.filter(
     (r) =>
@@ -635,6 +638,10 @@ function RecipesPage() {
           <Plus />
           {language === "zh" ? "新建菜谱" : "New recipe"}
         </button>
+        <button className="soft" onClick={() => setManagingCategories(true)}>
+          <Settings />
+          {language === "zh" ? "管理分类" : "Manage categories"}
+        </button>
       </div>
       <div className="filter-row">
         <button
@@ -643,13 +650,15 @@ function RecipesPage() {
         >
           {L.all}
         </button>
-        {categories.map((c) => (
+        {data!.categories.map((category) => (
           <button
-            className={cat === c ? "active" : ""}
-            key={c}
-            onClick={() => setCat(c)}
+            className={cat === category.id ? "active" : ""}
+            key={category.id}
+            onClick={() => setCat(category.id)}
           >
-            {c === "home" ? L.homeCat : L[c]}
+            {language === "en" && category.nameEn
+              ? category.nameEn
+              : category.name}
           </button>
         ))}
       </div>
@@ -659,7 +668,14 @@ function RecipesPage() {
             <RecipeImage recipe={r} />
             <div>
               <span className="category">
-                {r.category === "home" ? L.homeCat : L[r.category]}
+                {(() => {
+                  const category = data!.categories.find(
+                    (item) => item.id === r.category,
+                  );
+                  return language === "en" && category?.nameEn
+                    ? category.nameEn
+                    : (category?.name ?? r.category);
+                })()}
               </span>
               <h3>{language === "en" && r.nameEn ? r.nameEn : r.name}</h3>
               <p>
@@ -717,6 +733,9 @@ function RecipesPage() {
       {editing !== undefined && (
         <RecipeModal recipe={editing} close={() => setEditing(undefined)} />
       )}
+      {managingCategories && (
+        <CategoryManager close={() => setManagingCategories(false)} />
+      )}
     </>
   );
 }
@@ -732,7 +751,7 @@ function RecipeModal({
   const L = labels[language];
   const [name, setName] = useState(recipe?.name ?? "");
   const [category, setCategory] = useState<Category>(
-    recipe?.category ?? "home",
+    recipe?.category ?? data!.categories[0]?.id ?? "meat",
   );
   const [description, setDescription] = useState(recipe?.description ?? "");
   const [servings, setServings] = useState(recipe?.servings ?? 2);
@@ -804,9 +823,9 @@ function RecipeModal({
               value={category}
               onChange={(e) => setCategory(e.target.value as Category)}
             >
-              {categories.map((c) => (
-                <option value={c} key={c}>
-                  {c === "home" ? L.homeCat : L[c]}
+              {data!.categories.map((item) => (
+                <option value={item.id} key={item.id}>
+                  {language === "en" && item.nameEn ? item.nameEn : item.name}
                 </option>
               ))}
             </select>
@@ -935,6 +954,86 @@ function RecipeModal({
             {L.cancel}
           </button>
           <button onClick={submit}>{L.save}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CategoryManager({ close }: { close: () => void }) {
+  const { data, setData, language } = useApp();
+  const [name, setName] = useState("");
+  const create = () => {
+    try {
+      setData(addCategory(data!, name));
+      setName("");
+    } catch (error) {
+      alert(
+        language === "zh"
+          ? "分类名称不能为空或重复"
+          : "Category name cannot be blank or duplicated",
+      );
+    }
+  };
+  return (
+    <div className="overlay">
+      <div className="modal category-modal">
+        <div className="section-head">
+          <div>
+            <p className="eyebrow">
+              {language === "zh" ? "菜品分类" : "Recipe categories"}
+            </p>
+            <h2>{language === "zh" ? "管理分类" : "Manage categories"}</h2>
+          </div>
+          <button className="icon" onClick={close}>
+            <X />
+          </button>
+        </div>
+        <div className="stock-add">
+          <input
+            aria-label="new category"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+            placeholder={language === "zh" ? "新分类名称" : "New category"}
+          />
+          <button onClick={create}>
+            <Plus /> {language === "zh" ? "添加" : "Add"}
+          </button>
+        </div>
+        <div className="category-editor">
+          {data!.categories.map((category) => (
+            <div key={category.id}>
+              <input
+                aria-label={`${category.name} category name`}
+                value={category.name}
+                onChange={(event) =>
+                  setData(
+                    updateCategory(data!, {
+                      ...category,
+                      name: event.target.value,
+                    }),
+                  )
+                }
+              />
+              <button
+                className="icon danger"
+                disabled={data!.categories.length === 1}
+                aria-label={`delete ${category.name}`}
+                onClick={() => {
+                  if (
+                    confirm(
+                      language === "zh"
+                        ? "删除后，该分类的菜品将移动到第一个分类。继续吗？"
+                        : "Recipes will move to the first category. Continue?",
+                    )
+                  )
+                    setData(deleteCategory(data!, category.id));
+                }}
+              >
+                <Trash2 />
+              </button>
+            </div>
+          ))}
         </div>
       </div>
     </div>
@@ -1484,13 +1583,15 @@ function RecipeImage({ recipe }: { recipe: Recipe }) {
     <img className="recipe-image" src={recipe.image} alt="" />
   ) : (
     <div className={`recipe-image placeholder ${recipe.category}`}>
-      {recipe.category === "light"
+      {recipe.category === "diet" || recipe.category === "vegetable"
         ? "🥗"
-        : recipe.category === "home"
+        : recipe.category === "meat"
           ? "🍳"
-          : recipe.category === "hotpot"
+          : recipe.category === "soup"
             ? "🍲"
-            : "🥐"}
+            : recipe.category === "dessert"
+              ? "🍰"
+              : "🥢"}
     </div>
   );
 }

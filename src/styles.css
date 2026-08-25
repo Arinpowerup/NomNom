@@ -921,6 +921,15 @@ textarea:focus {
   justify-content: space-between;
   gap: 12px;
 }
+.category-editor {
+  display: grid;
+  gap: 9px;
+}
+.category-editor > div {
+  display: grid;
+  grid-template-columns: 1fr 42px;
+  gap: 8px;
+}
 .drawer-controls label {
   display: grid;
   gap: 7px;

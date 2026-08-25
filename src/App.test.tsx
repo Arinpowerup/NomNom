@@ -48,4 +48,22 @@ describe("application shell", () => {
       expect((await loadData()).mealPlans[0]?.meal).toBe("dinner"),
     );
   });
+  it("shows and persists editable recipe categories", async () => {
+    render(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    await screen.findByText("今晚想吃点什么？");
+    await userEvent.click(screen.getByRole("button", { name: "菜谱" }));
+    expect(await screen.findByRole("button", { name: "肉类" })).toBeVisible();
+    await userEvent.click(screen.getByRole("button", { name: /管理分类/ }));
+    await userEvent.type(screen.getByLabelText("new category"), "主食");
+    await userEvent.click(screen.getByRole("button", { name: "添加" }));
+    await waitFor(async () =>
+      expect(
+        (await loadData()).categories.some((item) => item.name === "主食"),
+      ).toBe(true),
+    );
+  });
 });
