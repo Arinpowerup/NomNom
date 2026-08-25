@@ -43,6 +43,7 @@ import {
   updateRole,
 } from "./lib/appActions";
 import { missingForRecipe } from "./lib/calculations";
+import { displayUnit } from "./lib/units";
 import { labels, t } from "./i18n";
 import { BRAND_ORANGE } from "./theme";
 import type {
@@ -77,19 +78,6 @@ const units: Unit[] = [
   "box",
 ];
 const fridgeUnits: Unit[] = ["piece", "g", "kg"];
-const fridgeUnitLabel = (unit: Unit, language: "zh" | "en") => {
-  const zh: Partial<Record<Unit, string>> = {
-    piece: "个",
-    g: "克",
-    kg: "千克",
-  };
-  const en: Partial<Record<Unit, string>> = {
-    piece: "piece",
-    g: "gram",
-    kg: "kilogram",
-  };
-  return (language === "zh" ? zh[unit] : en[unit]) ?? unit;
-};
 const localDate = (d = new Date()) => {
   const x = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
   return x.toISOString().slice(0, 10);
@@ -979,7 +967,9 @@ function RecipeModal({
               }
             >
               {units.map((u) => (
-                <option key={u}>{u}</option>
+                <option value={u} key={u}>
+                  {displayUnit(u, language, item.name)}
+                </option>
               ))}
             </select>
             <button
@@ -1162,7 +1152,7 @@ function FridgePage() {
           >
             {fridgeUnits.map((u) => (
               <option value={u} key={u}>
-                {fridgeUnitLabel(u, language)}
+                {displayUnit(u, language, name)}
               </option>
             ))}
           </select>
@@ -1190,7 +1180,7 @@ function FridgePage() {
                   })
                 }
               />
-              <span>{fridgeUnitLabel(s.unit, language)}</span>
+              <span>{displayUnit(s.unit, language, s.name)}</span>
               <button
                 className="icon danger"
                 onClick={() =>
@@ -1235,7 +1225,10 @@ function Recommendation({
               <small>
                 {t(language, "missing")}：
                 {x.missing
-                  .map((i) => `${i.name} ${i.quantity}${i.unit}`)
+                  .map(
+                    (i) =>
+                      `${i.name} ${i.quantity}${displayUnit(i.unit, language, i.name)}`,
+                  )
                   .join("、")}
               </small>
             )}
@@ -1369,7 +1362,9 @@ function ShoppingPage() {
               onChange={(e) => setManualUnit(e.target.value as Unit)}
             >
               {units.map((u) => (
-                <option key={u}>{u}</option>
+                <option value={u} key={u}>
+                  {displayUnit(u, language, manualName)}
+                </option>
               ))}
             </select>
             <button onClick={addManual}>
@@ -1403,8 +1398,8 @@ function ShoppingPage() {
                         ? "手动添加"
                         : "Manual"
                       : language === "zh"
-                        ? `总需 ${item.required}${item.unit} · 已有 ${item.inStock}${item.unit}`
-                        : `Need ${item.required}${item.unit} · Have ${item.inStock}${item.unit}`}
+                        ? `总需 ${item.required}${displayUnit(item.unit, language, item.name)} · 已有 ${item.inStock}${displayUnit(item.unit, language, item.name)}`
+                        : `Need ${item.required}${displayUnit(item.unit, language, item.name)} · Have ${item.inStock}${displayUnit(item.unit, language, item.name)}`}
                   </small>
                 </div>
                 <input
@@ -1422,7 +1417,7 @@ function ShoppingPage() {
                     })
                   }
                 />
-                <span>{item.unit}</span>
+                <span>{displayUnit(item.unit, language, item.name)}</span>
                 {item.stocked && (
                   <em>{language === "zh" ? "已入库" : "Stocked"}</em>
                 )}

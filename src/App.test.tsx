@@ -182,9 +182,18 @@ describe("application shell", () => {
       "kg",
     ]);
     expect([...unitSelect.options].map((option) => option.text)).toEqual([
-      "个",
+      "件",
       "克",
       "千克",
     ]);
+    const ingredient = screen.getByPlaceholderText("食材名称");
+    await userEvent.type(ingredient, "牛排");
+    expect(unitSelect.options[0].text).toBe("块");
+    await userEvent.clear(ingredient);
+    await userEvent.type(ingredient, "小白菜");
+    expect(unitSelect.options[0].text).toBe("把");
+    await userEvent.clear(ingredient);
+    await userEvent.type(ingredient, "鸡蛋");
+    expect(unitSelect.options[0].text).toBe("个");
   });
 });
