@@ -37,6 +37,24 @@ describe("application shell", () => {
     );
     expect(localStorage.getItem("language")).toBe("en");
   });
+  it("keeps NomNom as the product name and lets the current user rename themselves", async () => {
+    render(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    await screen.findByText("今晚想吃点什么？");
+    await userEvent.click(screen.getByRole("button", { name: "我" }));
+    expect(screen.getByText("NomNom", { selector: ".top-brand strong" })).toBeVisible();
+    expect(screen.queryByRole("heading", { name: "我的 NomNom" })).toBeNull();
+    const displayName = screen.getByLabelText("我的名字");
+    await userEvent.clear(displayName);
+    await userEvent.type(displayName, "小厨神");
+    await waitFor(async () =>
+      expect((await loadData()).roles[0].name).toBe("小厨神"),
+    );
+    expect(screen.getByRole("heading", { name: "你好，小厨神" })).toBeVisible();
+  });
   it("adds a recipe to tonight from the recipe catalogue", async () => {
     render(
       <AppProvider>

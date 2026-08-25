@@ -1578,6 +1578,7 @@ function SettingsPage() {
     setCurrentRoleId,
   } = useApp();
   const [name, setName] = useState("");
+  const currentRole = data!.roles.find((role) => role.id === currentRoleId);
   const file = useRef<HTMLInputElement>(null);
   const download = () => {
     const blob = new Blob([exportData(data!)], { type: "application/json" });
@@ -1622,6 +1623,37 @@ function SettingsPage() {
   };
   return (
     <div className="settings-grid">
+      <section className="panel current-profile-panel">
+        <div className="section-head">
+          <div>
+            <p className="eyebrow">
+              {language === "zh" ? "个人资料" : "PROFILE"}
+            </p>
+            <h2>{language === "zh" ? "我的名字" : "My name"}</h2>
+          </div>
+        </div>
+        <label className="profile-name-field">
+          <span>{language === "zh" ? "显示名字" : "Display name"}</span>
+          <input
+            aria-label={language === "zh" ? "我的名字" : "My name"}
+            value={currentRole?.name ?? ""}
+            onChange={(event) => {
+              if (currentRole)
+                setData(
+                  updateRole(data!, {
+                    ...currentRole,
+                    name: event.target.value,
+                  }),
+                );
+            }}
+          />
+          <small>
+            {language === "zh"
+              ? "这个名字会显示在点菜记录和今日菜单中。"
+              : "This name appears on orders and today's menu."}
+          </small>
+        </label>
+      </section>
       <section className="panel">
         <div className="section-head">
           <h2>{t(language, "roles")}</h2>
@@ -1744,7 +1776,8 @@ function SettingsPage() {
 }
 
 function MePage() {
-  const { language } = useApp();
+  const { data, language, currentRoleId } = useApp();
+  const currentRole = data!.roles.find((role) => role.id === currentRoleId);
   return (
     <>
       <section className="panel welcome-panel">
@@ -1752,7 +1785,11 @@ function MePage() {
           <p className="eyebrow">
             {language === "zh" ? "欢迎回来" : "Welcome back"}
           </p>
-          <h2>{language === "zh" ? "我的 NomNom" : "My NomNom"}</h2>
+          <h2>
+            {language === "zh"
+              ? `你好，${currentRole?.name ?? "家人"}`
+              : `Hello, ${currentRole?.name ?? "family"}`}
+          </h2>
           <p>
             {language === "zh"
               ? "管理家庭成员、语言、数据备份和个性设置。"

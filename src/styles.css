@@ -1132,6 +1132,16 @@ textarea:focus {
   margin: 10px 0;
   color: var(--muted);
 }
+.profile-name-field {
+  display: grid;
+  gap: 8px;
+}
+.profile-name-field span {
+  font-weight: 700;
+}
+.profile-name-field small {
+  color: var(--muted);
+}
 .app-shell.theme-warm {
   --green: #a94f2c;
   --green2: #c7653d;
