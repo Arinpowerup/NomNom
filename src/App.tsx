@@ -244,6 +244,10 @@ export default function App() {
               if (key === "order") setMenuIconAnimation((value) => value + 1);
             }}
           >
+            {(ctx.data!.preferences.theme === "warm" ||
+              ctx.data!.preferences.theme === "custom") && (
+              <NavThemeIcon page={key} style="hybrid" />
+            )}
             {ctx.data!.preferences.theme === "snoopy" && (
               <span className="nav-character-wrap" aria-hidden="true">
                 <span
@@ -267,6 +271,36 @@ export default function App() {
   );
 }
 
+function NavThemeIcon({
+  page,
+  style,
+}: {
+  page: Page;
+  style: "hybrid" | "glass";
+}) {
+  const icon =
+    page === "home" ? (
+      <Home />
+    ) : page === "order" ? (
+      <Menu />
+    ) : page === "foodlog" ? (
+      <History />
+    ) : page === "fridge" ? (
+      <Refrigerator />
+    ) : (
+      <Users />
+    );
+  return (
+    <span
+      className={`nav-theme-icon nav-theme-icon-${style}`}
+      data-nav-icon-style={style}
+      aria-hidden="true"
+    >
+      <span className="nav-theme-icon-fill" />
+      {icon}
+    </span>
+  );
+}
 function HomeModule() {
   const { language } = useApp();
   const [section, setSection] = useState<"today" | "week">("today");

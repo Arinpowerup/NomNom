@@ -254,6 +254,9 @@ describe("application shell", () => {
     expect(shell.style.getPropertyValue("--warm-peach")).toBe("#e4a38c");
     expect(shell.style.getPropertyValue("--warm-apricot")).toBe("#edc394");
     expect(shell.style.getPropertyValue("--warm-sage")).toBe("#afbea8");
+    expect(
+      container.querySelectorAll('[data-nav-icon-style="hybrid"]'),
+    ).toHaveLength(5);
   });
   it("switches and persists the glass theme", async () => {
     const { container } = render(
@@ -334,6 +337,9 @@ describe("application shell", () => {
     expect(shell.style.getPropertyValue("--custom-background-width")).toBe(
       "60%",
     );
+    expect(
+      document.querySelectorAll('[data-nav-icon-style="hybrid"]'),
+    ).toHaveLength(5);
     expect(
       screen.getByRole("img", { name: "当前自定义背景预览" }),
     ).toBeVisible();

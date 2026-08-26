@@ -2358,3 +2358,49 @@ button:not(:disabled):active {
     flex-wrap: wrap;
   }
 }
+/* Line-and-fill tab icons for warm and custom themes */
+.nav-theme-icon {
+  position: relative;
+  width: 34px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  isolation: isolate;
+}
+.nav-theme-icon > svg {
+  position: relative;
+  z-index: 2;
+  width: 23px;
+  height: 23px;
+  fill: none;
+  stroke-width: 2.15;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.nav-theme-icon-fill {
+  position: absolute;
+  z-index: 1;
+  width: 20px;
+  height: 16px;
+  right: 1px;
+  bottom: 1px;
+  border-radius: 7px 10px 6px 9px;
+  transform: rotate(-8deg);
+}
+.theme-warm .nav-theme-icon-hybrid > svg,
+.theme-custom .nav-theme-icon-hybrid > svg {
+  color: var(--warm-ink, #655b54);
+}
+.theme-warm .nav-theme-icon-hybrid .nav-theme-icon-fill {
+  background: var(--warm-apricot);
+  border: 1px solid rgba(101, 91, 84, 0.22);
+}
+.theme-custom .nav-theme-icon-hybrid .nav-theme-icon-fill {
+  background: #edb36e;
+  border: 1px solid rgba(74, 61, 50, 0.2);
+}
+.theme-warm .bottom-nav button.active .nav-theme-icon-fill,
+.theme-custom .bottom-nav button.active .nav-theme-icon-fill {
+  transform: rotate(3deg) scale(1.08);
+  background: #ee9f65;
+}
