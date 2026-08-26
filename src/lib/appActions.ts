@@ -220,10 +220,10 @@ export function completeDish(
         s.name.toLowerCase() === item.name.toLowerCase() &&
         s.unit === item.unit,
     );
-    if (!found || found.quantity < item.quantity)
-      throw new Error(`INSUFFICIENT:${item.name}`);
-    found.quantity -= item.quantity;
-    found.updatedAt = iso();
+    if (found) {
+      found.quantity = Math.max(0, found.quantity - item.quantity);
+      found.updatedAt = iso();
+    }
   }
   const next = updatePlan(
     { ...data, stock },

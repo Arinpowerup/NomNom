@@ -99,6 +99,36 @@ describe("menu safety rules", () => {
     data = completeDish(data, pid, "r2");
     expect(data.stock.find((s) => s.name === "鸡蛋")?.quantity).toBe(4);
   });
+  it("does not block completion when existing inventory is insufficient", () => {
+    let data: AppData = {
+      ...initialData,
+      stock: [
+        {
+          id: "s1",
+          name: "番茄",
+          quantity: 1,
+          unit: "piece",
+          createdAt: "",
+          updatedAt: "",
+        },
+        {
+          id: "s2",
+          name: "鸡蛋",
+          quantity: 1,
+          unit: "piece",
+          createdAt: "",
+          updatedAt: "",
+        },
+      ],
+    };
+    data = orderDish(data, "2026-08-24", "dinner", "r2", "role-me");
+
+    expect(() => {
+      data = completeDish(data, data.mealPlans[0].id, "r2");
+    }).not.toThrow();
+    expect(data.mealPlans[0].dishes[0].completed).toBe(true);
+    expect(data.stock.every((item) => item.quantity === 0)).toBe(true);
+  });
   it("updates only the selected history photo and validates image data", () => {
     const data: AppData = {
       ...initialData,
