@@ -54,6 +54,7 @@ import { displayUnit } from "./lib/units";
 import { labels, t } from "./i18n";
 import {
   BRAND_ORANGE,
+  CUSTOM_COFFEE_PALETTE,
   LIQUID_GLASS_ANIMATION_PALETTE,
   LIQUID_GLASS_PARAMETERS,
   LIQUID_GLASS_SURFACES,
@@ -153,6 +154,14 @@ export default function App() {
           "--glass-edge": LIQUID_GLASS_SURFACES.edge,
           "--glass-item": LIQUID_GLASS_SURFACES.item,
           "--glass-ink": LIQUID_GLASS_SURFACES.ink,
+        }
+      : {}),
+    ...(ctx.data.preferences.theme === "custom"
+      ? {
+          "--custom-primary": CUSTOM_COFFEE_PALETTE.primary,
+          "--custom-accent": CUSTOM_COFFEE_PALETTE.accent,
+          "--custom-soft": CUSTOM_COFFEE_PALETTE.soft,
+          "--custom-ink": CUSTOM_COFFEE_PALETTE.ink,
         }
       : {}),
     ...(ctx.data.preferences.customBackground

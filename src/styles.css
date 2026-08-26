@@ -2649,3 +2649,52 @@ button:not(:disabled):active {
     rgba(221, 239, 247, 0.38)
   );
 }
+/* Cream coffee palette for custom-photo theme */
+.app-shell.theme-custom {
+  --green: var(--custom-primary);
+  --green2: #85685a;
+  --orange: var(--custom-accent);
+  --cream: var(--custom-soft);
+  --paper: rgba(255, 252, 248, 0.9);
+  --line: rgba(111, 81, 67, 0.18);
+  --text: var(--custom-ink);
+  --muted: #75645b;
+  color: var(--custom-ink);
+}
+.theme-custom .hero {
+  color: #fffaf6;
+  background: linear-gradient(
+    125deg,
+    rgba(111, 81, 67, 0.96),
+    rgba(133, 104, 90, 0.9)
+  );
+  border-color: rgba(243, 233, 223, 0.44);
+  box-shadow: 0 18px 42px rgba(72, 50, 40, 0.2);
+}
+.theme-custom .hero p {
+  color: rgba(255, 250, 246, 0.82);
+}
+.theme-custom button:not(.danger):not(.bottom-nav button) {
+  color: var(--custom-ink);
+  border-color: rgba(111, 81, 67, 0.16);
+}
+.theme-custom button:not(.danger):not(.bottom-nav button).active,
+.theme-custom button:not(.danger):not(.bottom-nav button).selected {
+  color: var(--custom-ink);
+  background: color-mix(in srgb, var(--custom-accent) 30%, var(--custom-soft));
+  border-color: color-mix(in srgb, var(--custom-accent) 58%, transparent);
+}
+.theme-custom .bottom-nav button.active {
+  color: var(--custom-primary);
+  background: color-mix(in srgb, var(--custom-accent) 24%, transparent);
+}
+.theme-custom .nav-theme-icon-hybrid > svg {
+  color: var(--custom-primary);
+}
+.theme-custom .nav-theme-icon-hybrid .nav-theme-icon-fill {
+  background: var(--custom-accent);
+  border-color: rgba(111, 81, 67, 0.2);
+}
+.theme-custom .bottom-nav button.active .nav-theme-icon-fill {
+  background: #c78350;
+}
