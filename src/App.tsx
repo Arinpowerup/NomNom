@@ -150,6 +150,7 @@ export default function App() {
     ...(ctx.data.preferences.customBackground
       ? {
           "--custom-background": `url(${ctx.data.preferences.customBackground})`,
+          "--custom-background-width": "60%",
         }
       : {}),
   } as CSSProperties;
@@ -2002,27 +2003,44 @@ function AppearancePanel() {
         hidden
         type="file"
         accept="image/*"
-        onChange={(event) => readBackground(event.target.files?.[0])}
+        onChange={(event) => {
+          readBackground(event.currentTarget.files?.[0]);
+          event.currentTarget.value = "";
+        }}
       />
       {data!.preferences.customBackground && (
-        <div className="custom-background-actions">
-          <button
-            className="soft"
-            onClick={() => backgroundInput.current?.click()}
-          >
-            <Upload /> {language === "zh" ? "更换背景图片" : "Replace image"}
-          </button>
-          <button
-            className="soft"
-            onClick={() =>
-              setData({
-                ...data!,
-                preferences: { theme: "snoopy" },
-              })
+        <div className="custom-background-editor">
+          <div
+            className="custom-background-preview"
+            role="img"
+            aria-label={
+              language === "zh"
+                ? "当前自定义背景预览"
+                : "Custom background preview"
             }
-          >
-            {language === "zh" ? "恢复默认" : "Restore default"}
-          </button>
+            style={{
+              backgroundImage: `url(${data!.preferences.customBackground})`,
+            }}
+          />
+          <div className="custom-background-actions">
+            <button
+              className="soft"
+              onClick={() => backgroundInput.current?.click()}
+            >
+              <Upload /> {language === "zh" ? "更换背景图片" : "Replace image"}
+            </button>
+            <button
+              className="soft"
+              onClick={() =>
+                setData({
+                  ...data!,
+                  preferences: { ...data!.preferences, theme: "snoopy" },
+                })
+              }
+            >
+              {language === "zh" ? "恢复默认" : "Restore default"}
+            </button>
+          </div>
         </div>
       )}
     </section>

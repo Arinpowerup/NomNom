@@ -330,6 +330,28 @@ describe("application shell", () => {
       expect(saved.preferences.theme).toBe("custom");
       expect(saved.preferences.customBackground).toMatch(/^data:image\/png/);
     });
+    const shell = document.querySelector<HTMLElement>(".app-shell")!;
+    expect(shell.style.getPropertyValue("--custom-background-width")).toBe(
+      "60%",
+    );
+    expect(
+      screen.getByRole("img", { name: "当前自定义背景预览" }),
+    ).toBeVisible();
+    const backgroundInput = screen.getByLabelText(
+      "custom background image",
+    ) as HTMLInputElement;
+    expect(backgroundInput.value).toBe("");
+    expect(screen.getByRole("button", { name: /更换背景图片/ })).toBeVisible();
+    const replacement = new File([new Uint8Array([255, 216, 255])], "new.jpg", {
+      type: "image/jpeg",
+    });
+    await userEvent.upload(backgroundInput, replacement);
+    await waitFor(async () =>
+      expect((await loadData()).preferences.customBackground).toMatch(
+        /^data:image\/jpeg/,
+      ),
+    );
+    expect(backgroundInput.value).toBe("");
     await userEvent.upload(
       screen.getByLabelText("upload avatar for 我"),
       image,

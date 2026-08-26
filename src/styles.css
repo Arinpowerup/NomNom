@@ -2286,3 +2286,75 @@ button:not(:disabled):active {
   filter: blur(2px);
   box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.45);
 }
+/* Adaptive custom-photo canvas */
+.app-shell.theme-custom {
+  position: relative;
+  isolation: isolate;
+  background: #f4efe7;
+  background-image: none;
+}
+.app-shell.theme-custom::before {
+  content: "";
+  position: fixed;
+  z-index: 0;
+  inset: 0 0 0 auto;
+  width: var(--custom-background-width, 60%);
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(244, 239, 231, 0.9),
+      rgba(244, 239, 231, 0.08) 30%
+    ),
+    var(--custom-background);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: saturate(0.9) contrast(0.98);
+}
+.theme-custom .ambient-shapes {
+  display: none;
+}
+.theme-custom header,
+.theme-custom .panel,
+.theme-custom .recipe-card,
+.theme-custom .meal-card,
+.theme-custom .bottom-nav {
+  background: rgba(255, 253, 249, 0.9);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+.custom-background-editor {
+  display: grid;
+  grid-template-columns: minmax(180px, 320px) 1fr;
+  gap: 16px;
+  align-items: end;
+  margin-top: 16px;
+}
+.custom-background-preview {
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  box-shadow: 0 10px 28px rgba(48, 39, 31, 0.1);
+}
+.custom-background-editor .custom-background-actions {
+  margin-top: 0;
+}
+@media (max-width: 700px) {
+  .app-shell.theme-custom::before {
+    inset: 0 0 auto 0;
+    width: 100%;
+    height: 60vh;
+    background-image:
+      linear-gradient(180deg, rgba(244, 239, 231, 0.04), #f4efe7 96%),
+      var(--custom-background);
+  }
+  .custom-background-editor {
+    grid-template-columns: 1fr;
+  }
+  .custom-background-actions {
+    flex-wrap: wrap;
+  }
+}
