@@ -2698,3 +2698,28 @@ button:not(:disabled):active {
 .theme-custom .bottom-nav button.active .nav-theme-icon-fill {
   background: #c78350;
 }
+/* Accessible contrast for coffee-theme actions */
+.theme-custom button:not(.danger):not(.bottom-nav button) {
+  color: var(--custom-on-primary);
+  background: var(--custom-primary);
+}
+.theme-custom button.soft:not(.danger),
+.theme-custom .toolbar button.soft:not(.danger),
+.theme-custom .recipe-card button:last-child:not(.danger) {
+  color: var(--custom-ink);
+  background: rgba(243, 233, 223, 0.88);
+  border-color: rgba(111, 81, 67, 0.14);
+}
+.theme-custom button:not(.danger):not(.bottom-nav button):hover {
+  color: var(--custom-on-primary);
+  background: #604539;
+}
+.theme-custom button.soft:not(.danger):hover,
+.theme-custom .recipe-card button:last-child:not(.danger):hover {
+  color: var(--custom-ink);
+  background: #eadbd0;
+}
+.theme-custom button:not(.danger):not(.bottom-nav button).active,
+.theme-custom button:not(.danger):not(.bottom-nav button).selected {
+  color: var(--custom-ink);
+}

@@ -365,6 +365,7 @@ describe("application shell", () => {
     expect(shell.style.getPropertyValue("--custom-accent")).toBe("#d99a62");
     expect(shell.style.getPropertyValue("--custom-soft")).toBe("#f3e9df");
     expect(shell.style.getPropertyValue("--custom-ink")).toBe("#3e332e");
+    expect(shell.style.getPropertyValue("--custom-on-primary")).toBe("#fffaf6");
     expect(
       document.querySelectorAll('[data-nav-icon-style="hybrid"]'),
     ).toHaveLength(5);

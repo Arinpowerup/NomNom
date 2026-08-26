@@ -36,4 +36,5 @@ export const CUSTOM_COFFEE_PALETTE = {
   accent: "#d99a62",
   soft: "#f3e9df",
   ink: "#3e332e",
+  onPrimary: "#fffaf6",
 } as const;

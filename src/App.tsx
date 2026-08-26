@@ -162,6 +162,7 @@ export default function App() {
           "--custom-accent": CUSTOM_COFFEE_PALETTE.accent,
           "--custom-soft": CUSTOM_COFFEE_PALETTE.soft,
           "--custom-ink": CUSTOM_COFFEE_PALETTE.ink,
+          "--custom-on-primary": CUSTOM_COFFEE_PALETTE.onPrimary,
         }
       : {}),
     ...(ctx.data.preferences.customBackground
