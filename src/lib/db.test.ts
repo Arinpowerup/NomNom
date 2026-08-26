@@ -23,6 +23,7 @@ describe("indexed db persistence", () => {
     const migrated = await loadData();
     expect(migrated.categories).toHaveLength(6);
     expect(migrated.preferences.theme).toBe("snoopy");
+    expect(migrated.preferences.enabledMeals).toEqual(["lunch", "dinner"]);
     expect(migrated.recipes[0].category).toBe("diet");
   });
 });

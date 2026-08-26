@@ -2785,3 +2785,16 @@ button:not(:disabled):active {
   border-color: color-mix(in srgb, var(--custom-accent) 54%, transparent);
   box-shadow: 0 8px 20px rgba(91, 59, 44, 0.12);
 }
+/* Configurable two-meal weekly rhythm */
+.week-board .day {
+  display: grid;
+  grid-template-rows: auto repeat(
+      var(--enabled-meal-count, 2),
+      minmax(105px, auto)
+    );
+  gap: 8px;
+  align-content: start;
+}
+.week-board .day .meal-card {
+  margin-bottom: 0;
+}

@@ -80,7 +80,7 @@ const nav: { key: Page; src: string; effect: NavEffect }[] = [
   { key: "fridge", src: "/nav/snoopy-fridge.png", effect: "hearts" },
   { key: "me", src: "/nav/snoopy-me.png", effect: "hearts" },
 ];
-const meals: MealType[] = ["breakfast", "lunch", "dinner"];
+const DEFAULT_ENABLED_MEALS: MealType[] = ["lunch", "dinner"];
 const units: Unit[] = [
   "g",
   "kg",
@@ -348,13 +348,13 @@ function HomeModule() {
 
 function HomePage() {
   const { data, setData, language, currentRoleId } = useApp();
-  const [meal, setMeal] = useState<MealType>(() =>
-    new Date().getHours() < 11
-      ? "breakfast"
-      : new Date().getHours() < 16
-        ? "lunch"
-        : "dinner",
-  );
+  const enabledMeals = data!.preferences.enabledMeals ?? DEFAULT_ENABLED_MEALS;
+  const [meal, setMeal] = useState<MealType>(() => {
+    const preferred = new Date().getHours() < 16 ? "lunch" : "dinner";
+    return enabledMeals.includes(preferred)
+      ? preferred
+      : (enabledMeals[0] ?? "lunch");
+  });
   const date = localDate();
   const plan = getOrCreatePlan(data!, date, meal);
   const L = labels[language];
@@ -387,7 +387,7 @@ function HomePage() {
         </div>
       </section>
       <div className="meal-tabs">
-        {meals.map((m) => (
+        {enabledMeals.map((m) => (
           <button
             className={meal === m ? "active" : ""}
             key={m}
@@ -554,6 +554,7 @@ function WeekPage() {
     meal: MealType;
   } | null>(null);
   const L = labels[language];
+  const enabledMeals = data!.preferences.enabledMeals ?? DEFAULT_ENABLED_MEALS;
   const days = Array.from({ length: 7 }, (_, i) => addDays(start, i));
   const shift = (n: number) => {
     const x = addDays(start, n * 7);
@@ -583,7 +584,11 @@ function WeekPage() {
           →
         </button>
       </div>
-      <div className="week-board">
+      <div
+        className="week-board"
+        data-enabled-meals={enabledMeals.join(",")}
+        style={{ "--enabled-meal-count": enabledMeals.length } as CSSProperties}
+      >
         {days.map((date) => (
           <div
             className={date === localDate() ? "day today" : "day"}
@@ -598,7 +603,7 @@ function WeekPage() {
               </strong>
               <span>{date.slice(5)}</span>
             </div>
-            {meals.map((meal) => {
+            {enabledMeals.map((meal) => {
               const p = data!.mealPlans.find(
                 (x) => x.date === date && x.meal === meal,
               );
@@ -2009,6 +2014,7 @@ function AppearancePanel() {
       setData({
         ...data!,
         preferences: {
+          ...data!.preferences,
           theme: "custom",
           customBackground: String(reader.result),
         },

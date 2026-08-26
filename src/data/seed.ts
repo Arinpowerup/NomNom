@@ -117,7 +117,11 @@ export const seedRecipes: Recipe[] = [
 
 export const initialData: AppData = {
   version: 1,
-  preferences: { theme: "snoopy", appName: "NomNom" },
+  preferences: {
+    theme: "snoopy",
+    appName: "NomNom",
+    enabledMeals: ["lunch", "dinner"],
+  },
   categories: seedCategories,
   roles: [{ id: "role-me", name: "我", color: "#e66b45", createdAt: now }],
   recipes: seedRecipes,

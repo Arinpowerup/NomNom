@@ -102,6 +102,7 @@ export interface AppData {
     theme: AppTheme;
     appName?: string;
     customBackground?: string;
+    enabledMeals: MealType[];
   };
   categories: DishCategory[];
   roles: Role[];

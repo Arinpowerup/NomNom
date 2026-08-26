@@ -32,6 +32,13 @@ describe("application shell", () => {
       "/illustrations/snoopy-chef-trio.png",
     );
     expect(homeArtwork.querySelector(".cooking-steam")).toBeNull();
+    const mealTabs = document.querySelector(".meal-tabs")!;
+    expect(
+      Array.from(mealTabs.querySelectorAll(":scope > button")).map((button) =>
+        button.textContent?.replace(/\s+/g, " ").trim(),
+      ),
+    ).toEqual(["午餐0 道菜", "晚餐0 道菜"]);
+    expect(screen.queryByRole("button", { name: /早餐/ })).toBeNull();
   });
   it("switches the system interface to English", async () => {
     render(
@@ -214,6 +221,11 @@ describe("application shell", () => {
     await waitFor(() =>
       expect(container.querySelector(".week-board")).toBeVisible(),
     );
+    const weekBoard = container.querySelector<HTMLElement>(".week-board")!;
+    expect(weekBoard.dataset.enabledMeals).toBe("lunch,dinner");
+    expect(weekBoard.style.getPropertyValue("--enabled-meal-count")).toBe("2");
+    expect(weekBoard.querySelectorAll(".meal-card")).toHaveLength(14);
+    expect(weekBoard).not.toHaveTextContent("早餐");
     await userEvent.click(screen.getByRole("button", { name: "菜单" }));
     expect(screen.queryByRole("button", { name: /一周安排/ })).toBeNull();
     expect(screen.getByRole("button", { name: /购物清单/ })).toBeVisible();
