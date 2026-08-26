@@ -246,7 +246,9 @@ describe("application shell", () => {
     await screen.findByText("今晚想吃点什么？");
     await userEvent.click(screen.getByRole("button", { name: "我" }));
     const warmTheme = await screen.findByRole("button", { name: /暖色插画/ });
-    expect(warmTheme).toHaveTextContent("低饱和马卡龙色与圆润插画");
+    expect(
+      screen.queryByText("低饱和马卡龙色与圆润插画"),
+    ).not.toBeInTheDocument();
     await userEvent.click(warmTheme);
 
     const shell = container.querySelector<HTMLElement>(".app-shell")!;
@@ -271,12 +273,14 @@ describe("application shell", () => {
     ).toBeVisible();
     expect(screen.queryByText("App 皮肤")).not.toBeInTheDocument();
     const snoopyTheme = screen.getByRole("button", { name: /默认 Snoopy/ });
-    expect(snoopyTheme).toHaveTextContent("黑白橙简约手绘插画");
+    expect(screen.queryByText("黑白橙简约手绘插画")).not.toBeInTheDocument();
     expect(snoopyTheme).toHaveClass("active");
     const liquidGlass = await screen.findByRole("button", {
       name: /蓝白 Liquid Glass/,
     });
-    expect(liquidGlass).toHaveTextContent("折射 31 · 深度 20 · 无色散磨砂");
+    expect(
+      screen.queryByText("折射 31 · 深度 20 · 无色散磨砂"),
+    ).not.toBeInTheDocument();
     await userEvent.click(liquidGlass);
     expect(container.querySelector(".app-shell")).toHaveClass("theme-glass");
     expect(

@@ -1956,40 +1956,30 @@ function AppearancePanel() {
     icon: string;
     zh: string;
     en: string;
-    descZh: string;
-    descEn: string;
   }> = [
     {
       id: "snoopy",
       icon: "◉",
       zh: "默认 Snoopy",
       en: "Default Snoopy",
-      descZh: "黑白橙简约手绘插画",
-      descEn: "Minimal black, white and orange illustrations",
     },
     {
       id: "warm",
       icon: "☀️",
       zh: "暖色插画",
       en: "Warm illustration",
-      descZh: "低饱和马卡龙色与圆润插画",
-      descEn: "Muted macarons and rounded illustrations",
     },
     {
       id: "glass",
       icon: "◌",
       zh: "蓝白 Liquid Glass",
       en: "Blue Liquid Glass",
-      descZh: "折射 31 · 深度 20 · 无色散磨砂",
-      descEn: "Refraction 31 · depth 20 · dispersion-free frost",
     },
     {
       id: "custom",
       icon: "🖼️",
       zh: "自定义图片",
       en: "Custom image",
-      descZh: "从自己的设备选择背景",
-      descEn: "Choose a background from your device",
     },
   ];
   const chooseTheme = (theme: AppTheme) =>
@@ -2030,7 +2020,6 @@ function AppearancePanel() {
           >
             <span>{theme.icon}</span>
             <strong>{language === "zh" ? theme.zh : theme.en}</strong>
-            <small>{language === "zh" ? theme.descZh : theme.descEn}</small>
           </button>
         ))}
       </div>
