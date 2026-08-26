@@ -184,6 +184,10 @@ describe("application shell", () => {
     for (const name of ["首页", "菜单", "食记", "冰箱", "我"]) {
       expect(screen.getByRole("button", { name })).toBeVisible();
     }
+    const homeTabs = container.querySelector('[data-bubble-tabs="home"]')!;
+    expect(homeTabs).toHaveClass("module-tabs");
+    expect(homeTabs.querySelectorAll(":scope > button")).toHaveLength(2);
+    expect(homeTabs.querySelectorAll(":scope > button > svg")).toHaveLength(2);
     const bottomNav = container.querySelector(".bottom-nav")!;
     expect(bottomNav).toBeInTheDocument();
     expect(
@@ -213,6 +217,9 @@ describe("application shell", () => {
     await userEvent.click(screen.getByRole("button", { name: "菜单" }));
     expect(screen.queryByRole("button", { name: /一周安排/ })).toBeNull();
     expect(screen.getByRole("button", { name: /购物清单/ })).toBeVisible();
+    const orderTabs = container.querySelector('[data-bubble-tabs="order"]')!;
+    expect(orderTabs.querySelectorAll(":scope > button")).toHaveLength(2);
+    expect(orderTabs.querySelectorAll(":scope > button > svg")).toHaveLength(2);
     await userEvent.click(screen.getByRole("button", { name: "我" }));
     expect(await screen.findByText("新手教程")).toBeVisible();
   });

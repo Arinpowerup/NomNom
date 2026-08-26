@@ -327,7 +327,7 @@ function HomeModule() {
   const [section, setSection] = useState<"today" | "week">("today");
   return (
     <>
-      <div className="module-tabs home-tabs">
+      <div className="module-tabs home-tabs" data-bubble-tabs="home">
         <button
           className={section === "today" ? "active" : ""}
           onClick={() => setSection("today")}
@@ -760,7 +760,7 @@ function OrderPage({ initialCategory }: { initialCategory: Category | "all" }) {
   const [section, setSection] = useState<"recipes" | "shopping">("recipes");
   return (
     <>
-      <div className="module-tabs">
+      <div className="module-tabs" data-bubble-tabs="order">
         <button
           className={section === "recipes" ? "active" : ""}
           onClick={() => setSection("recipes")}
