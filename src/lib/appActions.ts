@@ -214,19 +214,91 @@ export function completeDish(
   if (!plan || !dish || !recipe || dish.completed) return data;
   const required = scaleIngredients(recipe, plan.diners);
   const stock = data.stock.map((s) => ({ ...s }));
+  const shortages: Array<{
+    name: string;
+    quantity: number;
+    unit: StockItem["unit"];
+  }> = [];
   for (const item of required) {
     const found = stock.find(
       (s) =>
         s.name.toLowerCase() === item.name.toLowerCase() &&
         s.unit === item.unit,
     );
+    const available = Math.max(0, found?.quantity ?? 0);
+    const shortage = Math.max(0, item.quantity - available);
+    if (shortage > 0) shortages.push({ ...item, quantity: shortage });
     if (found) {
-      found.quantity = Math.max(0, found.quantity - item.quantity);
+      found.quantity -= item.quantity;
       found.updatedAt = iso();
+    } else {
+      const timestamp = iso();
+      stock.push({
+        id: id("stock"),
+        name: item.name,
+        quantity: -item.quantity,
+        unit: item.unit,
+        createdAt: timestamp,
+        updatedAt: timestamp,
+      });
     }
   }
+  const pendingList = data.shoppingLists.find(
+    (list) => list.name === "待购清单",
+  );
+  const shortageItems = shortages.map((item) => ({
+    id: id("shopping-item"),
+    name: item.name,
+    unit: item.unit,
+    required: item.quantity,
+    inStock: 0,
+    quantity: item.quantity,
+    source: "calculated" as const,
+    purchased: false,
+    stocked: false,
+  }));
+  const shoppingLists =
+    shortages.length === 0
+      ? data.shoppingLists
+      : pendingList
+        ? data.shoppingLists.map((list) => {
+            if (list.id !== pendingList.id) return list;
+            const items = list.items.map((item) => ({ ...item }));
+            for (const shortage of shortageItems) {
+              const existing = items.find(
+                (item) =>
+                  !item.purchased &&
+                  !item.stocked &&
+                  item.name.toLowerCase() === shortage.name.toLowerCase() &&
+                  item.unit === shortage.unit,
+              );
+              if (existing) {
+                existing.required += shortage.quantity;
+                existing.quantity += shortage.quantity;
+              } else items.push(shortage);
+            }
+            return {
+              ...list,
+              from: list.from < plan.date ? list.from : plan.date,
+              to: list.to > plan.date ? list.to : plan.date,
+              items,
+              updatedAt: iso(),
+            };
+          })
+        : [
+            ...data.shoppingLists,
+            {
+              id: id("list"),
+              name: "待购清单",
+              from: plan.date,
+              to: plan.date,
+              items: shortageItems,
+              createdAt: iso(),
+              updatedAt: iso(),
+            },
+          ];
   const next = updatePlan(
-    { ...data, stock },
+    { ...data, stock, shoppingLists },
     {
       ...plan,
       dishes: plan.dishes.map((d) =>

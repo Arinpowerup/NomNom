@@ -127,7 +127,8 @@ describe("menu safety rules", () => {
       data = completeDish(data, data.mealPlans[0].id, "r2");
     }).not.toThrow();
     expect(data.mealPlans[0].dishes[0].completed).toBe(true);
-    expect(data.stock.every((item) => item.quantity === 0)).toBe(true);
+    expect(data.stock.find((item) => item.name === "番茄")?.quantity).toBe(-2);
+    expect(data.stock.find((item) => item.name === "鸡蛋")?.quantity).toBe(-3);
   });
   it("completes a dish and creates history when no inventory was recorded", () => {
     let data: AppData = { ...initialData, stock: [], history: [] };
@@ -143,6 +144,33 @@ describe("menu safety rules", () => {
       meal: "dinner",
       dishes: [{ name: "番茄炒蛋", completed: true }],
     });
+  });
+  it("creates negative stock and merges each new shortage into one pending shopping list", () => {
+    let data: AppData = {
+      ...initialData,
+      stock: [],
+      shoppingLists: [],
+      history: [],
+    };
+    data = orderDish(data, "2026-08-24", "dinner", "r2", "role-me");
+    data = completeDish(data, data.mealPlans[0].id, "r2");
+    data = orderDish(data, "2026-08-25", "dinner", "r2", "role-me");
+    data = completeDish(data, data.mealPlans[1].id, "r2");
+
+    expect(data.stock.find((item) => item.name === "番茄")?.quantity).toBe(-6);
+    expect(data.stock.find((item) => item.name === "鸡蛋")?.quantity).toBe(-8);
+    expect(data.shoppingLists).toHaveLength(1);
+    expect(data.shoppingLists[0]).toMatchObject({
+      name: "待购清单",
+      from: "2026-08-24",
+      to: "2026-08-25",
+    });
+    expect(
+      data.shoppingLists[0].items.find((item) => item.name === "番茄"),
+    ).toMatchObject({ quantity: 6, required: 6, purchased: false });
+    expect(
+      data.shoppingLists[0].items.find((item) => item.name === "鸡蛋"),
+    ).toMatchObject({ quantity: 8, required: 8, purchased: false });
   });
   it("updates only the selected history photo and validates image data", () => {
     const data: AppData = {
