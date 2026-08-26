@@ -52,7 +52,12 @@ import {
 import { missingForRecipe } from "./lib/calculations";
 import { displayUnit } from "./lib/units";
 import { labels, t } from "./i18n";
-import { BRAND_ORANGE, LIQUID_GLASS_ANIMATION_PALETTE } from "./theme";
+import {
+  BRAND_ORANGE,
+  LIQUID_GLASS_ANIMATION_PALETTE,
+  LIQUID_GLASS_PARAMETERS,
+  WARM_ILLUSTRATION_PALETTE,
+} from "./theme";
 import type {
   Category,
   AppTheme,
@@ -120,12 +125,26 @@ export default function App() {
   );
   const shellStyle = {
     "--orange": BRAND_ORANGE,
+    ...(ctx.data.preferences.theme === "warm"
+      ? {
+          "--warm-peach": WARM_ILLUSTRATION_PALETTE.peach,
+          "--warm-apricot": WARM_ILLUSTRATION_PALETTE.apricot,
+          "--warm-sage": WARM_ILLUSTRATION_PALETTE.sage,
+          "--warm-cream": WARM_ILLUSTRATION_PALETTE.cream,
+          "--warm-ink": WARM_ILLUSTRATION_PALETTE.ink,
+        }
+      : {}),
     ...(ctx.data.preferences.theme === "glass"
       ? {
           "--ambient-one": LIQUID_GLASS_ANIMATION_PALETTE.ambientOne,
           "--ambient-two": LIQUID_GLASS_ANIMATION_PALETTE.ambientTwo,
           "--ambient-three": LIQUID_GLASS_ANIMATION_PALETTE.ambientThree,
           "--illustration-spark": LIQUID_GLASS_ANIMATION_PALETTE.sparkle,
+          "--glass-refraction": LIQUID_GLASS_PARAMETERS.refraction,
+          "--glass-depth": LIQUID_GLASS_PARAMETERS.depth,
+          "--glass-dispersion": LIQUID_GLASS_PARAMETERS.dispersion,
+          "--glass-frost": LIQUID_GLASS_PARAMETERS.frost,
+          "--glass-light": LIQUID_GLASS_PARAMETERS.light,
         }
       : {}),
     ...(ctx.data.preferences.customBackground
@@ -1915,16 +1934,16 @@ function AppearancePanel() {
       icon: "☀️",
       zh: "暖色插画",
       en: "Warm illustration",
-      descZh: "米色搭配橙色，温暖简约",
-      descEn: "Warm beige and orange",
+      descZh: "低饱和马卡龙色与圆润插画",
+      descEn: "Muted macarons and rounded illustrations",
     },
     {
       id: "glass",
       icon: "◌",
       zh: "蓝白 Liquid Glass",
       en: "Blue Liquid Glass",
-      descZh: "蓝色、白色与透明流光",
-      descEn: "Blue, white and translucent highlights",
+      descZh: "折射 31 · 深度 20 · 无色散磨砂",
+      descEn: "Refraction 31 · depth 20 · dispersion-free frost",
     },
     {
       id: "custom",

@@ -237,6 +237,24 @@ describe("application shell", () => {
       animatedIcon,
     );
   });
+  it("applies the muted macaron palette to the warm illustration theme", async () => {
+    const { container } = render(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    await screen.findByText("今晚想吃点什么？");
+    await userEvent.click(screen.getByRole("button", { name: "我" }));
+    const warmTheme = await screen.findByRole("button", { name: /暖色插画/ });
+    expect(warmTheme).toHaveTextContent("低饱和马卡龙色与圆润插画");
+    await userEvent.click(warmTheme);
+
+    const shell = container.querySelector<HTMLElement>(".app-shell")!;
+    expect(shell).toHaveClass("theme-warm");
+    expect(shell.style.getPropertyValue("--warm-peach")).toBe("#e4a38c");
+    expect(shell.style.getPropertyValue("--warm-apricot")).toBe("#edc394");
+    expect(shell.style.getPropertyValue("--warm-sage")).toBe("#afbea8");
+  });
   it("switches and persists the glass theme", async () => {
     const { container } = render(
       <AppProvider>
@@ -255,7 +273,7 @@ describe("application shell", () => {
     const liquidGlass = await screen.findByRole("button", {
       name: /蓝白 Liquid Glass/,
     });
-    expect(liquidGlass).toHaveTextContent("蓝色、白色与透明流光");
+    expect(liquidGlass).toHaveTextContent("折射 31 · 深度 20 · 无色散磨砂");
     await userEvent.click(liquidGlass);
     expect(container.querySelector(".app-shell")).toHaveClass("theme-glass");
     expect(
@@ -279,6 +297,11 @@ describe("application shell", () => {
     expect(shell.style.getPropertyValue("--illustration-spark")).toBe(
       "#bfe8ff",
     );
+    expect(shell.style.getPropertyValue("--glass-refraction")).toBe("31");
+    expect(shell.style.getPropertyValue("--glass-depth")).toBe("20");
+    expect(shell.style.getPropertyValue("--glass-dispersion")).toBe("0");
+    expect(shell.style.getPropertyValue("--glass-frost")).toBe("100");
+    expect(shell.style.getPropertyValue("--glass-light")).toBe("45");
     await waitFor(async () =>
       expect((await loadData()).preferences.theme).toBe("glass"),
     );
