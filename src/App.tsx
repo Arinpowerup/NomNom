@@ -427,17 +427,7 @@ function DishRow({
     ids
       .map((id) => data!.roles.find((r) => r.id === id)?.name ?? "—")
       .join("、");
-  const finish = () => {
-    try {
-      setData(completeDish(data!, plan.id, recipe.id));
-    } catch (e) {
-      alert(
-        language === "zh"
-          ? `库存不足：${String(e).split(":").pop()}`
-          : `Insufficient stock: ${String(e).split(":").pop()}`,
-      );
-    }
-  };
+  const finish = () => setData(completeDish(data!, plan.id, recipe.id));
   return (
     <article className="dish-row">
       <RecipeImage recipe={recipe} />

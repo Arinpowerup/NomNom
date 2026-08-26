@@ -129,6 +129,21 @@ describe("menu safety rules", () => {
     expect(data.mealPlans[0].dishes[0].completed).toBe(true);
     expect(data.stock.every((item) => item.quantity === 0)).toBe(true);
   });
+  it("completes a dish and creates history when no inventory was recorded", () => {
+    let data: AppData = { ...initialData, stock: [], history: [] };
+    data = orderDish(data, "2026-08-24", "dinner", "r2", "role-me");
+    const planId = data.mealPlans[0].id;
+
+    data = completeDish(data, planId, "r2");
+
+    expect(data.mealPlans[0].dishes[0].completed).toBe(true);
+    expect(data.history).toHaveLength(1);
+    expect(data.history[0]).toMatchObject({
+      date: "2026-08-24",
+      meal: "dinner",
+      dishes: [{ name: "番茄炒蛋", completed: true }],
+    });
+  });
   it("updates only the selected history photo and validates image data", () => {
     const data: AppData = {
       ...initialData,
