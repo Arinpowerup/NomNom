@@ -56,6 +56,7 @@ import {
   BRAND_ORANGE,
   LIQUID_GLASS_ANIMATION_PALETTE,
   LIQUID_GLASS_PARAMETERS,
+  LIQUID_GLASS_SURFACES,
   WARM_ILLUSTRATION_PALETTE,
 } from "./theme";
 import type {
@@ -145,6 +146,12 @@ export default function App() {
           "--glass-dispersion": LIQUID_GLASS_PARAMETERS.dispersion,
           "--glass-frost": LIQUID_GLASS_PARAMETERS.frost,
           "--glass-light": LIQUID_GLASS_PARAMETERS.light,
+          "--glass-sky": LIQUID_GLASS_SURFACES.sky,
+          "--glass-water": LIQUID_GLASS_SURFACES.water,
+          "--glass-panel": LIQUID_GLASS_SURFACES.panel,
+          "--glass-panel-strong": LIQUID_GLASS_SURFACES.panelStrong,
+          "--glass-edge": LIQUID_GLASS_SURFACES.edge,
+          "--glass-ink": LIQUID_GLASS_SURFACES.ink,
         }
       : {}),
     ...(ctx.data.preferences.customBackground

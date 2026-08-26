@@ -1,10 +1,19 @@
 export const BRAND_ORANGE = "rgb(240, 160, 40)";
 
 export const LIQUID_GLASS_ANIMATION_PALETTE = {
-  ambientOne: "rgba(78, 167, 245, 0.42)",
-  ambientTwo: "rgba(203, 235, 255, 0.72)",
-  ambientThree: "rgba(118, 202, 255, 0.42)",
-  sparkle: "#bfe8ff",
+  ambientOne: "rgba(205, 224, 234, 0.72)",
+  ambientTwo: "rgba(242, 247, 250, 0.82)",
+  ambientThree: "rgba(112, 190, 224, 0.38)",
+  sparkle: "#eaf9ff",
+} as const;
+
+export const LIQUID_GLASS_SURFACES = {
+  sky: "#dbe3e8",
+  water: "#9fc9dc",
+  panel: "rgba(246, 250, 252, 0.48)",
+  panelStrong: "rgba(235, 246, 252, 0.7)",
+  edge: "rgba(255, 255, 255, 0.82)",
+  ink: "#18384c",
 } as const;
 export const WARM_ILLUSTRATION_PALETTE = {
   peach: "#e4a38c",

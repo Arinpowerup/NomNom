@@ -304,19 +304,28 @@ describe("application shell", () => {
     expect(liquidGlass).toHaveClass("active");
     const shell = container.querySelector<HTMLElement>(".app-shell")!;
     expect(shell.style.getPropertyValue("--ambient-one")).toBe(
-      "rgba(78, 167, 245, 0.42)",
+      "rgba(205, 224, 234, 0.72)",
     );
     expect(shell.style.getPropertyValue("--ambient-two")).toBe(
-      "rgba(203, 235, 255, 0.72)",
+      "rgba(242, 247, 250, 0.82)",
     );
     expect(shell.style.getPropertyValue("--illustration-spark")).toBe(
-      "#bfe8ff",
+      "#eaf9ff",
     );
     expect(shell.style.getPropertyValue("--glass-refraction")).toBe("31");
     expect(shell.style.getPropertyValue("--glass-depth")).toBe("20");
     expect(shell.style.getPropertyValue("--glass-dispersion")).toBe("0");
     expect(shell.style.getPropertyValue("--glass-frost")).toBe("100");
     expect(shell.style.getPropertyValue("--glass-light")).toBe("45");
+    expect(shell.style.getPropertyValue("--glass-sky")).toBe("#dbe3e8");
+    expect(shell.style.getPropertyValue("--glass-water")).toBe("#9fc9dc");
+    expect(shell.style.getPropertyValue("--glass-panel")).toBe(
+      "rgba(246, 250, 252, 0.48)",
+    );
+    expect(shell.style.getPropertyValue("--glass-edge")).toBe(
+      "rgba(255, 255, 255, 0.82)",
+    );
+    expect(shell.style.getPropertyValue("--glass-ink")).toBe("#18384c");
     await waitFor(async () =>
       expect((await loadData()).preferences.theme).toBe("glass"),
     );

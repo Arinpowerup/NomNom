@@ -2448,3 +2448,161 @@ button:not(:disabled):active {
     0 9px 18px rgba(20, 107, 180, 0.24);
   transform: translateY(-1px);
 }
+/* Editorial liquid-glass theme: mist, depth and bento-like surfaces */
+.app-shell.theme-glass {
+  --green: #2b718f;
+  --green2: #64b6da;
+  --orange: #269fe0;
+  --cream: var(--glass-sky);
+  --paper: var(--glass-panel);
+  --line: var(--glass-edge);
+  --text: var(--glass-ink);
+  --muted: #587181;
+  isolation: isolate;
+  background:
+    linear-gradient(155deg, rgba(255, 255, 255, 0.78) 0 8%, transparent 38%),
+    radial-gradient(
+      circle at 76% 23%,
+      rgba(255, 255, 255, 0.64),
+      transparent 28%
+    ),
+    linear-gradient(
+      145deg,
+      var(--glass-sky) 5%,
+      var(--glass-water) 54%,
+      #cdd7dd 100%
+    );
+  background-attachment: fixed;
+}
+.app-shell.theme-glass::before {
+  content: "";
+  position: fixed;
+  z-index: 0;
+  inset: -14% -8%;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      104deg,
+      transparent 34%,
+      rgba(255, 255, 255, 0.34) 44%,
+      transparent 53%
+    ),
+    radial-gradient(
+      ellipse at 12% 62%,
+      rgba(255, 255, 255, 0.46) 0 8%,
+      transparent 8.5%
+    ),
+    radial-gradient(
+      ellipse at 86% 78%,
+      rgba(76, 178, 225, 0.24) 0 14%,
+      transparent 15%
+    );
+  filter: blur(11px);
+  transform: rotate(-4deg) scale(1.04);
+}
+.theme-glass .ambient-shapes span {
+  opacity: 0.46;
+  border: 1px solid rgba(255, 255, 255, 0.66);
+  background: rgba(237, 249, 255, 0.3);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  box-shadow:
+    inset 7px 8px 18px rgba(255, 255, 255, 0.34),
+    inset -8px -9px 22px rgba(63, 150, 194, 0.14),
+    0 22px 46px rgba(47, 94, 122, 0.13);
+}
+.theme-glass header,
+.theme-glass .panel,
+.theme-glass .recipe-card,
+.theme-glass .meal-card,
+.theme-glass .meal-tabs button,
+.theme-glass .bottom-nav {
+  color: var(--glass-ink);
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.54),
+    var(--glass-panel)
+  );
+  -webkit-backdrop-filter: blur(30px) saturate(100%);
+  backdrop-filter: blur(30px) saturate(100%);
+  border: 1px solid var(--glass-edge);
+  border-radius: 28px;
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.78),
+    inset -1px -1px 0 rgba(91, 145, 173, 0.13),
+    0 20px 31px rgba(42, 82, 105, 0.14);
+}
+.theme-glass .hero {
+  color: #ffffff;
+  background:
+    radial-gradient(
+      circle at 84% 18%,
+      rgba(255, 255, 255, 0.34),
+      transparent 25%
+    ),
+    linear-gradient(135deg, rgba(88, 180, 224, 0.74), rgba(79, 150, 188, 0.5));
+  -webkit-backdrop-filter: blur(32px) saturate(100%);
+  backdrop-filter: blur(32px) saturate(100%);
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  border-radius: 32px;
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.78),
+    0 24px 44px rgba(36, 85, 111, 0.18);
+}
+.theme-glass .hero p {
+  color: rgba(255, 255, 255, 0.84);
+}
+.theme-glass .hero .pill {
+  color: var(--glass-ink);
+  background: rgba(255, 255, 255, 0.64);
+  border-color: rgba(255, 255, 255, 0.82);
+}
+.theme-glass button:not(.danger):not(.bottom-nav button),
+.theme-glass input,
+.theme-glass select,
+.theme-glass textarea {
+  color: var(--glass-ink);
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.66),
+    rgba(226, 242, 249, 0.38)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  border-radius: 18px;
+  -webkit-backdrop-filter: blur(20px) saturate(100%);
+  backdrop-filter: blur(20px) saturate(100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    0 8px 20px rgba(44, 91, 118, 0.1);
+}
+.theme-glass .bottom-nav {
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.68),
+    rgba(218, 238, 247, 0.42)
+  );
+  border-radius: 27px;
+}
+.theme-glass .bottom-nav button.active {
+  color: #176d9a;
+  background: rgba(255, 255, 255, 0.42);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.58);
+}
+.theme-glass .nav-theme-icon-glass {
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle at 32% 24%,
+      rgba(255, 255, 255, 0.96),
+      rgba(217, 244, 255, 0.54) 36%,
+      rgba(66, 171, 224, 0.32) 72%
+    ),
+    rgba(255, 255, 255, 0.28);
+  box-shadow:
+    inset 4px 5px 9px rgba(255, 255, 255, 0.68),
+    inset -5px -6px 11px rgba(49, 151, 205, 0.2),
+    0 9px 18px rgba(31, 101, 140, 0.18);
+}
+.theme-glass .nav-theme-icon-glass .nav-theme-icon-fill {
+  display: none;
+}
