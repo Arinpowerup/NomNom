@@ -45,6 +45,7 @@ import {
   stockPurchased,
   toggleVote,
   updateCategory,
+  updateHistoryPhoto,
   updatePlan,
   updateRole,
 } from "./lib/appActions";
@@ -1571,6 +1572,13 @@ function HistoryPage() {
         orderDish(data!, localDate(), "dinner", recipe.id, currentRoleId),
       );
   };
+  const uploadPhoto = (historyId: string, selected?: File) => {
+    if (!selected?.type.startsWith("image/")) return;
+    const reader = new FileReader();
+    reader.onload = () =>
+      setData(updateHistoryPhoto(data!, historyId, String(reader.result)));
+    reader.readAsDataURL(selected);
+  };
   return (
     <section className="panel">
       <div className="section-head">
@@ -1585,6 +1593,43 @@ function HistoryPage() {
               <div className="history-date">
                 <strong>{h.date.slice(8)}</strong>
                 <span>{h.date.slice(0, 7)}</span>
+              </div>
+              <div
+                className={
+                  h.image ? "history-photo has-photo" : "history-photo"
+                }
+              >
+                {h.image && (
+                  <img
+                    src={h.image}
+                    alt={
+                      h.date +
+                      " " +
+                      t(language, h.meal) +
+                      (language === "zh" ? " 食记照片" : " food log photo")
+                    }
+                  />
+                )}
+                <label>
+                  <Upload />
+                  {language === "zh"
+                    ? h.image
+                      ? "更换照片"
+                      : "上传照片"
+                    : h.image
+                      ? "Replace photo"
+                      : "Upload photo"}
+                  <input
+                    aria-label={
+                      "upload history photo for " + h.date + " " + h.meal
+                    }
+                    type="file"
+                    accept="image/*"
+                    onChange={(event) =>
+                      uploadPhoto(h.id, event.target.files?.[0])
+                    }
+                  />
+                </label>
               </div>
               <div className="grow">
                 <h3>

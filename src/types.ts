@@ -88,6 +88,7 @@ export interface HistoryEntry {
   date: string;
   meal: MealType;
   diners: number;
+  image?: string;
   dishes: Array<{
     name: string;
     orderedBy: string[];

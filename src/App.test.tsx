@@ -354,6 +354,52 @@ describe("application shell", () => {
     await userEvent.type(ingredient, "鸡蛋");
     expect(unitSelect.options[0].text).toBe("个");
   });
+  it("uploads, previews, and persists a photo for a food log entry", async () => {
+    await saveData({
+      ...structuredClone(initialData),
+      history: [
+        {
+          id: "history-dinner",
+          date: "2026-08-25",
+          meal: "dinner",
+          diners: 2,
+          dishes: [
+            {
+              name: "番茄炒蛋",
+              orderedBy: ["我"],
+              votes: [],
+              completed: true,
+            },
+          ],
+        },
+      ],
+    });
+    render(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    await screen.findByText("今晚想吃点什么？");
+    await userEvent.click(screen.getByRole("button", { name: "食记" }));
+    const photo = new File([new Uint8Array([137, 80, 78, 71])], "dinner.png", {
+      type: "image/png",
+    });
+    await userEvent.upload(
+      await screen.findByLabelText(
+        "upload history photo for 2026-08-25 dinner",
+      ),
+      photo,
+    );
+    await waitFor(async () =>
+      expect(
+        (await loadData()).history[0].image?.startsWith("data:image/png"),
+      ).toBe(true),
+    );
+    expect(
+      await screen.findByAltText("2026-08-25 晚餐 食记照片"),
+    ).toBeVisible();
+    expect(screen.getByText("更换照片")).toBeVisible();
+  });
   it("uploads and persists a dish photo directly from the menu card", async () => {
     render(
       <AppProvider>

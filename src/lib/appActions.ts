@@ -275,6 +275,20 @@ export function completeDish(
         ],
   };
 }
+export function updateHistoryPhoto(
+  data: AppData,
+  historyId: string,
+  image: string,
+): AppData {
+  if (!image.startsWith("data:image/")) throw new Error("INVALID_IMAGE");
+  return {
+    ...data,
+    history: data.history.map((entry) =>
+      entry.id === historyId ? { ...entry, image } : entry,
+    ),
+  };
+}
+
 export function addStock(
   data: AppData,
   item: Pick<StockItem, "name" | "quantity" | "unit">,

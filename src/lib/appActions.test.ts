@@ -9,6 +9,7 @@ import {
   orderDish,
   saveRecipe,
   toggleVote,
+  updateHistoryPhoto,
   updateCategory,
 } from "./appActions";
 import { initialData } from "../data/seed";
@@ -97,6 +98,37 @@ describe("menu safety rules", () => {
     expect(data.stock.find((s) => s.name === "鸡蛋")?.quantity).toBe(4);
     data = completeDish(data, pid, "r2");
     expect(data.stock.find((s) => s.name === "鸡蛋")?.quantity).toBe(4);
+  });
+  it("updates only the selected history photo and validates image data", () => {
+    const data: AppData = {
+      ...initialData,
+      history: [
+        {
+          id: "history-one",
+          date: "2026-08-25",
+          meal: "dinner",
+          diners: 2,
+          dishes: [],
+        },
+        {
+          id: "history-two",
+          date: "2026-08-24",
+          meal: "lunch",
+          diners: 1,
+          dishes: [],
+        },
+      ],
+    };
+    const next = updateHistoryPhoto(
+      data,
+      "history-one",
+      "data:image/png;base64,AAAA",
+    );
+    expect(next.history[0].image).toBe("data:image/png;base64,AAAA");
+    expect(next.history[1].image).toBeUndefined();
+    expect(() =>
+      updateHistoryPhoto(data, "history-one", "data:text/plain;base64,AAAA"),
+    ).toThrow("INVALID_IMAGE");
   });
   it("rejects invalid backups", () =>
     expect(() => importData('{"hello":1}')).toThrow("INVALID_BACKUP"));
