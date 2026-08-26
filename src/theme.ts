@@ -12,7 +12,8 @@ export const LIQUID_GLASS_SURFACES = {
   water: "#9fc9dc",
   panel: "rgba(246, 250, 252, 0.48)",
   panelStrong: "rgba(235, 246, 252, 0.7)",
-  edge: "rgba(255, 255, 255, 0.82)",
+  edge: "rgba(255, 255, 255, 0.52)",
+  item: "rgba(224, 240, 248, 0.58)",
   ink: "#18384c",
 } as const;
 export const WARM_ILLUSTRATION_PALETTE = {

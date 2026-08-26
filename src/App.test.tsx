@@ -323,9 +323,12 @@ describe("application shell", () => {
       "rgba(246, 250, 252, 0.48)",
     );
     expect(shell.style.getPropertyValue("--glass-edge")).toBe(
-      "rgba(255, 255, 255, 0.82)",
+      "rgba(255, 255, 255, 0.52)",
     );
     expect(shell.style.getPropertyValue("--glass-ink")).toBe("#18384c");
+    expect(shell.style.getPropertyValue("--glass-item")).toBe(
+      "rgba(224, 240, 248, 0.58)",
+    );
     await waitFor(async () =>
       expect((await loadData()).preferences.theme).toBe("glass"),
     );

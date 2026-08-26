@@ -2606,3 +2606,46 @@ button:not(:disabled):active {
 .theme-glass .nav-theme-icon-glass .nav-theme-icon-fill {
   display: none;
 }
+/* Softer glass borders and cool inventory surfaces */
+.theme-glass .stock-list > div {
+  background: linear-gradient(
+    145deg,
+    rgba(247, 252, 255, 0.52),
+    var(--glass-item)
+  );
+  border: 1px solid var(--glass-edge);
+  border-radius: 17px;
+  -webkit-backdrop-filter: blur(20px) saturate(100%);
+  backdrop-filter: blur(20px) saturate(100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    0 8px 20px rgba(43, 89, 114, 0.1);
+}
+.theme-glass
+  :is(
+    header,
+    .panel,
+    .recipe-card,
+    .meal-card,
+    .search,
+    .role-switcher,
+    .theme-grid button,
+    .shopping-list > label,
+    .bottom-nav,
+    button:not(.danger),
+    input,
+    select,
+    textarea
+  ) {
+  border-color: var(--glass-edge);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.38),
+    0 10px 24px rgba(42, 82, 105, 0.1);
+}
+.theme-glass :is(input, select, textarea, .search) {
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.48),
+    rgba(221, 239, 247, 0.38)
+  );
+}

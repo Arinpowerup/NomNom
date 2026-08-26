@@ -151,6 +151,7 @@ export default function App() {
           "--glass-panel": LIQUID_GLASS_SURFACES.panel,
           "--glass-panel-strong": LIQUID_GLASS_SURFACES.panelStrong,
           "--glass-edge": LIQUID_GLASS_SURFACES.edge,
+          "--glass-item": LIQUID_GLASS_SURFACES.item,
           "--glass-ink": LIQUID_GLASS_SURFACES.ink,
         }
       : {}),
