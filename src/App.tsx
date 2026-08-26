@@ -247,6 +247,9 @@ export default function App() {
             {(ctx.data!.preferences.theme === "warm" ||
               ctx.data!.preferences.theme === "custom") && (
               <NavThemeIcon page={key} style="hybrid" />
+            )}{" "}
+            {ctx.data!.preferences.theme === "glass" && (
+              <NavThemeIcon page={key} style="glass" />
             )}
             {ctx.data!.preferences.theme === "snoopy" && (
               <span className="nav-character-wrap" aria-hidden="true">

@@ -283,6 +283,9 @@ describe("application shell", () => {
       screen.queryByRole("img", { name: "Snoopy chef profile illustration" }),
     ).not.toBeInTheDocument();
     expect(container.querySelectorAll("[data-nav-character]")).toHaveLength(0);
+    expect(
+      container.querySelectorAll("[data-nav-icon-style='glass']"),
+    ).toHaveLength(5);
     await userEvent.click(screen.getByRole("button", { name: "菜单" }));
     expect(
       screen.queryByRole("img", {
