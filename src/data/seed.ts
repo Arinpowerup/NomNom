@@ -121,6 +121,7 @@ export const initialData: AppData = {
     theme: "snoopy",
     appName: "NomNom",
     enabledMeals: ["lunch", "dinner"],
+    fontScale: 1,
   },
   categories: seedCategories,
   roles: [{ id: "role-me", name: "我", color: "#e66b45", createdAt: now }],

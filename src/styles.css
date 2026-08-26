@@ -2830,3 +2830,50 @@ button:not(:disabled):active {
   background: var(--custom-selected);
   border-color: rgba(95, 67, 54, 0.48);
 }
+/* User-controlled global text scale */
+.app-shell {
+  font-size: calc(16px * var(--app-font-scale, 1));
+}
+.app-shell :is(button, input, select, textarea) {
+  font-size: calc(14px * var(--app-font-scale, 1));
+}
+.app-shell :is(small, .eyebrow, .meal-card span, .recipe-card p) {
+  font-size: calc(12px * var(--app-font-scale, 1));
+}
+.app-shell h1 {
+  font-size: calc(28px * var(--app-font-scale, 1));
+}
+.app-shell h2 {
+  font-size: calc(24px * var(--app-font-scale, 1));
+}
+.app-shell h3 {
+  font-size: calc(19px * var(--app-font-scale, 1));
+}
+.font-size-panel {
+  margin-bottom: 18px;
+}
+.font-size-preview {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 46px;
+  border-radius: 15px;
+  color: var(--text);
+  background: color-mix(in srgb, var(--orange) 14%, var(--paper));
+  border: 1px solid var(--line);
+  font-size: 21px;
+  font-weight: 800;
+}
+.font-size-options {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(90px, 1fr));
+  gap: 10px;
+}
+.font-size-options button {
+  justify-content: center;
+}
+@media (max-width: 560px) {
+  .font-size-options {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

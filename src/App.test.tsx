@@ -74,6 +74,29 @@ describe("application shell", () => {
     expect((await loadData()).roles[0].name).toBe("我");
     expect(document.title).toBe("幸福厨房");
   });
+  it("changes and persists the global font size from the profile page", async () => {
+    const { container } = render(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
+    await screen.findByText("今晚想吃点什么？");
+    await userEvent.click(screen.getByRole("button", { name: "我" }));
+    expect(
+      await screen.findByRole("heading", { name: "字体大小" }),
+    ).toBeVisible();
+    expect(screen.getByRole("button", { name: "字体大小：标准" })).toHaveClass(
+      "active",
+    );
+
+    await userEvent.click(screen.getByRole("button", { name: "字体大小：大" }));
+
+    const shell = container.querySelector<HTMLElement>(".app-shell")!;
+    expect(shell.style.getPropertyValue("--app-font-scale")).toBe("1.1");
+    await waitFor(async () =>
+      expect((await loadData()).preferences.fontScale).toBe(1.1),
+    );
+  });
   it("does not show the old management description in the profile hero", async () => {
     render(
       <AppProvider>

@@ -24,6 +24,7 @@ describe("indexed db persistence", () => {
     expect(migrated.categories).toHaveLength(6);
     expect(migrated.preferences.theme).toBe("snoopy");
     expect(migrated.preferences.enabledMeals).toEqual(["lunch", "dinner"]);
+    expect(migrated.preferences.fontScale).toBe(1);
     expect(migrated.recipes[0].category).toBe("diet");
   });
 });

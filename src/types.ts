@@ -103,6 +103,7 @@ export interface AppData {
     appName?: string;
     customBackground?: string;
     enabledMeals: MealType[];
+    fontScale: number;
   };
   categories: DishCategory[];
   roles: Role[];

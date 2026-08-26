@@ -45,11 +45,13 @@ export async function loadData(): Promise<AppData> {
                       "lunch",
                       "dinner",
                     ],
+                    fontScale: saved.preferences.fontScale ?? 1,
                   }
                 : {
                     theme: "snoopy",
                     appName: "NomNom",
                     enabledMeals: ["lunch", "dinner"],
+                    fontScale: 1,
                   },
               categories: saved.categories ?? structuredClone(seedCategories),
               recipes: isLegacyCategoryData

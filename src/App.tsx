@@ -127,6 +127,7 @@ export default function App() {
   );
   const shellStyle = {
     "--orange": BRAND_ORANGE,
+    "--app-font-scale": ctx.data.preferences.fontScale ?? 1,
     ...(ctx.data.preferences.theme === "warm"
       ? {
           "--warm-peach": WARM_ILLUSTRATION_PALETTE.peach,
@@ -1944,6 +1945,7 @@ function MePage() {
         </span>
       </section>
       <AppearancePanel />
+      <FontSizePanel />
       <SettingsPage />
       <section className="panel tutorial-panel">
         <div className="section-head">
@@ -1972,6 +1974,52 @@ function MePage() {
   );
 }
 
+function FontSizePanel() {
+  const { data, setData, language } = useApp();
+  const options = [
+    { value: 0.9, zh: "小", en: "Small" },
+    { value: 1, zh: "标准", en: "Standard" },
+    { value: 1.1, zh: "大", en: "Large" },
+    { value: 1.2, zh: "特大", en: "Extra large" },
+  ];
+  const current = data!.preferences.fontScale ?? 1;
+  return (
+    <section className="panel font-size-panel">
+      <div className="section-head">
+        <div>
+          <p className="eyebrow">
+            {language === "zh" ? "阅读设置" : "READING"}
+          </p>
+          <h2>{language === "zh" ? "字体大小" : "Text size"}</h2>
+        </div>
+        <span className="font-size-preview" aria-hidden="true">
+          Aa
+        </span>
+      </div>
+      <div
+        className="font-size-options"
+        role="group"
+        aria-label={language === "zh" ? "字体大小" : "Text size"}
+      >
+        {options.map((option) => (
+          <button
+            key={option.value}
+            className={current === option.value ? "active" : ""}
+            aria-label={`${language === "zh" ? "字体大小" : "Text size"}：${language === "zh" ? option.zh : option.en}`}
+            onClick={() =>
+              setData({
+                ...data!,
+                preferences: { ...data!.preferences, fontScale: option.value },
+              })
+            }
+          >
+            {language === "zh" ? option.zh : option.en}
+          </button>
+        ))}
+      </div>
+    </section>
+  );
+}
 function AppearancePanel() {
   const { data, setData, language } = useApp();
   const backgroundInput = useRef<HTMLInputElement>(null);
