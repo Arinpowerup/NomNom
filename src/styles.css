@@ -2798,3 +2798,35 @@ button:not(:disabled):active {
 .week-board .day .meal-card {
   margin-bottom: 0;
 }
+/* Clear meal states for the lighter coffee theme */
+.theme-custom .meal-tabs button,
+.theme-custom .week-board .meal-card {
+  color: var(--custom-ink);
+  background: rgba(255, 250, 246, 0.86);
+  border-color: rgba(128, 97, 81, 0.18);
+  box-shadow: 0 8px 20px rgba(79, 55, 43, 0.09);
+}
+.theme-custom .meal-tabs button small,
+.theme-custom .week-board .meal-card small,
+.theme-custom .week-board .meal-card em {
+  color: #75645b;
+}
+.theme-custom .meal-tabs button.active {
+  color: var(--custom-on-primary);
+  background: var(--custom-selected);
+  border-color: rgba(95, 67, 54, 0.52);
+  box-shadow: 0 10px 24px rgba(74, 49, 38, 0.2);
+}
+.theme-custom .meal-tabs button.active small {
+  color: rgba(255, 250, 246, 0.8);
+}
+.theme-custom .week-board .meal-card:hover {
+  color: var(--custom-ink);
+  background: rgba(243, 233, 223, 0.94);
+  border-color: rgba(128, 97, 81, 0.32);
+}
+.theme-custom .module-tabs button.active {
+  color: var(--custom-on-primary);
+  background: var(--custom-selected);
+  border-color: rgba(95, 67, 54, 0.48);
+}

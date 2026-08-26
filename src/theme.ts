@@ -32,7 +32,8 @@ export const LIQUID_GLASS_PARAMETERS = {
   light: "45",
 } as const;
 export const CUSTOM_COFFEE_PALETTE = {
-  primary: "#6f5143",
+  primary: "#806151",
+  selected: "#6f5143",
   accent: "#d99a62",
   soft: "#f3e9df",
   ink: "#3e332e",

@@ -380,7 +380,8 @@ describe("application shell", () => {
     expect(shell.style.getPropertyValue("--custom-background-width")).toBe(
       "60%",
     );
-    expect(shell.style.getPropertyValue("--custom-primary")).toBe("#6f5143");
+    expect(shell.style.getPropertyValue("--custom-primary")).toBe("#806151");
+    expect(shell.style.getPropertyValue("--custom-selected")).toBe("#6f5143");
     expect(shell.style.getPropertyValue("--custom-accent")).toBe("#d99a62");
     expect(shell.style.getPropertyValue("--custom-soft")).toBe("#f3e9df");
     expect(shell.style.getPropertyValue("--custom-ink")).toBe("#3e332e");

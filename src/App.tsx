@@ -159,6 +159,7 @@ export default function App() {
     ...(ctx.data.preferences.theme === "custom"
       ? {
           "--custom-primary": CUSTOM_COFFEE_PALETTE.primary,
+          "--custom-selected": CUSTOM_COFFEE_PALETTE.selected,
           "--custom-accent": CUSTOM_COFFEE_PALETTE.accent,
           "--custom-soft": CUSTOM_COFFEE_PALETTE.soft,
           "--custom-ink": CUSTOM_COFFEE_PALETTE.ink,
