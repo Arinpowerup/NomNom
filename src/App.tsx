@@ -1960,7 +1960,7 @@ function AppearancePanel() {
     {
       id: "snoopy",
       icon: "◉",
-      zh: "默认 Snoopy",
+      zh: "默认",
       en: "Default Snoopy",
     },
     {
@@ -1972,7 +1972,7 @@ function AppearancePanel() {
     {
       id: "glass",
       icon: "◌",
-      zh: "蓝白 Liquid Glass",
+      zh: "毛玻璃",
       en: "Blue Liquid Glass",
     },
     {

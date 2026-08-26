@@ -272,11 +272,16 @@ describe("application shell", () => {
       await screen.findByRole("heading", { name: "界面风格" }),
     ).toBeVisible();
     expect(screen.queryByText("App 皮肤")).not.toBeInTheDocument();
-    const snoopyTheme = screen.getByRole("button", { name: /默认 Snoopy/ });
+    expect(
+      Array.from(container.querySelectorAll(".theme-grid button")).map(
+        (button) => button.textContent,
+      ),
+    ).toEqual(["◉默认", "☀️暖色插画", "◌毛玻璃", "🖼️自定义图片"]);
+    const snoopyTheme = screen.getByRole("button", { name: /默认$/ });
     expect(screen.queryByText("黑白橙简约手绘插画")).not.toBeInTheDocument();
     expect(snoopyTheme).toHaveClass("active");
     const liquidGlass = await screen.findByRole("button", {
-      name: /蓝白 Liquid Glass/,
+      name: /毛玻璃$/,
     });
     expect(
       screen.queryByText("折射 31 · 深度 20 · 无色散磨砂"),
