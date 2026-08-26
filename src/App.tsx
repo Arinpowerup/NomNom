@@ -224,19 +224,21 @@ export default function App() {
               if (key === "order") setMenuIconAnimation((value) => value + 1);
             }}
           >
-            <span className="nav-character-wrap" aria-hidden="true">
-              <span
-                className={`nav-effect nav-effect-${effect}`}
-                data-nav-effect={effect}
-              />
-              <img
-                key={key === "order" ? menuIconAnimation : key}
-                className="nav-character"
-                data-nav-character={key}
-                src={src}
-                alt=""
-              />
-            </span>
+            {ctx.data!.preferences.theme === "snoopy" && (
+              <span className="nav-character-wrap" aria-hidden="true">
+                <span
+                  className={`nav-effect nav-effect-${effect}`}
+                  data-nav-effect={effect}
+                />
+                <img
+                  key={key === "order" ? menuIconAnimation : key}
+                  className="nav-character"
+                  data-nav-character={key}
+                  src={src}
+                  alt=""
+                />
+              </span>
+            )}
             <span>{L[key]}</span>
           </button>
         ))}
@@ -746,17 +748,19 @@ function RecipesPage({
     <>
       <div className="toolbar recipe-toolbar">
         <div className="search recipe-search">
-          <div
-            className="recipe-search-art"
-            role="img"
-            aria-label="Three Snoopy characters resting on the recipe search border"
-          >
-            <img
-              src="/illustrations/snoopy-search-trio.png"
-              alt=""
-              aria-hidden="true"
-            />
-          </div>
+          {data!.preferences.theme === "snoopy" && (
+            <div
+              className="recipe-search-art"
+              role="img"
+              aria-label="Three Snoopy characters resting on the recipe search border"
+            >
+              <img
+                src="/illustrations/snoopy-search-trio.png"
+                alt=""
+                aria-hidden="true"
+              />
+            </div>
+          )}
           <Search />
           <input
             aria-label="recipe search"
@@ -2109,6 +2113,8 @@ function MiniRecipe({ recipe }: { recipe: Recipe }) {
   );
 }
 function KitchenMascot() {
+  const { data } = useApp();
+  if (data?.preferences.theme !== "snoopy") return null;
   return (
     <div
       className="kitchen-mascot"
@@ -2125,6 +2131,8 @@ function KitchenMascot() {
   );
 }
 function ProfileIllustration() {
+  const { data } = useApp();
+  if (data?.preferences.theme !== "snoopy") return null;
   return (
     <svg
       className="profile-illustration"
@@ -2158,6 +2166,8 @@ function ProfileIllustration() {
   );
 }
 function EmptyIllustration() {
+  const { data } = useApp();
+  if (data?.preferences.theme !== "snoopy") return null;
   return (
     <div
       className="empty-illustration"

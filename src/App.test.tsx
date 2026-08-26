@@ -258,6 +258,16 @@ describe("application shell", () => {
     expect(liquidGlass).toHaveTextContent("蓝色、白色与透明流光");
     await userEvent.click(liquidGlass);
     expect(container.querySelector(".app-shell")).toHaveClass("theme-glass");
+    expect(
+      screen.queryByRole("img", { name: "Snoopy chef profile illustration" }),
+    ).not.toBeInTheDocument();
+    expect(container.querySelectorAll("[data-nav-character]")).toHaveLength(0);
+    await userEvent.click(screen.getByRole("button", { name: "菜单" }));
+    expect(
+      screen.queryByRole("img", {
+        name: "Three Snoopy characters resting on the recipe search border",
+      }),
+    ).not.toBeInTheDocument();
     expect(liquidGlass).toHaveClass("active");
     const shell = container.querySelector<HTMLElement>(".app-shell")!;
     expect(shell.style.getPropertyValue("--ambient-one")).toBe(
