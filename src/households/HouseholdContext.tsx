@@ -5,6 +5,10 @@ type HouseholdValue = { household: Household; households: Household[]; selectHou
 const Context = createContext<HouseholdValue | null>(null);
 export function useHousehold() { const value = useContext(Context); if (!value) throw new Error("Missing HouseholdProvider"); return value; }
 export function useOptionalHousehold() { return useContext(Context); }
+function errorMessage(reason: unknown, fallback: string) {
+  if (reason && typeof reason === "object" && "message" in reason && typeof reason.message === "string") return reason.message;
+  return fallback;
+}
 
 export function HouseholdGate({ children }: { children: ReactNode }) {
   const [households, setHouseholds] = useState<Household[] | null>(null);
@@ -20,7 +24,7 @@ export function HouseholdGate({ children }: { children: ReactNode }) {
       const code = await createInvite(household.id);
       await navigator.clipboard?.writeText(code);
       alert(`家庭邀请码：${code}\n有效期 7 天，已复制到剪贴板。`);
-    } catch (reason) { alert(reason instanceof Error ? reason.message : "邀请码生成失败"); }
+    } catch (reason) { alert(errorMessage(reason, "邀请码生成失败")); }
   };
   return <Context.Provider value={{ household, households, selectHousehold: setSelectedId, createInvite: () => createInvite(household.id) }}>
     {children}
