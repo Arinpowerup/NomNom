@@ -4,6 +4,7 @@ import { createHousehold, createInvite, joinHousehold, listHouseholds, type Hous
 type HouseholdValue = { household: Household; households: Household[]; selectHousehold: (id: string) => void; createInvite: () => Promise<string> };
 const Context = createContext<HouseholdValue | null>(null);
 export function useHousehold() { const value = useContext(Context); if (!value) throw new Error("Missing HouseholdProvider"); return value; }
+export function useOptionalHousehold() { return useContext(Context); }
 
 export function HouseholdGate({ children }: { children: ReactNode }) {
   const [households, setHouseholds] = useState<Household[] | null>(null);

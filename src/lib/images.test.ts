@@ -1,0 +1,3 @@
+import { describe, expect, it } from "vitest";
+import { MAX_IMAGE_BYTES, validateImage } from "./images";
+describe("image upload safety", () => { it("accepts supported family photos", () => { expect(() => validateImage(new File(["ok"], "meal.webp", { type: "image/webp" }))).not.toThrow(); }); it("rejects executable and oversized uploads", () => { expect(() => validateImage(new File(["x"], "bad.svg", { type: "image/svg+xml" }))).toThrow("JPG"); const large = new File([new Uint8Array(MAX_IMAGE_BYTES + 1)], "large.jpg", { type: "image/jpeg" }); expect(() => validateImage(large)).toThrow("5MB"); }); });

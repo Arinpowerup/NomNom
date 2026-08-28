@@ -51,6 +51,8 @@ import {
 } from "./lib/appActions";
 import { missingForRecipe } from "./lib/calculations";
 import { displayUnit } from "./lib/units";
+import { storeImage } from "./lib/images";
+import { useOptionalHousehold } from "./households/HouseholdContext";
 import { labels, t } from "./i18n";
 import {
   BRAND_ORANGE,
@@ -777,6 +779,7 @@ function RecipesPage({
   initialCategory?: Category | "all";
 }) {
   const { data, setData, language, currentRoleId } = useApp();
+  const household = useOptionalHousehold();
   const [cat, setCat] = useState<Category | "all">(initialCategory);
   const [query, setQuery] = useState("");
   const [editing, setEditing] = useState<Recipe | null | undefined>(undefined);
@@ -790,23 +793,10 @@ function RecipesPage({
         .toLowerCase()
         .includes(query.toLowerCase()),
   );
-  const uploadPhoto = (recipe: Recipe, selected?: File) => {
+  const uploadPhoto = async (recipe: Recipe, selected?: File) => {
     if (!selected) return;
-    const reader = new FileReader();
-    reader.onload = () =>
-      setData({
-        ...data!,
-        recipes: data!.recipes.map((item) =>
-          item.id === recipe.id
-            ? {
-                ...item,
-                image: String(reader.result),
-                updatedAt: new Date().toISOString(),
-              }
-            : item,
-        ),
-      });
-    reader.readAsDataURL(selected);
+    try { const image = await storeImage(household?.household.id, selected, "recipes"); setData({ ...data!, recipes: data!.recipes.map((item) => item.id === recipe.id ? { ...item, image, updatedAt: new Date().toISOString() } : item) }); }
+    catch (error) { alert(error instanceof Error ? error.message : "图片上传失败"); }
   };
   return (
     <>
@@ -984,6 +974,7 @@ function RecipeModal({
   close: () => void;
 }) {
   const { data, setData, language } = useApp();
+  const household = useOptionalHousehold();
   const L = labels[language];
   const [name, setName] = useState(recipe?.name ?? "");
   const [category, setCategory] = useState<Category>(
@@ -996,11 +987,10 @@ function RecipeModal({
     recipe?.ingredients ?? [{ name: "", quantity: 1, unit: "g" }],
   );
   const [steps, setSteps] = useState<string[]>(recipe?.steps ?? [""]);
-  const readImage = (file?: File) => {
+  const readImage = async (file?: File) => {
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => setImage(String(reader.result));
-    reader.readAsDataURL(file);
+    try { setImage(await storeImage(household?.household.id, file, "recipes")); }
+    catch (error) { alert(error instanceof Error ? error.message : "图片上传失败"); }
   };
   const submit = () => {
     try {
@@ -1623,6 +1613,7 @@ function ShoppingPage() {
 
 function HistoryPage() {
   const { data, setData, language, currentRoleId } = useApp();
+  const household = useOptionalHousehold();
   const arrange = (name: string) => {
     const recipe = data!.recipes.find((r) => r.name === name);
     if (recipe)
@@ -1630,12 +1621,10 @@ function HistoryPage() {
         orderDish(data!, localDate(), "dinner", recipe.id, currentRoleId),
       );
   };
-  const uploadPhoto = (historyId: string, selected?: File) => {
-    if (!selected?.type.startsWith("image/")) return;
-    const reader = new FileReader();
-    reader.onload = () =>
-      setData(updateHistoryPhoto(data!, historyId, String(reader.result)));
-    reader.readAsDataURL(selected);
+  const uploadPhoto = async (historyId: string, selected?: File) => {
+    if (!selected) return;
+    try { setData(updateHistoryPhoto(data!, historyId, await storeImage(household?.household.id, selected, "history"))); }
+    catch (error) { alert(error instanceof Error ? error.message : "图片上传失败"); }
   };
   return (
     <section className="panel">
@@ -1725,6 +1714,7 @@ function SettingsPage() {
     currentRoleId,
     setCurrentRoleId,
   } = useApp();
+  const household = useOptionalHousehold();
   const [name, setName] = useState("");
   const file = useRef<HTMLInputElement>(null);
   const download = () => {
@@ -1758,15 +1748,10 @@ function SettingsPage() {
       );
     }
   };
-  const readAvatar = (roleId: string, selected?: File) => {
+  const readAvatar = async (roleId: string, selected?: File) => {
     if (!selected) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      const role = data!.roles.find((item) => item.id === roleId);
-      if (role)
-        setData(updateRole(data!, { ...role, avatar: String(reader.result) }));
-    };
-    reader.readAsDataURL(selected);
+    try { const image = await storeImage(household?.household.id, selected, "avatars"); const role = data!.roles.find((item) => item.id === roleId); if (role) setData(updateRole(data!, { ...role, avatar: image })); }
+    catch (error) { alert(error instanceof Error ? error.message : "图片上传失败"); }
   };
   return (
     <div className="settings-grid">
