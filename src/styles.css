@@ -6,6 +6,8 @@
 .auth-card code { overflow-wrap: anywhere; padding: 12px; border-radius: 10px; background: #f6efe7; }.auth-mark { width: 48px; height: 48px; display: grid; place-items: center; border-radius: 16px; background: #f49f33; color: #19130f; font-size: 1.3rem; font-weight: 900; }
 .auth-message { padding: 10px 12px; border-radius: 10px; background: #fff0e8; color: #913f25; }.auth-hint { color: #776b62; font-size: .9rem; }.auth-loading { min-height: 100vh; display: grid; place-items: center; background: #fffaf2; }
 .account-signout { position: fixed; z-index: 30; right: 18px; bottom: 18px; border: 1px solid rgba(111,82,64,.18); border-radius: 999px; padding: 9px 14px; background: rgba(255,255,255,.92); color: #6f5240; box-shadow: 0 8px 24px rgba(60,40,28,.12); }
+ .family-controls { position: fixed; z-index: 29; right: 18px; bottom: 62px; display: flex; gap: 8px; padding: 7px; border: 1px solid rgba(111,82,64,.18); border-radius: 14px; background: rgba(255,255,255,.94); box-shadow: 0 8px 24px rgba(60,40,28,.12); }
+ .family-controls select,.family-controls button { min-height: 34px; border: 0; border-radius: 9px; padding: 0 10px; background: #f6efe7; color: #513b2d; font: inherit; font-weight: 700; }
 
 :root {
   font-family: "DM Sans", "Noto Sans SC", sans-serif;

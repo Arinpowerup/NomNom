@@ -15,7 +15,20 @@ export function HouseholdGate({ children }: { children: ReactNode }) {
   if (!households) return <div className="auth-loading">正在加载家庭…</div>;
   if (!households.length) return <HouseholdOnboarding onDone={refresh} />;
   const household = households.find((item) => item.id === selectedId) ?? households[0];
-  return <Context.Provider value={{ household, households, selectHousehold: setSelectedId, createInvite: () => createInvite(household.id) }}>{children}</Context.Provider>;
+  const shareInvite = async () => {
+    try {
+      const code = await createInvite(household.id);
+      await navigator.clipboard?.writeText(code);
+      alert(`家庭邀请码：${code}\n有效期 7 天，已复制到剪贴板。`);
+    } catch (reason) { alert(reason instanceof Error ? reason.message : "邀请码生成失败"); }
+  };
+  return <Context.Provider value={{ household, households, selectHousehold: setSelectedId, createInvite: () => createInvite(household.id) }}>
+    {children}
+    <aside className="family-controls" aria-label="家庭空间">
+      <select aria-label="当前家庭" value={household.id} onChange={(event) => setSelectedId(event.target.value)}>{households.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select>
+      {household.role === "owner" && <button onClick={() => void shareInvite()}>邀请成员</button>}
+    </aside>
+  </Context.Provider>;
 }
 
 function HouseholdOnboarding({ onDone }: { onDone: (id?: string) => Promise<void> }) {
