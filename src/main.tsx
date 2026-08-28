@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { AppProvider } from "./context/AppContext";
+import { CloudAppProvider } from "./context/CloudAppProvider";
 import { AuthGate } from "./auth/AuthContext";
 import { HouseholdGate } from "./households/HouseholdContext";
 import App from "./App";
@@ -10,7 +10,7 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <AuthGate>
       <HouseholdGate>
-        <AppProvider><App /></AppProvider>
+        <CloudAppProvider><App /></CloudAppProvider>
       </HouseholdGate>
     </AuthGate>
   </StrictMode>,

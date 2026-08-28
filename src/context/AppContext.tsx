@@ -8,6 +8,7 @@ import {
 } from "react";
 import type { AppData, Language } from "../types";
 import { loadData, saveData } from "../lib/db";
+import { loadCloudData, saveCloudData, subscribeCloudData } from "../lib/cloudData";
 
 type Value = {
   data: AppData | null;
@@ -18,7 +19,7 @@ type Value = {
   setCurrentRoleId: (v: string) => void;
 };
 const Context = createContext<Value | null>(null);
-export function AppProvider({ children }: { children: ReactNode }) {
+export function AppProvider({ children, householdId, userId }: { children: ReactNode; householdId?: string; userId?: string }) {
   const [data, setState] = useState<AppData | null>(null);
   const [language, setLang] = useState<Language>(
     () => (localStorage.getItem("language") as Language) || "zh",
@@ -27,11 +28,25 @@ export function AppProvider({ children }: { children: ReactNode }) {
     () => localStorage.getItem("currentRole") || "role-me",
   );
   useEffect(() => {
-    loadData().then(setState);
-  }, []);
+    let active = true;
+    void loadData().then(async (local) => {
+      if (!householdId || !userId) { if (active) setState(local); return; }
+      try {
+        const cloud = await loadCloudData(householdId);
+        if (!active) return;
+        if (cloud) { setState(cloud); await saveData(cloud); }
+        else { setState(local); await saveCloudData(householdId, userId, local); }
+      } catch { if (active) setState(local); }
+    });
+    const unsubscribe = householdId ? subscribeCloudData(householdId, () => {
+      void loadCloudData(householdId).then((cloud) => { if (active && cloud) { setState(cloud); void saveData(cloud); } });
+    }) : undefined;
+    return () => { active = false; unsubscribe?.(); };
+  }, [householdId, userId]);
   const setData = (next: AppData) => {
     setState(next);
     void saveData(next);
+    if (householdId && userId) void saveCloudData(householdId, userId, next);
   };
   const setLanguage = (v: Language) => {
     setLang(v);
