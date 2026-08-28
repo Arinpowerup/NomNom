@@ -9,6 +9,7 @@ import {
 import type { AppData, Language } from "../types";
 import { loadData, saveData } from "../lib/db";
 import { loadCloudData, saveCloudData, subscribeCloudData } from "../lib/cloudData";
+import { migrateLocalData } from "../lib/migration";
 
 type Value = {
   data: AppData | null;
@@ -35,7 +36,7 @@ export function AppProvider({ children, householdId, userId }: { children: React
         const cloud = await loadCloudData(householdId);
         if (!active) return;
         if (cloud) { setState(cloud); await saveData(cloud); }
-        else { setState(local); await saveCloudData(householdId, userId, local); }
+        else { setState(local); await migrateLocalData(householdId, userId, local); }
       } catch { if (active) setState(local); }
     });
     const unsubscribe = householdId ? subscribeCloudData(householdId, () => {
