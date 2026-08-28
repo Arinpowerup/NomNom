@@ -318,7 +318,8 @@ describe("application shell", () => {
       Array.from(container.querySelectorAll(".theme-grid button")).map(
         (button) => button.textContent,
       ),
-    ).toEqual(["◉默认", "☀️暖色插画", "◌毛玻璃", "🖼️自定义图片"]);
+    ).toEqual(["◉默认", "☀️暖色插画", "◌毛玻璃"]);
+    expect(screen.queryByText("自定义图片")).not.toBeInTheDocument();
     const snoopyTheme = screen.getByRole("button", { name: /默认$/ });
     expect(screen.queryByText("黑白橙简约手绘插画")).not.toBeInTheDocument();
     expect(snoopyTheme).toHaveClass("active");
@@ -375,7 +376,7 @@ describe("application shell", () => {
       expect((await loadData()).preferences.theme).toBe("glass"),
     );
   });
-  it("stores device images for a custom background and user avatar", async () => {
+  it("stores a device image for the user avatar without custom theme controls", async () => {
     render(
       <AppProvider>
         <App />
@@ -383,53 +384,12 @@ describe("application shell", () => {
     );
     await screen.findByText("今晚想吃点什么？");
     await userEvent.click(screen.getByRole("button", { name: "我" }));
-    expect(
-      document.querySelector('.role-list input[type="color"]'),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText("自定义图片")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("custom background image")).toBeNull();
     expect(screen.getByLabelText("upload avatar for 我")).toBeInTheDocument();
     const image = new File([new Uint8Array([137, 80, 78, 71])], "photo.png", {
       type: "image/png",
     });
-    await userEvent.upload(
-      screen.getByLabelText("custom background image"),
-      image,
-    );
-    await waitFor(async () => {
-      const saved = await loadData();
-      expect(saved.preferences.theme).toBe("custom");
-      expect(saved.preferences.customBackground).toMatch(/^data:image\/png/);
-    });
-    const shell = document.querySelector<HTMLElement>(".app-shell")!;
-    expect(shell.style.getPropertyValue("--custom-background-width")).toBe(
-      "60%",
-    );
-    expect(shell.style.getPropertyValue("--custom-primary")).toBe("#806151");
-    expect(shell.style.getPropertyValue("--custom-selected")).toBe("#6f5143");
-    expect(shell.style.getPropertyValue("--custom-accent")).toBe("#d99a62");
-    expect(shell.style.getPropertyValue("--custom-soft")).toBe("#f3e9df");
-    expect(shell.style.getPropertyValue("--custom-ink")).toBe("#3e332e");
-    expect(shell.style.getPropertyValue("--custom-on-primary")).toBe("#fffaf6");
-    expect(
-      document.querySelectorAll('[data-nav-icon-style="hybrid"]'),
-    ).toHaveLength(5);
-    expect(
-      screen.getByRole("img", { name: "当前自定义背景预览" }),
-    ).toBeVisible();
-    const backgroundInput = screen.getByLabelText(
-      "custom background image",
-    ) as HTMLInputElement;
-    expect(backgroundInput.value).toBe("");
-    expect(screen.getByRole("button", { name: /更换背景图片/ })).toBeVisible();
-    const replacement = new File([new Uint8Array([255, 216, 255])], "new.jpg", {
-      type: "image/jpeg",
-    });
-    await userEvent.upload(backgroundInput, replacement);
-    await waitFor(async () =>
-      expect((await loadData()).preferences.customBackground).toMatch(
-        /^data:image\/jpeg/,
-      ),
-    );
-    expect(backgroundInput.value).toBe("");
     await userEvent.upload(
       screen.getByLabelText("upload avatar for 我"),
       image,

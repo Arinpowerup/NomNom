@@ -39,8 +39,11 @@ export async function loadData(): Promise<AppData> {
               ...saved,
               preferences: saved.preferences
                 ? {
-                    appName: "NomNom",
-                    ...saved.preferences,
+                    theme:
+                      (saved.preferences.theme as string) === "custom"
+                        ? "snoopy"
+                        : saved.preferences.theme,
+                    appName: saved.preferences.appName ?? "NomNom",
                     enabledMeals: saved.preferences.enabledMeals ?? [
                       "lunch",
                       "dinner",

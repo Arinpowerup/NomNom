@@ -3,7 +3,7 @@ export type MealType = "breakfast" | "lunch" | "dinner";
 export type Unit =
   "g" | "kg" | "ml" | "l" | "piece" | "grain" | "slice" | "pack" | "box";
 export type Category = string;
-export type AppTheme = "snoopy" | "warm" | "glass" | "custom";
+export type AppTheme = "snoopy" | "warm" | "glass";
 
 export interface Role {
   id: string;
@@ -101,7 +101,6 @@ export interface AppData {
   preferences: {
     theme: AppTheme;
     appName?: string;
-    customBackground?: string;
     enabledMeals: MealType[];
     fontScale: number;
   };

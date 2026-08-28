@@ -14,6 +14,23 @@ describe("indexed db persistence", () => {
     await saveData(data);
     expect((await loadData()).roles.some((r) => r.id === "two")).toBe(true);
   });
+  it("falls back to the default theme when legacy data used a custom image", async () => {
+    const legacy = structuredClone(initialData) as unknown as Record<
+      string,
+      any
+    >;
+    legacy.preferences = {
+      ...legacy.preferences,
+      theme: "custom",
+      customBackground: "data:image/png;base64,legacy",
+    };
+    await saveData(legacy as AppData);
+
+    const migrated = await loadData();
+
+    expect(migrated.preferences.theme).toBe("snoopy");
+    expect("customBackground" in migrated.preferences).toBe(false);
+  });
   it("migrates legacy categories and appearance preferences without data loss", async () => {
     const legacy = structuredClone(initialData) as Partial<AppData>;
     delete legacy.categories;

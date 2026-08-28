@@ -54,7 +54,6 @@ import { displayUnit } from "./lib/units";
 import { labels, t } from "./i18n";
 import {
   BRAND_ORANGE,
-  CUSTOM_COFFEE_PALETTE,
   LIQUID_GLASS_ANIMATION_PALETTE,
   LIQUID_GLASS_PARAMETERS,
   LIQUID_GLASS_SURFACES,
@@ -157,22 +156,6 @@ export default function App() {
           "--glass-ink": LIQUID_GLASS_SURFACES.ink,
         }
       : {}),
-    ...(ctx.data.preferences.theme === "custom"
-      ? {
-          "--custom-primary": CUSTOM_COFFEE_PALETTE.primary,
-          "--custom-selected": CUSTOM_COFFEE_PALETTE.selected,
-          "--custom-accent": CUSTOM_COFFEE_PALETTE.accent,
-          "--custom-soft": CUSTOM_COFFEE_PALETTE.soft,
-          "--custom-ink": CUSTOM_COFFEE_PALETTE.ink,
-          "--custom-on-primary": CUSTOM_COFFEE_PALETTE.onPrimary,
-        }
-      : {}),
-    ...(ctx.data.preferences.customBackground
-      ? {
-          "--custom-background": `url(${ctx.data.preferences.customBackground})`,
-          "--custom-background-width": "60%",
-        }
-      : {}),
   } as CSSProperties;
   return (
     <div
@@ -264,10 +247,9 @@ export default function App() {
               if (key === "order") setMenuIconAnimation((value) => value + 1);
             }}
           >
-            {(ctx.data!.preferences.theme === "warm" ||
-              ctx.data!.preferences.theme === "custom") && (
+            {ctx.data!.preferences.theme === "warm" && (
               <NavThemeIcon page={key} style="hybrid" />
-            )}{" "}
+            )}
             {ctx.data!.preferences.theme === "glass" && (
               <NavThemeIcon page={key} style="glass" />
             )}
@@ -2022,7 +2004,6 @@ function FontSizePanel() {
 }
 function AppearancePanel() {
   const { data, setData, language } = useApp();
-  const backgroundInput = useRef<HTMLInputElement>(null);
   const themes: Array<{
     id: AppTheme;
     icon: string;
@@ -2047,29 +2028,9 @@ function AppearancePanel() {
       zh: "毛玻璃",
       en: "Blue Liquid Glass",
     },
-    {
-      id: "custom",
-      icon: "🖼️",
-      zh: "自定义图片",
-      en: "Custom image",
-    },
   ];
   const chooseTheme = (theme: AppTheme) =>
     setData({ ...data!, preferences: { ...data!.preferences, theme } });
-  const readBackground = (selected?: File) => {
-    if (!selected) return;
-    const reader = new FileReader();
-    reader.onload = () =>
-      setData({
-        ...data!,
-        preferences: {
-          ...data!.preferences,
-          theme: "custom",
-          customBackground: String(reader.result),
-        },
-      });
-    reader.readAsDataURL(selected);
-  };
   return (
     <section className="panel appearance-panel">
       <div className="section-head">
@@ -2085,63 +2046,13 @@ function AppearancePanel() {
           <button
             key={theme.id}
             className={data!.preferences.theme === theme.id ? "active" : ""}
-            onClick={() =>
-              theme.id === "custom" && !data!.preferences.customBackground
-                ? backgroundInput.current?.click()
-                : chooseTheme(theme.id)
-            }
+            onClick={() => chooseTheme(theme.id)}
           >
             <span>{theme.icon}</span>
             <strong>{language === "zh" ? theme.zh : theme.en}</strong>
           </button>
         ))}
       </div>
-      <input
-        ref={backgroundInput}
-        aria-label="custom background image"
-        hidden
-        type="file"
-        accept="image/*"
-        onChange={(event) => {
-          readBackground(event.currentTarget.files?.[0]);
-          event.currentTarget.value = "";
-        }}
-      />
-      {data!.preferences.customBackground && (
-        <div className="custom-background-editor">
-          <div
-            className="custom-background-preview"
-            role="img"
-            aria-label={
-              language === "zh"
-                ? "当前自定义背景预览"
-                : "Custom background preview"
-            }
-            style={{
-              backgroundImage: `url(${data!.preferences.customBackground})`,
-            }}
-          />
-          <div className="custom-background-actions">
-            <button
-              className="soft"
-              onClick={() => backgroundInput.current?.click()}
-            >
-              <Upload /> {language === "zh" ? "更换背景图片" : "Replace image"}
-            </button>
-            <button
-              className="soft"
-              onClick={() =>
-                setData({
-                  ...data!,
-                  preferences: { ...data!.preferences, theme: "snoopy" },
-                })
-              }
-            >
-              {language === "zh" ? "恢复默认" : "Restore default"}
-            </button>
-          </div>
-        </div>
-      )}
     </section>
   );
 }
