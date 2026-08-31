@@ -2888,3 +2888,27 @@ button:not(:disabled):active {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+.auth-method-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 5px;
+  border-radius: 16px;
+  background: #f6efe7;
+}
+.auth-card .auth-method-tabs button {
+  min-height: 40px;
+  background: transparent;
+  color: #6f5240;
+}
+.auth-card .auth-method-tabs button[aria-selected="true"] {
+  background: #fff;
+  color: #7c441c;
+  box-shadow: 0 4px 14px rgba(87,61,42,.12);
+}
+.auth-fields { display: grid; gap: 16px; }
+.auth-phone-group { display: grid; gap: 8px; font-weight: 700; }
+.phone-field { display: grid; grid-template-columns: 132px 1fr; gap: 8px; }
+.auth-card select { min-height: 46px; border: 1px solid #dfd4c8; border-radius: 14px; padding: 0 10px; background: #fff; color: inherit; font: inherit; }
+@media (max-width: 420px) {
