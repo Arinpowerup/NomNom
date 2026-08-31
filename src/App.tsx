@@ -53,6 +53,7 @@ import { missingForRecipe } from "./lib/calculations";
 import { displayUnit } from "./lib/units";
 import { storeImage } from "./lib/images";
 import { useOptionalHousehold } from "./households/HouseholdContext";
+import { useOptionalAuth } from "./auth/AuthContext";
 import { labels, t } from "./i18n";
 import {
   BRAND_ORANGE,
@@ -1876,6 +1877,73 @@ function SettingsPage() {
   );
 }
 
+export function AccountHouseholdPanel() {
+  const { language } = useApp();
+  const household = useOptionalHousehold();
+  const auth = useOptionalAuth();
+  const [inviteCode, setInviteCode] = useState("");
+  const [joinCode, setJoinCode] = useState("");
+  const [message, setMessage] = useState("");
+  const [busy, setBusy] = useState(false);
+  if (!household && !auth) return null;
+  const createFamilyInvite = async () => {
+    if (!household) return;
+    setBusy(true);
+    setMessage("");
+    try {
+      const code = await household.createInvite();
+      setInviteCode(code);
+      await navigator.clipboard?.writeText(code);
+      setMessage(language === "zh" ? "邀请码已复制，有效期 7 天。" : "Invite copied. It is valid for 7 days.");
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : language === "zh" ? "邀请码生成失败" : "Could not create invite");
+    } finally { setBusy(false); }
+  };
+  const joinFamily = async () => {
+    if (!household || !joinCode.trim()) return;
+    setBusy(true);
+    setMessage("");
+    try {
+      await household.joinWithCode(joinCode);
+      setJoinCode("");
+      setMessage(language === "zh" ? "已成功加入家庭。" : "You joined the household.");
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : language === "zh" ? "加入家庭失败" : "Could not join household");
+    } finally { setBusy(false); }
+  };
+  return <section className="panel account-household-panel">
+    <div className="section-head">
+      <div>
+        <p className="eyebrow">{language === "zh" ? "登录与共享" : "Account & sharing"}</p>
+        <h2>{language === "zh" ? "账户与家庭" : "Account and household"}</h2>
+      </div>
+      <Users />
+    </div>
+    {auth?.user.email && <p className="account-email">{auth.user.email}</p>}
+    {household && <div className="account-household-grid">
+      <label>
+        <span>{language === "zh" ? "当前家庭" : "Current household"}</span>
+        <select aria-label={language === "zh" ? "当前家庭" : "Current household"} value={household.household.id} onChange={(event) => household.selectHousehold(event.target.value)}>
+          {household.households.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
+        </select>
+      </label>
+      {household.household.role === "owner" && <div className="invite-family-block">
+        <button className="soft" disabled={busy} onClick={() => void createFamilyInvite()}>{language === "zh" ? "生成成员邀请码" : "Create member invite"}</button>
+        {inviteCode && <output aria-label={language === "zh" ? "成员邀请码" : "Member invite code"}>{inviteCode}</output>}
+      </div>}
+      <div className="join-household-form">
+        <label>
+          <span>{language === "zh" ? "加入另一个家庭" : "Join another household"}</span>
+          <input aria-label={language === "zh" ? "输入家庭邀请码" : "Enter household invite"} value={joinCode} onChange={(event) => setJoinCode(event.target.value.toUpperCase())} placeholder={language === "zh" ? "输入邀请码" : "Invite code"} />
+        </label>
+        <button disabled={busy || !joinCode.trim()} onClick={() => void joinFamily()}>{language === "zh" ? "加入家庭" : "Join household"}</button>
+      </div>
+    </div>}
+    {message && <p className="account-notice" role="status">{message}</p>}
+    {auth && <button className="danger account-signout-button" onClick={() => void auth.signOut()}>{language === "zh" ? "退出登录" : "Sign out"}</button>}
+  </section>;
+}
+
 function MePage() {
   const { data, setData, language } = useApp();
   const appName = data!.preferences.appName ?? "NomNom";
@@ -1911,6 +1979,7 @@ function MePage() {
           <ProfileIllustration />
         </span>
       </section>
+      <AccountHouseholdPanel />
       <AppearancePanel />
       <FontSizePanel />
       <SettingsPage />

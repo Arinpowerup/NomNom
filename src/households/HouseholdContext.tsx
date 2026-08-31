@@ -1,37 +1,43 @@
 import { createContext, useContext, useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { createHousehold, createInvite, joinHousehold, listHouseholds, type Household } from "../lib/households";
 
-type HouseholdValue = { household: Household; households: Household[]; selectHousehold: (id: string) => void; createInvite: () => Promise<string> };
+type HouseholdValue = {
+  household: Household;
+  households: Household[];
+  selectHousehold: (id: string) => void;
+  createInvite: () => Promise<string>;
+  joinWithCode: (code: string) => Promise<void>;
+};
 const Context = createContext<HouseholdValue | null>(null);
 export function useHousehold() { const value = useContext(Context); if (!value) throw new Error("Missing HouseholdProvider"); return value; }
 export function useOptionalHousehold() { return useContext(Context); }
-function errorMessage(reason: unknown, fallback: string) {
-  if (reason && typeof reason === "object" && "message" in reason && typeof reason.message === "string") return reason.message;
-  return fallback;
-}
 
 export function HouseholdGate({ children }: { children: ReactNode }) {
   const [households, setHouseholds] = useState<Household[] | null>(null);
   const [selectedId, setSelectedId] = useState(() => localStorage.getItem("currentHousehold") ?? "");
-  const refresh = async (preferred?: string) => { const next = await listHouseholds(); setHouseholds(next); const id = preferred ?? selectedId; if (!next.some((item) => item.id === id)) setSelectedId(next[0]?.id ?? ""); };
+  const refresh = async (preferred?: string) => {
+    const next = await listHouseholds();
+    setHouseholds(next);
+    if (preferred && next.some((item) => item.id === preferred)) setSelectedId(preferred);
+    else if (!next.some((item) => item.id === selectedId)) setSelectedId(next[0]?.id ?? "");
+  };
   useEffect(() => { void refresh(); }, []);
   useEffect(() => { if (selectedId) localStorage.setItem("currentHousehold", selectedId); }, [selectedId]);
   if (!households) return <div className="auth-loading">正在加载家庭…</div>;
   if (!households.length) return <HouseholdOnboarding onDone={refresh} />;
   const household = households.find((item) => item.id === selectedId) ?? households[0];
-  const shareInvite = async () => {
-    try {
-      const code = await createInvite(household.id);
-      await navigator.clipboard?.writeText(code);
-      alert(`家庭邀请码：${code}\n有效期 7 天，已复制到剪贴板。`);
-    } catch (reason) { alert(errorMessage(reason, "邀请码生成失败")); }
+  const joinWithCode = async (code: string) => {
+    const id = await joinHousehold(code.trim());
+    await refresh(id);
   };
-  return <Context.Provider value={{ household, households, selectHousehold: setSelectedId, createInvite: () => createInvite(household.id) }}>
+  return <Context.Provider value={{
+    household,
+    households,
+    selectHousehold: setSelectedId,
+    createInvite: () => createInvite(household.id),
+    joinWithCode,
+  }}>
     {children}
-    <aside className="family-controls" aria-label="家庭空间">
-      <select aria-label="当前家庭" value={household.id} onChange={(event) => setSelectedId(event.target.value)}>{households.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select>
-      {household.role === "owner" && <button onClick={() => void shareInvite()}>邀请成员</button>}
-    </aside>
   </Context.Provider>;
 }
 
