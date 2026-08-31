@@ -1,0 +1,23 @@
+.mock-otp {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 4px 12px;
+  padding: 14px;
+  border: 1px dashed #d69148;
+  border-radius: 14px;
+  background: #fff8e9;
+  color: #684321;
+}
+.mock-otp code {
+  padding: 5px 9px;
+  background: #fff;
+  color: #8a4515;
+  font-size: 1.2rem;
+  font-weight: 900;
+  letter-spacing: .12em;
+}
+.mock-otp small {
+  grid-column: 1 / -1;
+  color: #856a54;
+}

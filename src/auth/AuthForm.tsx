@@ -1,6 +1,8 @@
 import { useState, type FormEvent } from "react";
 import { supabase } from "../lib/supabase";
 import { formatPhone, type CountryCode } from "../lib/phone";
+import { getPhoneMockConfig } from "../lib/phoneMock";
+import "./authMock.css";
 
 type Method = "email" | "phone";
 type Mode = "login" | "register";
@@ -21,6 +23,7 @@ export function AuthForm() {
   const [otpSent, setOtpSent] = useState(false);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
+  const phoneMock = getPhoneMockConfig();
 
   const resetMethod = (next: Method) => {
     setMethod(next);
@@ -56,9 +59,12 @@ export function AuthForm() {
       options: { shouldCreateUser: mode === "register" },
     });
     setBusy(false);
-    if (error) return setMessage(`${error.message}。请确认 Supabase 已配置 SMS Provider。`);
+    if (error) return setMessage(phoneMock
+      ? `${error.message}。请确认该手机号已加入 Supabase Test OTP 列表。`
+      : `${error.message}。请确认 Supabase 已配置 SMS Provider。`);
     setOtpSent(true);
-    setMessage("验证码已发送，请输入短信中的 6 位数字。");
+    if (phoneMock) console.info(`[NomNom Mock SMS] ${phone}: ${phoneMock.otp}`);
+    setMessage(phoneMock ? "测试验证码已生成，不会发送真实短信。" : "验证码已发送，请输入短信中的 6 位数字。");
   };
 
   const verifySms = async (event: FormEvent) => {
@@ -97,12 +103,13 @@ export function AuthForm() {
         </select>
         <input aria-label="手机号" type="tel" inputMode="tel" placeholder={countryCode === "+61" ? "0412 345 678" : "138 0013 8000"} value={phoneNumber} onChange={(event) => { setPhoneNumber(event.target.value); setOtpSent(false); setOtp(""); }} required />
       </div></div>
+      {otpSent && phoneMock && <aside className="mock-otp" role="note"><span>测试验证码</span><code>{phoneMock.otp}</code><small>仅用于 Preview 测试，不会发送短信。</small></aside>}
       {otpSent && <label>短信验证码<input aria-label="短信验证码" inputMode="numeric" autoComplete="one-time-code" maxLength={6} value={otp} onChange={(event) => setOtp(event.target.value.replace(/\D/g, ""))} required /></label>}
       {message && <p className="auth-message" role="status">{message}</p>}
       <button type="submit" disabled={busy}>{busy ? "请稍候…" : otpSent ? "验证并登录" : "发送验证码"}</button>
       {otpSent && <button type="button" className="auth-switch" onClick={() => { setOtpSent(false); setOtp(""); setMessage(""); }}>重新发送验证码</button>}
     </form>}
     <button className="auth-switch" type="button" onClick={() => { setMode(mode === "login" ? "register" : "login"); setMessage(""); setOtpSent(false); }}>{mode === "login" ? "没有账号？立即注册" : "已有账号？返回登录"}</button>
-    {method === "phone" && <p className="auth-hint">短信由 Supabase 配置的 SMS Provider（如 Twilio）发送。</p>}
+    {method === "phone" && <p className="auth-hint">{phoneMock ? "当前为 Mock Mode：仅限测试手机号，发布正式版前必须关闭。" : "短信由 Supabase 配置的 SMS Provider（如 Twilio）发送。"}</p>}
   </section></main>;
 }

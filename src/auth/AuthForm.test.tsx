@@ -9,7 +9,10 @@ vi.mock("../lib/supabase", () => ({ supabase: { auth } }));
 import { AuthForm } from "./AuthForm";
 
 describe("multi-method authentication", () => {
-  afterEach(cleanup);
+  afterEach(() => {
+    cleanup();
+    vi.unstubAllEnvs();
+  });
   beforeEach(() => {
     vi.clearAllMocks();
     auth.signInWithOtp.mockResolvedValue({ error: null });
@@ -44,5 +47,20 @@ describe("multi-method authentication", () => {
     await user.click(screen.getByRole("button", { name: "发送验证码" }));
     expect(await screen.findByRole("status")).toHaveTextContent("中国大陆手机号");
     expect(auth.signInWithOtp).not.toHaveBeenCalled();
+  });
+
+  it("shows a configured test OTP without sending a real SMS", async () => {
+    vi.stubEnv("VITE_PHONE_AUTH_MODE", "mock");
+    vi.stubEnv("VITE_PHONE_MOCK_OTP", "246810");
+    const user = userEvent.setup();
+    const info = vi.spyOn(console, "info").mockImplementation(() => undefined);
+    render(<AuthForm />);
+    await user.click(screen.getByRole("tab", { name: "手机号登录" }));
+    await user.type(screen.getByLabelText("手机号"), "0412 345 678");
+    await user.click(screen.getByRole("button", { name: "发送验证码" }));
+    expect(screen.getByRole("note")).toHaveTextContent("246810");
+    expect(screen.getByRole("status")).toHaveTextContent("不会发送真实短信");
+    expect(info).toHaveBeenCalledWith("[NomNom Mock SMS] +61412345678: 246810");
+    info.mockRestore();
   });
 });
