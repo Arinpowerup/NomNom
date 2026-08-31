@@ -450,7 +450,12 @@ export function recommend(recipes: Recipe[], stock: StockItem[], diners = 2) {
           .reduce((a, b) => a + b.quantity, 0);
         return have >= i.quantity
           ? []
-          : [{ ...i, quantity: i.quantity - have }];
+          : [{
+              ...i,
+              quantity: i.quantity - have,
+              required: i.quantity,
+              inStock: Math.max(0, have),
+            }];
       });
       return { recipe, missing };
     })

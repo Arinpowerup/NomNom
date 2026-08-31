@@ -1389,7 +1389,9 @@ function Recommendation({
                 {x.missing
                   .map(
                     (i) =>
-                      `${i.name} ${i.quantity}${displayUnit(i.unit, language, i.name)}`,
+                      language === "zh"
+                        ? `${i.name} ${i.quantity}${displayUnit(i.unit, language, i.name)}（已有 ${i.inStock} / 需要 ${i.required}）`
+                        : `${i.name} ${i.quantity}${displayUnit(i.unit, language, i.name)} (have ${i.inStock} / need ${i.required})`,
                   )
                   .join("、")}
               </small>
