@@ -1998,22 +1998,30 @@ button:not(:disabled):active {
 }
 @media (max-width: 700px) {
   .hero {
-    min-height: 230px;
+    min-height: 0;
     padding: 26px 24px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
   }
   .hero-art {
     display: block;
-    position: absolute;
-    width: 190px;
-    height: 138px;
-    right: -10px;
-    bottom: -3px;
+    position: relative;
+    width: min(190px, 58vw);
+    height: 132px;
+    right: auto;
+    bottom: auto;
+    justify-self: end;
+    margin-top: 14px;
+    margin-right: -10px;
+    margin-bottom: -18px;
     opacity: 0.88;
   }
   .hero > div:first-child {
     position: relative;
     z-index: 1;
-    max-width: 75%;
+    width: 100%;
+    max-width: none;
   }
   .hero h2 {
     font-size: 25px;

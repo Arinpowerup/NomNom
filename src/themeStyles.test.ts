@@ -28,7 +28,7 @@ describe("Snoopy home hero artwork", () => {
     expect(styles).not.toContain(".kitchen-mascot::before");
     expect(styles).toContain("width: min(390px, 40vw);");
     expect(styles).toContain("width: 118%;");
-    expect(styles).toContain("width: 190px;");
+    expect(styles).toContain("width: min(190px, 58vw);");
   });
 });
 describe("bottom navigation positioning", () => {
