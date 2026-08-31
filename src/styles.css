@@ -2890,12 +2890,22 @@ button:not(:disabled):active {
 }
 .auth-brand {
   display: grid;
+  width: 100%;
+  justify-self: stretch;
   justify-items: center;
   gap: 10px;
   text-align: center;
+  background: transparent;
 }
 .auth-brand .eyebrow {
   margin: 0;
   text-transform: none;
   letter-spacing: 0.12em;
+}
+.auth-brand .auth-mark {
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
