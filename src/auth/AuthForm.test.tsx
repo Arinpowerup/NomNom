@@ -16,7 +16,9 @@ describe("email authentication", () => {
 
   it("centers the NomNom brand without the Family label or phone login", () => {
     render(<AuthForm />);
-    expect(screen.getByText("NomNom").closest(".auth-brand")).toBeInTheDocument();
+    const brand = screen.getByText("NomNom").closest(".auth-brand");
+    expect(brand).toBeInTheDocument();
+    expect(brand?.tagName).toBe("DIV");
     expect(screen.queryByText(/family/i)).not.toBeInTheDocument();
     expect(screen.queryByRole("tab", { name: "手机号登录" })).not.toBeInTheDocument();
   });

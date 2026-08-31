@@ -23,10 +23,10 @@ export function AuthForm() {
   };
 
   return <main className="auth-shell"><form className="auth-card" onSubmit={submit}>
-    <header className="auth-brand">
+    <div className="auth-brand">
       <span className="auth-mark">N</span>
       <p className="eyebrow">NomNom</p>
-    </header>
+    </div>
     <h1>{mode === "login" ? "欢迎回来" : "创建账号"}</h1>
     <p>登录后即可与家庭成员共同安排菜单、冰箱和食记。</p>
     <label>邮箱<input aria-label="邮箱" type="email" value={email} onChange={(event) => setEmail(event.target.value)} autoComplete="email" required /></label>
