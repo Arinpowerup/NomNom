@@ -24,7 +24,9 @@ export function AuthForm() {
 
   return <main className="auth-shell"><form className="auth-card" onSubmit={submit}>
     <div className="auth-brand">
-      <span className="auth-mark">N</span>
+      <span className="auth-mark">
+        <img src="/brand/nomnom-mark.png" alt="NomNom logo" />
+      </span>
       <p className="eyebrow">NomNom</p>
     </div>
     <h1>{mode === "login" ? "欢迎回来" : "创建账号"}</h1>

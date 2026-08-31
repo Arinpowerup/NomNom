@@ -20,6 +20,8 @@ describe("application shell", () => {
     );
     expect(await screen.findByText("今晚想吃点什么？")).toBeInTheDocument();
     expect(screen.getByText("NomNom")).toBeVisible();
+    expect(screen.getByRole("img", { name: "NomNom logo" }))
+      .toHaveAttribute("src", "/brand/nomnom-mark.png");
     expect(screen.queryByText("灶边")).not.toBeInTheDocument();
     expect(document.title).toBe("NomNom");
     expect(document.querySelector(".app-shell")).toHaveClass("theme-snoopy");

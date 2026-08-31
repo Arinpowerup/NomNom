@@ -173,7 +173,7 @@ export default function App() {
         <header>
           <div className="top-brand">
             <span className="brand-mark">
-              <ChefHat />
+              <img src="/brand/nomnom-mark.png" alt="NomNom logo" />
             </span>
             <div>
               <strong>

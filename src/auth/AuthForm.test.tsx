@@ -19,6 +19,8 @@ describe("email authentication", () => {
     const brand = screen.getByText("NomNom").closest(".auth-brand");
     expect(brand).toBeInTheDocument();
     expect(brand?.tagName).toBe("DIV");
+    expect(screen.getByRole("img", { name: "NomNom logo" }))
+      .toHaveAttribute("src", "/brand/nomnom-mark.png");
     expect(screen.queryByText(/family/i)).not.toBeInTheDocument();
     expect(screen.queryByRole("tab", { name: "手机号登录" })).not.toBeInTheDocument();
   });
