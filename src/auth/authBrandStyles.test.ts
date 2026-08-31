@@ -10,10 +10,10 @@ describe("authentication brand styles", () => {
   });
 
   it("uses an orange frosted-glass tile behind the login logo", () => {
-    expect(styles).toMatch(/\.auth-brand \.auth-mark\s*\{[^}]*linear-gradient[^}]*backdrop-filter:\s*blur\(18px\)/s);
+    expect(styles).toMatch(/\.auth-brand \.auth-mark\s*\{[^}]*background-color:\s*#ee8f1f[^}]*linear-gradient[^}]*backdrop-filter:\s*blur\(18px\)/s);
   });
 
   it("uses the same frosted-glass treatment for in-app brand marks", () => {
-    expect(styles).toMatch(/\.app-shell \.brand-mark\s*\{[^}]*linear-gradient[^}]*backdrop-filter:\s*blur\(16px\)/s);
+    expect(styles).toMatch(/\.app-shell \.brand-mark\s*\{[^}]*background-color:\s*#ee8f1f[^}]*linear-gradient[^}]*backdrop-filter:\s*blur\(16px\)/s);
   });
 });
