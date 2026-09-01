@@ -34,3 +34,8 @@ do $$ begin
     alter publication supabase_realtime add table public.household_members;
   end if;
 end $$;
+do $$ begin
+  if not exists(select 1 from pg_publication_tables where pubname='supabase_realtime' and schemaname='public' and tablename='households') then
+    alter publication supabase_realtime add table public.households;
+  end if;
+end $$;
