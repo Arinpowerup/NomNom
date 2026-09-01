@@ -28,3 +28,13 @@ export async function createInvite(householdId: string) {
   if (error) throw error;
   return data as string;
 }
+
+export async function renameHousehold(householdId: string, name: string) {
+  const nextName = name.trim();
+  if (!nextName) throw new Error("家庭名称不能为空");
+  const { error } = await supabase!
+    .from("households")
+    .update({ name: nextName, updated_at: new Date().toISOString() })
+    .eq("id", householdId);
+  if (error) throw error;
+}

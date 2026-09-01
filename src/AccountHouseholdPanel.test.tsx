@@ -1,11 +1,12 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { AppProvider } from "./context/AppContext";
 
 const mocks = vi.hoisted(() => ({
   createInvite: vi.fn(),
   joinWithCode: vi.fn(),
+  renameCurrentHousehold: vi.fn(),
   selectHousehold: vi.fn(),
   signOut: vi.fn(),
 }));
@@ -16,6 +17,7 @@ vi.mock("./households/HouseholdContext", () => ({
     selectHousehold: mocks.selectHousehold,
     createInvite: mocks.createInvite,
     joinWithCode: mocks.joinWithCode,
+    renameCurrentHousehold: mocks.renameCurrentHousehold,
   }),
 }));
 vi.mock("./auth/AuthContext", () => ({
@@ -23,10 +25,13 @@ vi.mock("./auth/AuthContext", () => ({
 }));
 import { AccountHouseholdPanel } from "./App";
 
+afterEach(cleanup);
+
 beforeEach(() => {
   vi.clearAllMocks();
   mocks.createInvite.mockResolvedValue("FAMILY7");
   mocks.joinWithCode.mockResolvedValue(undefined);
+  mocks.renameCurrentHousehold.mockResolvedValue(undefined);
 });
 
 it("places household invitation, joining, and sign out controls in the profile panel", async () => {
@@ -40,4 +45,14 @@ it("places household invitation, joining, and sign out controls in the profile p
   await waitFor(() => expect(mocks.joinWithCode).toHaveBeenCalledWith("ABC123"));
   await userEvent.click(screen.getByRole("button", { name: "退出登录" }));
   expect(mocks.signOut).toHaveBeenCalledOnce();
+});
+
+it("lets the household owner rename the current household", async () => {
+  render(<AppProvider><AccountHouseholdPanel /></AppProvider>);
+  const input = screen.getByRole("textbox", { name: "家庭名称" });
+  await userEvent.clear(input);
+  await userEvent.type(input, "快乐厨房");
+  await userEvent.click(screen.getByRole("button", { name: "保存名称" }));
+  await waitFor(() => expect(mocks.renameCurrentHousehold).toHaveBeenCalledWith("快乐厨房"));
+  expect(await screen.findByRole("status")).toHaveTextContent("家庭名称已更新");
 });

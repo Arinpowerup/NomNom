@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, type FormEvent, type ReactNode } from "react";
-import { createHousehold, createInvite, joinHousehold, listHouseholds, type Household } from "../lib/households";
+import { createHousehold, createInvite, joinHousehold, listHouseholds, renameHousehold, type Household } from "../lib/households";
+import { supabase } from "../lib/supabase";
 
 type HouseholdValue = {
   household: Household;
@@ -7,6 +8,7 @@ type HouseholdValue = {
   selectHousehold: (id: string) => void;
   createInvite: () => Promise<string>;
   joinWithCode: (code: string) => Promise<void>;
+  renameCurrentHousehold: (name: string) => Promise<void>;
 };
 const Context = createContext<HouseholdValue | null>(null);
 export function useHousehold() { const value = useContext(Context); if (!value) throw new Error("Missing HouseholdProvider"); return value; }
@@ -22,6 +24,14 @@ export function HouseholdGate({ children }: { children: ReactNode }) {
     else if (!next.some((item) => item.id === selectedId)) setSelectedId(next[0]?.id ?? "");
   };
   useEffect(() => { void refresh(); }, []);
+  useEffect(() => {
+    const channel = supabase?.channel("household-names").on(
+      "postgres_changes",
+      { event: "UPDATE", schema: "public", table: "households" },
+      () => { void refresh(); },
+    ).subscribe();
+    return () => { if (channel) void supabase?.removeChannel(channel); };
+  }, [selectedId]);
   useEffect(() => { if (selectedId) localStorage.setItem("currentHousehold", selectedId); }, [selectedId]);
   if (!households) return <div className="auth-loading">正在加载家庭…</div>;
   if (!households.length) return <HouseholdOnboarding onDone={refresh} />;
@@ -36,6 +46,10 @@ export function HouseholdGate({ children }: { children: ReactNode }) {
     selectHousehold: setSelectedId,
     createInvite: () => createInvite(household.id),
     joinWithCode,
+    renameCurrentHousehold: async (name) => {
+      await renameHousehold(household.id, name);
+      await refresh(household.id);
+    },
   }}>
     {children}
   </Context.Provider>;

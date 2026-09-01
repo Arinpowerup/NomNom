@@ -1887,6 +1887,8 @@ export function AccountHouseholdPanel() {
   const [joinCode, setJoinCode] = useState("");
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
+  const [householdName, setHouseholdName] = useState(household?.household.name ?? "");
+  useEffect(() => { setHouseholdName(household?.household.name ?? ""); }, [household?.household.id, household?.household.name]);
   if (!household && !auth) return null;
   const createFamilyInvite = async () => {
     if (!household) return;
@@ -1913,6 +1915,17 @@ export function AccountHouseholdPanel() {
       setMessage(error instanceof Error ? error.message : language === "zh" ? "加入家庭失败" : "Could not join household");
     } finally { setBusy(false); }
   };
+  const saveHouseholdName = async () => {
+    if (!household || household.household.role !== "owner" || !householdName.trim()) return;
+    setBusy(true);
+    setMessage("");
+    try {
+      await household.renameCurrentHousehold(householdName);
+      setMessage(language === "zh" ? "家庭名称已更新。" : "Household name updated.");
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : language === "zh" ? "家庭名称更新失败" : "Could not update household name");
+    } finally { setBusy(false); }
+  };
   return <section className="panel account-household-panel">
     <div className="section-head">
       <div>
@@ -1929,6 +1942,13 @@ export function AccountHouseholdPanel() {
           {household.households.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
         </select>
       </label>
+      {household.household.role === "owner" && <div className="rename-household-form">
+        <label>
+          <span>{language === "zh" ? "家庭名称" : "Household name"}</span>
+          <input aria-label={language === "zh" ? "家庭名称" : "Household name"} value={householdName} maxLength={80} onChange={(event) => setHouseholdName(event.target.value)} />
+        </label>
+        <button className="soft" disabled={busy || !householdName.trim() || householdName.trim() === household.household.name} onClick={() => void saveHouseholdName()}>{language === "zh" ? "保存名称" : "Save name"}</button>
+      </div>}
       {household.household.role === "owner" && <div className="invite-family-block">
         <button className="soft" disabled={busy} onClick={() => void createFamilyInvite()}>{language === "zh" ? "生成成员邀请码" : "Create member invite"}</button>
         {inviteCode && <output aria-label={language === "zh" ? "成员邀请码" : "Member invite code"}>{inviteCode}</output>}
