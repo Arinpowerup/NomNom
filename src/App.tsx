@@ -1915,6 +1915,17 @@ export function AccountHouseholdPanel() {
       setMessage(error instanceof Error ? error.message : language === "zh" ? "加入家庭失败" : "Could not join household");
     } finally { setBusy(false); }
   };
+  const leaveFamily = async () => {
+    if (!household || !window.confirm(language === "zh" ? "确定退出当前家庭吗？" : "Leave the current household?")) return;
+    setBusy(true);
+    setMessage("");
+    try {
+      await household.leaveCurrentHousehold();
+      setMessage(language === "zh" ? "已退出当前家庭。" : "You left the household.");
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : language === "zh" ? "退出家庭失败" : "Could not leave household");
+    } finally { setBusy(false); }
+  };
   const saveHouseholdName = async () => {
     if (!household || household.household.role !== "owner" || !householdName.trim()) return;
     setBusy(true);
@@ -1971,6 +1982,7 @@ export function AccountHouseholdPanel() {
         <button disabled={busy || !joinCode.trim()} onClick={() => void joinFamily()}>{language === "zh" ? "加入家庭" : "Join household"}</button>
       </div>
     </div>}
+    {household && <button className="danger leave-household-button" disabled={busy} onClick={() => void leaveFamily()}>{language === "zh" ? "退出当前家庭" : "Leave household"}</button>}
     {message && <p className="account-notice" role="status">{message}</p>}
     {auth && <button className="danger account-signout-button" onClick={() => void auth.signOut()}>{language === "zh" ? "退出登录" : "Sign out"}</button>}
   </section>;

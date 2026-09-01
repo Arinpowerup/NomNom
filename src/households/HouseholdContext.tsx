@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, type FormEvent, type ReactNode } from "react";
-import { createHousehold, createInvite, joinHousehold, listHouseholdMembers, listHouseholds, renameHousehold, type Household, type HouseholdMember } from "../lib/households";
+import { createHousehold, createInvite, joinHousehold, leaveHousehold, listHouseholdMembers, listHouseholds, renameHousehold, type Household, type HouseholdMember } from "../lib/households";
 import { supabase } from "../lib/supabase";
 
 type HouseholdValue = {
@@ -10,6 +10,7 @@ type HouseholdValue = {
   createInvite: () => Promise<string>;
   joinWithCode: (code: string) => Promise<void>;
   renameCurrentHousehold: (name: string) => Promise<void>;
+  leaveCurrentHousehold: () => Promise<void>;
 };
 const Context = createContext<HouseholdValue | null>(null);
 export function useHousehold() { const value = useContext(Context); if (!value) throw new Error("Missing HouseholdProvider"); return value; }
@@ -63,6 +64,12 @@ export function HouseholdGate({ children }: { children: ReactNode }) {
     renameCurrentHousehold: async (name) => {
       await renameHousehold(household.id, name);
       await refresh(household.id);
+    },
+    leaveCurrentHousehold: async () => {
+      await leaveHousehold(household.id);
+      localStorage.removeItem("currentHousehold");
+      setSelectedId("");
+      await refresh();
     },
   }}>
     {children}

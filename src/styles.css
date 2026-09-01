@@ -3015,3 +3015,4 @@ button:not(:disabled):active {
 .household-members small { overflow: hidden; color: var(--muted); text-overflow: ellipsis; white-space: nowrap; }
 .household-members em { padding: 5px 9px; border-radius: 999px; color: var(--text); background: color-mix(in srgb, var(--orange) 18%, var(--paper)); font-size: .78em; font-style: normal; font-weight: 800; }
 .member-avatar { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; color: #fff; background: var(--orange); font-weight: 900; }
+.leave-household-button { width: fit-content; }

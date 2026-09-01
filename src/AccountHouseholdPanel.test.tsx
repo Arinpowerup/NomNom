@@ -7,6 +7,7 @@ const mocks = vi.hoisted(() => ({
   createInvite: vi.fn(),
   joinWithCode: vi.fn(),
   renameCurrentHousehold: vi.fn(),
+  leaveCurrentHousehold: vi.fn(),
   selectHousehold: vi.fn(),
   signOut: vi.fn(),
 }));
@@ -22,6 +23,7 @@ vi.mock("./households/HouseholdContext", () => ({
     createInvite: mocks.createInvite,
     joinWithCode: mocks.joinWithCode,
     renameCurrentHousehold: mocks.renameCurrentHousehold,
+    leaveCurrentHousehold: mocks.leaveCurrentHousehold,
   }),
 }));
 vi.mock("./auth/AuthContext", () => ({
@@ -36,6 +38,8 @@ beforeEach(() => {
   mocks.createInvite.mockResolvedValue("FAMILY7");
   mocks.joinWithCode.mockResolvedValue(undefined);
   mocks.renameCurrentHousehold.mockResolvedValue(undefined);
+  mocks.leaveCurrentHousehold.mockResolvedValue(undefined);
+  vi.spyOn(window, "confirm").mockReturnValue(true);
 });
 
 it("places household invitation, joining, and sign out controls in the profile panel", async () => {
@@ -68,4 +72,10 @@ it("shows household members with their account and role", () => {
   expect(members).toHaveTextContent("创建者");
   expect(members).toHaveTextContent("Mia");
   expect(members).toHaveTextContent("成员");
+});
+it("leaves the current household after confirmation", async () => {
+  render(<AppProvider><AccountHouseholdPanel /></AppProvider>);
+  await userEvent.click(screen.getByRole("button", { name: "退出当前家庭" }));
+  expect(window.confirm).toHaveBeenCalledWith("确定退出当前家庭吗？");
+  await waitFor(() => expect(mocks.leaveCurrentHousehold).toHaveBeenCalledOnce());
 });

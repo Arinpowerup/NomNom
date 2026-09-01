@@ -57,3 +57,7 @@ export async function listHouseholdMembers(householdId: string): Promise<Househo
     joinedAt: member.joined_at,
   }));
 }
+export async function leaveHousehold(householdId: string) {
+  const { error } = await supabase!.rpc("leave_household", { target_household_id: householdId });
+  if (error) throw error;
+}

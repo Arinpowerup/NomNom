@@ -2,8 +2,8 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { expect, it, vi } from "vitest";
 
-const { listHouseholds, joinHousehold } = vi.hoisted(() => ({ listHouseholds: vi.fn(), joinHousehold: vi.fn() }));
-vi.mock("../lib/households", () => ({ listHouseholds, createHousehold: vi.fn(), joinHousehold, createInvite: vi.fn() }));
+const { listHouseholds, listHouseholdMembers, joinHousehold } = vi.hoisted(() => ({ listHouseholds: vi.fn(), listHouseholdMembers: vi.fn(), joinHousehold: vi.fn() }));
+vi.mock("../lib/households", () => ({ listHouseholds, listHouseholdMembers, createHousehold: vi.fn(), joinHousehold, createInvite: vi.fn(), renameHousehold: vi.fn(), leaveHousehold: vi.fn() }));
 import { HouseholdGate, useHousehold } from "./HouseholdContext";
 
 function Probe() {
@@ -15,6 +15,7 @@ function Probe() {
 }
 
 it("keeps household actions in context without rendering floating controls", async () => {
+  listHouseholdMembers.mockResolvedValue([]);
   listHouseholds
     .mockResolvedValueOnce([{ id: "h1", name: "我们的家", role: "owner" }])
     .mockResolvedValueOnce([
