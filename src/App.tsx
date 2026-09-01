@@ -1949,6 +1949,16 @@ export function AccountHouseholdPanel() {
         </label>
         <button className="soft" disabled={busy || !householdName.trim() || householdName.trim() === household.household.name} onClick={() => void saveHouseholdName()}>{language === "zh" ? "保存名称" : "Save name"}</button>
       </div>}
+      <div className="household-members" aria-label={language === "zh" ? "家庭成员" : "Household members"}>
+        <strong>{language === "zh" ? `家庭成员（${household.members.length}）` : `Members (${household.members.length})`}</strong>
+        <ul>
+          {household.members.map((member) => <li key={member.userId}>
+            <span className="member-avatar" aria-hidden="true">{member.displayName.slice(0, 1).toUpperCase()}</span>
+            <span><b>{member.displayName}</b><small>{member.email}</small></span>
+            <em>{member.role === "owner" ? (language === "zh" ? "创建者" : "Owner") : (language === "zh" ? "成员" : "Member")}</em>
+          </li>)}
+        </ul>
+      </div>
       {household.household.role === "owner" && <div className="invite-family-block">
         <button className="soft" disabled={busy} onClick={() => void createFamilyInvite()}>{language === "zh" ? "生成成员邀请码" : "Create member invite"}</button>
         {inviteCode && <output aria-label={language === "zh" ? "成员邀请码" : "Member invite code"}>{inviteCode}</output>}

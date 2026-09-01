@@ -38,3 +38,22 @@ export async function renameHousehold(householdId: string, name: string) {
     .eq("id", householdId);
   if (error) throw error;
 }
+export type HouseholdMember = {
+  userId: string;
+  displayName: string;
+  email: string;
+  role: "owner" | "member";
+  joinedAt: string;
+};
+
+export async function listHouseholdMembers(householdId: string): Promise<HouseholdMember[]> {
+  const { data, error } = await supabase!.rpc("list_household_members", { target_household_id: householdId });
+  if (error) throw error;
+  return (data ?? []).map((member: { member_user_id: string; display_name: string; email: string; role: string; joined_at: string }) => ({
+    userId: member.member_user_id,
+    displayName: member.display_name,
+    email: member.email,
+    role: member.role as HouseholdMember["role"],
+    joinedAt: member.joined_at,
+  }));
+}

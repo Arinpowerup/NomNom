@@ -3007,3 +3007,11 @@ button:not(:disabled):active {
   .account-household-grid { grid-template-columns: 1fr; }
   .join-household-form { align-items: stretch; flex-direction: column; }
 }
+
+.household-members { grid-column: 1 / -1; display: grid; gap: 10px; }
+.household-members ul { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.household-members li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 14px; background: color-mix(in srgb, var(--paper) 90%, transparent); }
+.household-members li > span:nth-child(2) { min-width: 0; display: grid; gap: 2px; }
+.household-members small { overflow: hidden; color: var(--muted); text-overflow: ellipsis; white-space: nowrap; }
+.household-members em { padding: 5px 9px; border-radius: 999px; color: var(--text); background: color-mix(in srgb, var(--orange) 18%, var(--paper)); font-size: .78em; font-style: normal; font-weight: 800; }
+.member-avatar { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; color: #fff; background: var(--orange); font-weight: 900; }

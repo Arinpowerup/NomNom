@@ -14,6 +14,10 @@ vi.mock("./households/HouseholdContext", () => ({
   useOptionalHousehold: () => ({
     household: { id: "h1", name: "lalaland", role: "owner" },
     households: [{ id: "h1", name: "lalaland", role: "owner" }],
+    members: [
+      { userId: "u1", displayName: "Arin", email: "arin@example.com", role: "owner", joinedAt: "2026-01-01" },
+      { userId: "u2", displayName: "Mia", email: "mia@example.com", role: "member", joinedAt: "2026-01-02" },
+    ],
     selectHousehold: mocks.selectHousehold,
     createInvite: mocks.createInvite,
     joinWithCode: mocks.joinWithCode,
@@ -55,4 +59,13 @@ it("lets the household owner rename the current household", async () => {
   await userEvent.click(screen.getByRole("button", { name: "保存名称" }));
   await waitFor(() => expect(mocks.renameCurrentHousehold).toHaveBeenCalledWith("快乐厨房"));
   expect(await screen.findByRole("status")).toHaveTextContent("家庭名称已更新");
+});
+it("shows household members with their account and role", () => {
+  render(<AppProvider><AccountHouseholdPanel /></AppProvider>);
+  const members = screen.getByLabelText("家庭成员");
+  expect(members).toHaveTextContent("Arin");
+  expect(members).toHaveTextContent("arin@example.com");
+  expect(members).toHaveTextContent("创建者");
+  expect(members).toHaveTextContent("Mia");
+  expect(members).toHaveTextContent("成员");
 });

@@ -1,10 +1,11 @@
 import { createContext, useContext, useEffect, useState, type FormEvent, type ReactNode } from "react";
-import { createHousehold, createInvite, joinHousehold, listHouseholds, renameHousehold, type Household } from "../lib/households";
+import { createHousehold, createInvite, joinHousehold, listHouseholdMembers, listHouseholds, renameHousehold, type Household, type HouseholdMember } from "../lib/households";
 import { supabase } from "../lib/supabase";
 
 type HouseholdValue = {
   household: Household;
   households: Household[];
+  members: HouseholdMember[];
   selectHousehold: (id: string) => void;
   createInvite: () => Promise<string>;
   joinWithCode: (code: string) => Promise<void>;
@@ -17,6 +18,7 @@ export function useOptionalHousehold() { return useContext(Context); }
 export function HouseholdGate({ children }: { children: ReactNode }) {
   const [households, setHouseholds] = useState<Household[] | null>(null);
   const [selectedId, setSelectedId] = useState(() => localStorage.getItem("currentHousehold") ?? "");
+  const [members, setMembers] = useState<HouseholdMember[]>([]);
   const refresh = async (preferred?: string) => {
     const next = await listHouseholds();
     setHouseholds(next);
@@ -33,6 +35,17 @@ export function HouseholdGate({ children }: { children: ReactNode }) {
     return () => { if (channel) void supabase?.removeChannel(channel); };
   }, [selectedId]);
   useEffect(() => { if (selectedId) localStorage.setItem("currentHousehold", selectedId); }, [selectedId]);
+  useEffect(() => {
+    if (!selectedId) { setMembers([]); return; }
+    const loadMembers = () => { void listHouseholdMembers(selectedId).then(setMembers); };
+    loadMembers();
+    const channel = supabase?.channel(`household-members-${selectedId}`).on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "household_members", filter: `household_id=eq.${selectedId}` },
+      loadMembers,
+    ).subscribe();
+    return () => { if (channel) void supabase?.removeChannel(channel); };
+  }, [selectedId]);
   if (!households) return <div className="auth-loading">正在加载家庭…</div>;
   if (!households.length) return <HouseholdOnboarding onDone={refresh} />;
   const household = households.find((item) => item.id === selectedId) ?? households[0];
@@ -43,6 +56,7 @@ export function HouseholdGate({ children }: { children: ReactNode }) {
   return <Context.Provider value={{
     household,
     households,
+    members,
     selectHousehold: setSelectedId,
     createInvite: () => createInvite(household.id),
     joinWithCode,
