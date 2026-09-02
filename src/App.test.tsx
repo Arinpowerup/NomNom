@@ -1,12 +1,18 @@
 import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { AppProvider } from "./context/AppContext";
 import App from "./App";
 import { loadData, saveData } from "./lib/db";
 import { initialData } from "./data/seed";
+vi.mock("./lib/images", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("./lib/images")>();
+  return { ...actual, cropImage: vi.fn(async (file: File) => file) };
+});
 
 beforeEach(async () => {
+  Object.defineProperty(URL, "createObjectURL", { configurable: true, value: vi.fn(() => "blob:food-log-preview") });
+  Object.defineProperty(URL, "revokeObjectURL", { configurable: true, value: vi.fn() });
   localStorage.clear();
   await saveData(structuredClone(initialData));
 });
@@ -485,6 +491,8 @@ describe("application shell", () => {
       ),
       photo,
     );
+    expect(await screen.findByRole("dialog", { name: "裁剪照片" })).toBeVisible();
+    await userEvent.click(screen.getByRole("button", { name: "使用照片" }));
     await waitFor(async () =>
       expect(
         (await loadData()).history[0].image?.startsWith("data:image/png"),

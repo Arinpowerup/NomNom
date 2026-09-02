@@ -26,6 +26,7 @@ import {
   X,
 } from "lucide-react";
 import { useApp } from "./context/AppContext";
+import { ImageCropper } from "./ImageCropper";
 import {
   addCategory,
   addRole,
@@ -1617,6 +1618,7 @@ function ShoppingPage() {
 function HistoryPage() {
   const { data, setData, language, currentRoleId } = useApp();
   const household = useOptionalHousehold();
+  const [cropTarget, setCropTarget] = useState<{ historyId: string; file: File }>();
   const arrange = (name: string) => {
     const recipe = data!.recipes.find((r) => r.name === name);
     if (recipe)
@@ -1624,12 +1626,21 @@ function HistoryPage() {
         orderDish(data!, localDate(), "dinner", recipe.id, currentRoleId),
       );
   };
-  const uploadPhoto = async (historyId: string, selected?: File) => {
-    if (!selected) return;
-    try { setData(updateHistoryPhoto(data!, historyId, await storeImage(household?.household.id, selected, "history"))); }
+  const uploadPhoto = async (historyId: string, selected: File) => {
+    try { setData(updateHistoryPhoto(data!, historyId, await storeImage(household?.household.id, selected, "history"))); setCropTarget(undefined); }
     catch (error) { alert(error instanceof Error ? error.message : "图片上传失败"); }
   };
   return (
+    <>
+      {cropTarget && (
+        <ImageCropper
+          file={cropTarget.file}
+          language={language}
+          onCancel={() => setCropTarget(undefined)}
+          onConfirm={(file) => uploadPhoto(cropTarget.historyId, file)}
+        />
+      )}
+
     <section className="panel">
       <div className="section-head">
         <h2>{t(language, "history")}</h2>
@@ -1676,7 +1687,7 @@ function HistoryPage() {
                     type="file"
                     accept="image/*"
                     onChange={(event) =>
-                      uploadPhoto(h.id, event.target.files?.[0])
+                      event.target.files?.[0] && setCropTarget({ historyId: h.id, file: event.target.files[0] })
                     }
                   />
                 </label>
@@ -1705,6 +1716,7 @@ function HistoryPage() {
         <Empty text={t(language, "noData")} />
       )}
     </section>
+    </>
   );
 }
 

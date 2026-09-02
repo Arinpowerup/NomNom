@@ -50,6 +50,39 @@ export async function normalizeImageForUpload(file: File, maxDimension = 2048) {
   return normalized;
 }
 
+
+export type CropSettings = { positionX: number; positionY: number; zoom: number };
+
+export function calculateCropPlacement(sourceWidth: number, sourceHeight: number, outputWidth: number, outputHeight: number, settings: CropSettings) {
+  const zoom = Math.max(1, Math.min(3, settings.zoom));
+  const scale = Math.max(outputWidth / sourceWidth, outputHeight / sourceHeight) * zoom;
+  const width = sourceWidth * scale;
+  const height = sourceHeight * scale;
+  const positionX = Math.max(0, Math.min(100, settings.positionX)) / 100;
+  const positionY = Math.max(0, Math.min(100, settings.positionY)) / 100;
+  const overflowX = width - outputWidth;
+  const overflowY = height - outputHeight;
+  return {
+    x: overflowX === 0 || positionX === 0 ? 0 : -overflowX * positionX,
+    y: overflowY === 0 || positionY === 0 ? 0 : -overflowY * positionY,
+    width,
+    height,
+  };
+}
+
+export async function cropImage(file: File, settings: CropSettings, outputWidth = 1200, outputHeight = 840) {
+  validateSourceImage(file);
+  const image = await loadBrowserImage(file);
+  const placement = calculateCropPlacement(image.naturalWidth, image.naturalHeight, outputWidth, outputHeight, settings);
+  const canvas = document.createElement("canvas");
+  canvas.width = outputWidth;
+  canvas.height = outputHeight;
+  const context = canvas.getContext("2d");
+  if (!context) throw new Error("当前浏览器无法处理图片");
+  context.drawImage(image, placement.x, placement.y, placement.width, placement.height);
+  const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob((result) => result ? resolve(result) : reject(new Error("图片裁剪失败")), "image/jpeg", 0.9));
+  return new File([blob], `${file.name.replace(/\.[^.]+$/, "") || "food-log"}-cropped.jpg`, { type: "image/jpeg" });
+}
 export async function storeImage(householdId: string | undefined, file: File, kind: "recipes" | "history" | "avatars") {
   if (!householdId || !supabase) {
     validateSourceImage(file);
