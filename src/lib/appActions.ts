@@ -352,7 +352,14 @@ export function updateHistoryPhoto(
   historyId: string,
   image: string,
 ): AppData {
-  if (!image.startsWith("data:image/")) throw new Error("INVALID_IMAGE");
+  const isInlineImage = /^data:image\/(?:jpeg|png|webp);base64,/i.test(image);
+  let isSecureRemoteImage = false;
+  try {
+    isSecureRemoteImage = new URL(image).protocol === "https:";
+  } catch {
+    isSecureRemoteImage = false;
+  }
+  if (!isInlineImage && !isSecureRemoteImage) throw new Error("INVALID_IMAGE");
   return {
     ...data,
     history: data.history.map((entry) =>
@@ -450,12 +457,14 @@ export function recommend(recipes: Recipe[], stock: StockItem[], diners = 2) {
           .reduce((a, b) => a + b.quantity, 0);
         return have >= i.quantity
           ? []
-          : [{
-              ...i,
-              quantity: i.quantity - have,
-              required: i.quantity,
-              inStock: Math.max(0, have),
-            }];
+          : [
+              {
+                ...i,
+                quantity: i.quantity - have,
+                required: i.quantity,
+                inStock: Math.max(0, have),
+              },
+            ];
       });
       return { recipe, missing };
     })

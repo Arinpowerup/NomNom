@@ -15,6 +15,8 @@ vi.mock("./supabase", () => ({
 }));
 
 import { storeImage } from "./images";
+import { updateHistoryPhoto } from "./appActions";
+import { initialData } from "../data/seed";
 
 describe("cloud image upload", () => {
   beforeEach(() => {
@@ -48,6 +50,30 @@ describe("cloud image upload", () => {
     expect(options).toEqual({ contentType: "image/jpeg", upsert: false });
   });
 
+  it("writes the returned HTTPS signed URL into the food log", async () => {
+    const signedUrl = await storeImage(
+      "11111111-1111-4111-8111-111111111111",
+      new File(["jpeg"], "meal.jpg", { type: "image/jpeg" }),
+      "history",
+      { prepared: true },
+    );
+    const data = {
+      ...structuredClone(initialData),
+      history: [
+        {
+          id: "history-one",
+          date: "2026-09-02",
+          meal: "dinner" as const,
+          diners: 2,
+          dishes: [],
+        },
+      ],
+    };
+
+    expect(
+      updateHistoryPhoto(data, "history-one", signedUrl).history[0].image,
+    ).toBe("https://example.test/meal.jpg");
+  });
   it("returns a useful upload-stage error", async () => {
     storage.upload.mockResolvedValue({
       data: null,

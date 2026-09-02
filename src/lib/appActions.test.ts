@@ -199,8 +199,16 @@ describe("menu safety rules", () => {
     );
     expect(next.history[0].image).toBe("data:image/png;base64,AAAA");
     expect(next.history[1].image).toBeUndefined();
+    const signedImage =
+      "https://example.supabase.co/storage/v1/object/sign/family-images/meal.jpg?token=signed";
+    expect(
+      updateHistoryPhoto(data, "history-one", signedImage).history[0].image,
+    ).toBe(signedImage);
     expect(() =>
       updateHistoryPhoto(data, "history-one", "data:text/plain;base64,AAAA"),
+    ).toThrow("INVALID_IMAGE");
+    expect(() =>
+      updateHistoryPhoto(data, "history-one", "http://example.test/meal.jpg"),
     ).toThrow("INVALID_IMAGE");
   });
   it("rejects invalid backups", () =>
