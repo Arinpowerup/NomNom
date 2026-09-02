@@ -20,6 +20,15 @@ export function validateSourceImage(file: File) {
   if (file.size > MAX_SOURCE_IMAGE_BYTES) throw new Error("原始图片不能超过 20MB");
 }
 
+export const fileArrayBuffer = (file: File) => new Promise<ArrayBuffer>((resolve, reject) => {
+  const reader = new FileReader();
+  reader.onload = () => {
+    if (reader.result instanceof ArrayBuffer) resolve(reader.result);
+    else reject(new Error("无法读取图片数据"));
+  };
+  reader.onerror = () => reject(reader.error ?? new Error("无法读取图片数据"));
+  reader.readAsArrayBuffer(file);
+});
 const dataUrl = (file: File) => new Promise<string>((resolve, reject) => {
   const reader = new FileReader(); reader.onload = () => resolve(String(reader.result)); reader.onerror = () => reject(reader.error); reader.readAsDataURL(file);
 });
@@ -83,16 +92,29 @@ export async function cropImage(file: File, settings: CropSettings, outputWidth 
   const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob((result) => result ? resolve(result) : reject(new Error("图片裁剪失败")), "image/jpeg", 0.9));
   return new File([blob], `${file.name.replace(/\.[^.]+$/, "") || "food-log"}-cropped.jpg`, { type: "image/jpeg" });
 }
-export async function storeImage(householdId: string | undefined, file: File, kind: "recipes" | "history" | "avatars") {
+export async function storeImage(
+  householdId: string | undefined,
+  file: File,
+  kind: "recipes" | "history" | "avatars",
+  options: { prepared?: boolean } = {},
+) {
   if (!householdId || !supabase) {
     validateSourceImage(file);
     return dataUrl(file);
   }
-  const uploadFile = await normalizeImageForUpload(file);
+  const uploadFile = options.prepared ? file : await normalizeImageForUpload(file);
+  validateImage(uploadFile);
   const path = `${householdId}/${kind}/${crypto.randomUUID()}.jpg`;
-  const { error } = await supabase.storage.from("family-images").upload(path, uploadFile, { contentType: "image/jpeg", upsert: false });
-  if (error) throw error;
-  const { data, error: signError } = await supabase.storage.from("family-images").createSignedUrl(path, 60 * 60 * 24 * 365);
-  if (signError) throw signError;
+  const bucket = supabase.storage.from("family-images");
+  const { error } = await bucket.upload(path, await fileArrayBuffer(uploadFile), {
+    contentType: "image/jpeg",
+    upsert: false,
+  });
+  if (error) throw new Error(`照片上传失败：${error.message}`);
+  const { data, error: signError } = await bucket.createSignedUrl(
+    path,
+    60 * 60 * 24 * 365,
+  );
+  if (signError) throw new Error(`照片链接生成失败：${signError.message}`);
   return data.signedUrl;
 }

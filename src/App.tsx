@@ -1627,7 +1627,7 @@ function HistoryPage() {
       );
   };
   const uploadPhoto = async (historyId: string, selected: File) => {
-    try { setData(updateHistoryPhoto(data!, historyId, await storeImage(household?.household.id, selected, "history"))); setCropTarget(undefined); }
+    try { setData(updateHistoryPhoto(data!, historyId, await storeImage(household?.household.id, selected, "history", { prepared: true }))); setCropTarget(undefined); }
     catch (error) { alert(error instanceof Error ? error.message : "图片上传失败"); }
   };
   return (
